@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const pug = require('pug');
+
+const PORT = 3000;
 
 app.get('/', (req, res) =>{
 
@@ -7,7 +10,6 @@ app.get('/', (req, res) =>{
 
 });
 
-
-app.listen(3000,()=>{
-    console.log("Server is runnin on port 3000")
+app.listen(PORT,()=>{
+    console.log("Se inicio el servidor en el puerto: "+ PORT)
 });
