@@ -4,9 +4,12 @@ const pug = require('pug');
 
 const PORT = 3000;
 
+app.set('view engine', 'pug');
+app.set('views', './vistas')
+
 app.get('/', (req, res) =>{
 
-    res.send('Hello World!!')
+    res.render('index')
 
 });
 
