@@ -5,7 +5,9 @@ const pug = require('pug');
 const PORT = 3000;
 
 app.set('view engine', 'pug');
-app.set('views', './vistas')
+app.set('views', './vistas');
+app.use('/imgs', express.static(__dirname + '/imgs'));
+
 
 app.get('/', (req, res) =>{
 

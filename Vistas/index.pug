@@ -5,8 +5,28 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css", integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT", crossorigin="anonymous")
-        title HIS
+        title Home - HCS 
     body 
-        +navbar 
+        +navbar
+    block content 
+    
+    div
+        p.p-3 Te damos la bienvenida al Hospital Central Sur, donde la salud y el bienestar de nuestros pacientes son nuestra prioridad. Este sistema de gestión hospitalaria te permite acceder de manera sencilla y rápida a toda la información relacionada con la admisión, tratamiento y seguimiento de nuestros pacientes. ¡Comencemos a cuidarte!
+
+    div.px-5
+         div#carouselExampleAutoplaying.carousel.slide(data-bs-ride="carousel")
+            div.carousel-inner
+                div.carousel-item.active
+                    img.d-block.w-100(src="/imgs/img1.png" alt="Imagen no encontrada")
+                div.carousel-item
+                    img.d-block.w-100(src="/imgs/img2.jpg" alt="Imagen no encontrada")
+                div.carousel-item
+                    img.d-block.w-100(src="/imgs/img3.png" alt="Imagen no encontrada")
+            button.carousel-control-prev(type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev")
+                span.carousel-control-prev-icon(aria-hidden="true")
+                span.visually-hidden Previous
+            button.carousel-control-next(type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next")
+                span.carousel-control-next-icon(aria-hidden="true")
+                span.visually-hidden Next
 
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js", integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO", crossorigin="anonymous")
