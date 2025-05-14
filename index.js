@@ -17,6 +17,10 @@ app.get('/NuevoPaciente', (req, res) =>{
     res.render('NuevoPaciente')
 })
 
+app.use((req, res) => {
+  res.status(404).render('404');
+});
+
 app.listen(PORT,()=>{
     console.log("Se inicio el servidor en el puerto: "+ PORT)
 });
