@@ -10,10 +10,12 @@ app.use('/imgs', express.static(__dirname + '/imgs'));
 
 
 app.get('/', (req, res) =>{
-
     res.render('index')
-
 });
+
+app.get('/NuevoPaciente', (req, res) =>{
+    res.render('NuevoPaciente')
+})
 
 app.listen(PORT,()=>{
     console.log("Se inicio el servidor en el puerto: "+ PORT)
