@@ -6,11 +6,10 @@ const PORT = 3000;
 
 app.set('view engine', 'pug');
 app.set('views', './vistas');
-app.use('/imgs', express.static(__dirname + '/imgs'));
 
 
 app.get('/', (req, res) =>{
-    res.render('index')
+    res.render('PaginaInicio')
 });
 
 app.get('/BuscarPaciente', (req, res) =>{

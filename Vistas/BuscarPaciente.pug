@@ -15,15 +15,15 @@ html(lang="en")
                     form(action="/buscarPaciente" method="POST")
                         div.mb-3
                             label.form-label(for="dni") DNI
-                            input#dni.form-control(type="number" name="dni" placeholder="Ej: 12345678")
+                            input#dni.form-control(type="number" name="dni")
 
                         div.mb-3
                             label.form-label(for="nombre") Nombre
-                            input#nombre.form-control(type="text" name="nombre" placeholder="Ej: Juancito")
+                            input#nombre.form-control(type="text" name="nombre")
 
                         div.mb-3
                             label.form-label(for="apellido") Apellido 
-                            input#apellido.form-control(type="text" name="apellido" placeholder="Ej: Perezcito")
+                            input#apellido.form-control(type="text" name="apellido")
 
                         button.btn.btn-primary.w-100(type="submit") Buscar
 
