@@ -13,8 +13,8 @@ app.get('/', (req, res) =>{
     res.render('index')
 });
 
-app.get('/NuevoPaciente', (req, res) =>{
-    res.render('NuevoPaciente')
+app.get('/BuscarPaciente', (req, res) =>{
+    res.render('BuscarPaciente')
 })
 
 app.use((req, res) => {
