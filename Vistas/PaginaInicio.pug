@@ -11,39 +11,44 @@ html(lang="es")
     block content 
 
     div.container.mt-5
-        h2.text-center.mb-4 Hospital Central Sur - HIS
-        div.row.row-cols-1.row-cols-md-2.row-cols-lg-4.g-4
-            div.col
-                div.card.p-3.shadow
-                    h5.card-header Admisión y Recepción
-                    div.card-body
-                        h5.card-title Registro
-                        p.card-text Registro o actualización de datos del paciente.
-                        a.btn.btn-primary.mb-2(href="#") Buscar Paciente (Actualizar)
-                        a.btn.btn-primary(href="#") Cargar Paciente
+      h2.text-center.mb-4 Hospital Central Sur - HIS
+      div.row.row-cols-1.row-cols-md-2.row-cols-lg-4.g-4
 
-            div.col
-                div.card.p-3.shadow
-                    h5.card-header Evaluación Médica
-                    div.card-body
-                        h5.card-title Médicos
-                        p.card-text Acceso al formulario de evolución médica.
-                        a.btn.btn-primary.disabled(style="pointer-events: none;") Nueva Evaluación
-            div.col
-                div.card.p-3.shadow
-                    h5.card-header Evaluación de Enfermería
-                    div.card-body
-                        h5.card-title Enfermería
-                        p.card-text Registro de signos vitales y controles.
-                        a.btn.btn-primary.disabled.mb-2(style="pointer-events: none;") Buscar Historial Médico
-                        a.btn.btn-primary.disabled.mb-2(style="pointer-events: none;") Registrar signos Vitales
-                        a.btn.btn-primary.disabled(style="pointer-events: none;") Realizar plan de Cuidados
+        div.col
+          div.card.p-3.shadow
+            h5.card-header.bg-success.text-white Admisión y Recepción
+            div.card-body
+              h5.card-title Registro
+              p.card-text Registro o actualización de datos del paciente.
+              a.btn.btn-outline-success.mb-2(href="/BuscarPaciente") Buscar Paciente (Actualizar)
+              a.btn.btn-outline-success(href="/FormularioPaciente") Cargar Paciente
 
-            div.col
-                div.card.p-3.shadow
-                    h5.card-header Altas e Internación
-                    div.card-body
-                        h5.card-title Gestión de Internación
-                        p.card-text Asignación de habitación y alta del paciente.
-                        a.btn.btn-primary.mb-2(href="#") Ver Internaciones
-                        a.btn.btn-primary.disabled(style="pointer-events: none;") Ver Altas
+        div.col
+          div.card.p-3.shadow
+            h5.card-header.bg-secondary.text-white Evaluación Médica
+            div.card-body
+              h5.card-title Médicos
+              p.card-text Acceso al formulario de evolución médica.
+              a.btn.btn-secondary.disabled(href="") Nueva Evaluación
+
+        div.col
+          div.card.p-3.shadow
+            h5.card-header.bg-secondary.text-white Evaluación de Enfermería
+            div.card-body
+              h5.card-title Enfermería
+              p.card-text Registro de signos vitales y controles.
+              a.btn.btn-secondary.disabled.mb-2(href="") Buscar Historial Médico
+              a.btn.btn-secondary.disabled.mb-2(href="") Registrar Signos Vitales
+              a.btn.btn-secondary.disabled(href="") Realizar Plan de Cuidados
+
+        div.col
+          div.card.p-3.shadow
+            h5.card-header.bg-success.text-white Altas e Internación
+            div.card-body
+              h5.card-title Gestión de Internación
+              p.card-text Asignación de habitación y alta del paciente.
+              a.btn.btn-outline-success.mb-2(href="/PacientesInternados") Ver Internaciones
+              a.btn.btn-secondary.disabled(href="") Ver Altas
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous")
+
