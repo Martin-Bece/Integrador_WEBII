@@ -9,7 +9,7 @@ app.set('views', './vistas');
 
 
 app.get('/', (req, res) =>{
-    res.render('PaginaInicio')
+    res.render('Paginainicio')
 });
 
 app.get('/BuscarPaciente', (req, res) =>{

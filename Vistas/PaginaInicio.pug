@@ -20,16 +20,17 @@ html(lang="es")
             div.card-body
               h5.card-title Registro
               p.card-text Registro o actualización de datos del paciente.
-              a.btn.btn-outline-success.mb-2(href="/BuscarPaciente") Buscar Paciente (Actualizar)
-              a.btn.btn-outline-success(href="/FormularioPaciente") Cargar Paciente
+              a.btn.btn-outline-success.mb-2(href="/BuscarPaciente") Buscar Paciente
+              a.btn.btn-outline-danger(href="/FormularioPaciente") Emergencia
 
         div.col
           div.card.p-3.shadow
             h5.card-header.bg-secondary.text-white Evaluación Médica
             div.card-body
               h5.card-title Médicos
-              p.card-text Acceso al formulario de evolución médica.
-              a.btn.btn-secondary.disabled(href="") Nueva Evaluación
+              p.card-text Evolucion Medica y turnos.
+              a.btn.btn-secondary.disabled.mb-2(href="") Nueva Evaluación
+              a.btn.btn-secondary.disabled(href="") Dar Turno
 
         div.col
           div.card.p-3.shadow
