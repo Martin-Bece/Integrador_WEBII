@@ -6,11 +6,46 @@ html(lang="es")
     meta(name="viewport" content="width=device-width, initial-scale=1")
     title Internaciones - Hospital Central Sur
     link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" crossorigin="anonymous")
+    style.
+      body {
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      main.container {
+        flex-grow: 1;
+      }
+      h2 {
+        font-weight: 700;
+        color: #0d6efd;
+      }
+      table {
+        box-shadow: 0 0 15px rgba(13, 110, 253, 0.2);
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+      thead {
+        background: #0d6efd;
+        color: white;
+      }
+      tbody tr:hover {
+        background-color: #cfe2ff;
+        cursor: pointer;
+      }
+      .btn-primary {
+        transition: background-color 0.3s ease;
+      }
+      .btn-primary:hover {
+        background-color: #0b5ed7;
+      }
+      .btn-danger[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
   body
-    +navbar 
-    block content 
-
-    div.container.mt-5
+    +navbar
+    main.container.mt-5
       h2.mb-4.text-center Pacientes Internados
 
       table.table.table-striped.table-hover

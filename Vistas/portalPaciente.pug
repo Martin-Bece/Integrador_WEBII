@@ -29,16 +29,15 @@ html(lang="es")
     +navbar
 
     .container.mt-5
-      h2.text-center.mb-5 Portal del Paciente
+      h2.text-center.mb-5 PORTAL DEL PACIENTE
 
       .row
-        // Columna izquierda: Info + botones
         .col-md-4
           .left-panel
-            h4 Información Básica
+            h4 Información Del Paciente
             p
               strong ID: 
-              | #{paciente.id}
+              | #{paciente.idPaciente}
             p
               strong Nombre: 
               | #{paciente.nombre}
@@ -49,11 +48,11 @@ html(lang="es")
             hr
 
             .d-grid.gap-2
-              a.btn.btn-outline-primary(href=`/pacientes/${paciente.id}/editar`) Editar Información
-              a.btn.btn-outline-success(href=`/pacientes/${paciente.id}/turnos/nuevo`) Asignar Nuevo Turno
-              a.btn.btn-outline-danger(href=`/pacientes/${paciente.id}/baja`) Dar de Baja
+              a.btn.btn-outline-primary(href=``) Editar Información
+              a.btn.btn-outline-success(href=``) Asignar Nuevo Turno
+              a.btn.btn-outline-danger(href=``) Dar de Baja
+              a.btn.btn-outline-warning(href=``) Nueva Admision
 
-        // Columna derecha: Tabla de turnos
         .col-md-8
           .right-panel
             h4.mb-3 Turnos del Paciente
@@ -64,7 +63,7 @@ html(lang="es")
                     th Fecha
                     th Hora
                     th Especialidad
-                    th Profesional
+                    th Medico
                     th Estado
                     th Acciones
                 tbody
@@ -72,8 +71,8 @@ html(lang="es")
                     tr
                       td #{turno.fecha}
                       td #{turno.hora}
-                      td #{turno.especialidad}
-                      td #{turno.profesional}
+                      td #{turno.idEspecialidad}
+                      td #{turno.idMedico}
                       td #{turno.estado}
                       td
                         a.btn.btn-sm.btn-success.me-1(href=`/turnos/${turno.id}/editar`) Admitir 
