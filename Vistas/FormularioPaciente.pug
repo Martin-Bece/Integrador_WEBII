@@ -37,12 +37,9 @@ html(lang="en")
                         label.form-label(for='sexo') Sexo
                         select#sexo.form-select(name='sexo' required)
                             option(value='') Seleccione una opción
-                            option(value='Masculino') Masculino
-                            option(value='Femenino') Femenino
-
-                    div.mb-3
-                        label.form-label(for='motivo') Motivo de Admisión
-                        textarea#motivo.form-control(name='motivo' rows='3' required)
+                            option(value='M') Masculino
+                            option(value='F') Femenino
+                            option(value='O') Otro
 
                     div.mb-3
                         label.form-label(for='telefono') Teléfono
@@ -53,25 +50,9 @@ html(lang="en")
                         input#direccion.form-control(type='text' name='direccion' required)
 
                     div.mb-3
-                        label.form-label(for='contactoEmergencia') Contacto de Emergencia
-                        input#contactoEmergencia.form-control(type='text' name='contactoEmergencia' required)
-
-                    div.mb-3
-                        label.form-label(for='origen') Origen de la Admisión
-                        select#origen.form-select(name='origen' required)
-                            option(value='') Seleccione una opción
-                            option(value='Guardia') Guardia
-                            option(value='Derivación') Derivación
-                            option(value='Cita') Cita Programada
-
-                    div.mb-3
-                        label.form-label(for='seguroNombre') Nombre de la obra social o seguro
-                        input#seguroNombre.form-control(type='text' name='seguroNombre' placeholder='En caso de no tener ingrese: Ninguna')
-
-                    div.mb-3
-                        label.form-label(for='seguroNumero') Número de afiliado
-                        input#seguroNumero.form-control(type='text' name='seguroNumero' placeholder='Ej: 123456789')
-
+                        label.form-label(for='mutual') Nombre de la obra social o mutual
+                        select#mutual.form-select(name='mutual' required)
+                            option(value="S") Seleccione una opcion 
 
                     button.btn.btn-success.w-100(type='submit') Cargar Paciente
 
