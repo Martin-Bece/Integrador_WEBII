@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const pug = require('pug');
 const path = require('path');
-const { sequelize } = require('./Modelo');
+const db = require('./Modelo');
+const { where } = require('sequelize');
 
 const PORT = 3000;
 
@@ -29,40 +30,23 @@ app.get('/PacientesInternados', (req, res) =>{
     res.render('PacientesInternados')
 })
 
-app.get('/portalPaciente', (req, res) =>{
-    res.render('portalPaciente', {
-  paciente: {
-    idPaciente: 1,
-    nombre: 'Juan',
-    apellido: 'Pérez',
-    dni: '12345678',
-    fecha_nacimiento: '1985-06-01',
-    sexo: 'Masculino',
-    telefono: '123456789',
-    direccion: 'Calle Falsa 123',
-    mutual: 'OSDE',
-    
-  },
-  turnos: [
-    {
-      id: 1,
-      fecha: '2025-05-24',
-      hora: '10:30',
-      idEspecialidad: 'Clínica Médica',
-      idMedico: 'Dr. López',
-      estado: 'Pendiente'
-    },
-    {
-      id: 2,
-      fecha: '2025-05-28',
-      hora: '14:00',
-      idEspecialidad: 'Cardiología',
-      idMedico: 'Dra. Torres',
-      estado: 'Pendiente'
-    }
-  ]
+app.get('/portalPaciente/:dni', async (req, res) => {
+  const dni = req.params.dni;
+
+  try {
+    const paciente = await db.pacientes.findOne({ where: { dni } });
+    if (!paciente) return res.status(404).send('Paciente no encontrado');
+
+    const turnos = await db.turnos.findAll({
+      where: { paciente_id: paciente.idPaciente }
+    });
+
+    res.render('portalPaciente', { paciente, turnos });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error interno');
+  }
 });
-})
 
 app.get('/formAdmision', (req, res) =>{
     const motivos = [
@@ -87,6 +71,19 @@ app.get('/Emergencia', (req, res) =>{
     res.render('formEmergencia')
 })
 
+app.post('/BuscarPaciente', async (req, res) =>{
+  
+    const dni  = req.body.dni;
+
+    const paciente = await db.pacientes.findOne({where: { dni }});
+
+    if (paciente) {
+      res.redirect('/portalPaciente/' + dni);
+    } else {
+      res.status(404).send('Paciente no encontrado');
+    }
+  });
+
 app.use((req, res) => {
   res.status(404).render('404');
 });
@@ -97,7 +94,7 @@ app.use((err,req, res) => {
 });
 
 
-sequelize.sync({force:false})
+db.sequelize.sync({force:false, alter: true})
   .then(()=>{
     console.log('Conexion a la BD realizada correctamente.');
     app.listen(PORT,()=>{

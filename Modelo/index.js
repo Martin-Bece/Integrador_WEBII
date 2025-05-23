@@ -1,23 +1,20 @@
 const Sequelize = require('sequelize');
-const db = {};
+const initModels = require('./init-models');
 
 const sequelize = new Sequelize(
-    'bd_his',
-    'root',
-    '',
-    {
-        host: 'localhost',
-        dialect: 'mysql',
-    }
+  'bd_his', 
+  'root',   
+  '',       
+  {
+    host: 'localhost', 
+    dialect: 'mysql',
+    logging: false 
+  }
 );
 
-Object.keys(db).forEach(modelName => {
-    if (db[modelName].asocciate) {
-        db[modelName].asocciate(db);
-    }
-});
+const models = initModels(sequelize);
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+models.sequelize = sequelize;
+models.Sequelize = Sequelize;
 
-module.exports = db;
+module.exports = models;
