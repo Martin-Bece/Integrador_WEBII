@@ -1,11 +1,16 @@
 const express = require('express');
 const app = express();
 const pug = require('pug');
+const path = require('path');
+const { sequelize } = require('./Modelo');
 
 const PORT = 3000;
 
 app.set('view engine', 'pug');
 app.set('views', './vistas');
+
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
 
 
 app.get('/', (req, res) =>{
@@ -86,6 +91,19 @@ app.use((req, res) => {
   res.status(404).render('404');
 });
 
-app.listen(PORT,()=>{
+app.use((err,req, res) => {
+  console.error(err.stack);
+  res.status(500).render('500');
+});
+
+
+sequelize.sync({force:false})
+  .then(()=>{
+    console.log('Conexion a la BD realizada correctamente.');
+    app.listen(PORT,()=>{
     console.log("Se inicio el servidor en el puerto: "+ PORT)
 });
+  })
+  .catch( err =>{
+    console.error('Error al acceder a la BD: ', err)
+  })
