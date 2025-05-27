@@ -71,6 +71,20 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
+        name: "fk_admision_habitacion",
+        using: "BTREE",
+        fields: [
+          { name: "habitacion_id" },
+        ]
+      },
+      {
+        name: "fk_admision_cama",
+        using: "BTREE",
+        fields: [
+          { name: "cama_id" },
+        ]
+      },
+      {
         name: "paciente_id",
         using: "BTREE",
         fields: [
@@ -89,20 +103,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "origen_id" },
-        ]
-      },
-      {
-        name: "fk_admision_habitacion",
-        using: "BTREE",
-        fields: [
-          { name: "habitacion_id" },
-        ]
-      },
-      {
-        name: "fk_admision_cama",
-        using: "BTREE",
-        fields: [
-          { name: "cama_id" },
         ]
       },
     ]

@@ -3,14 +3,14 @@ const app = express();
 const pug = require('pug');
 const path = require('path');
 const db = require('./Modelo');
-const { where } = require('sequelize');
+const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja } = require('./Controller/PacientesController');
 
 const PORT = 3000;
 
 app.set('view engine', 'pug');
 app.set('views', './vistas');
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 
@@ -22,31 +22,14 @@ app.get('/BuscarPaciente', (req, res) =>{
     res.render('BuscarPaciente')
 })
 
-app.get('/FormularioPaciente', (req, res) =>{
-    res.render('FormularioPaciente')
-})
+app.get('/FormularioPaciente', renderFormularioPaciente);
+
 
 app.get('/PacientesInternados', (req, res) =>{
     res.render('PacientesInternados')
 })
 
-app.get('/portalPaciente/:dni', async (req, res) => {
-  const dni = req.params.dni;
-
-  try {
-    const paciente = await db.pacientes.findOne({ where: { dni } });
-    if (!paciente) return res.status(404).send('Paciente no encontrado');
-
-    const turnos = await db.turnos.findAll({
-      where: { paciente_id: paciente.idPaciente }
-    });
-
-    res.render('portalPaciente', { paciente, turnos });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error interno');
-  }
-});
+app.get('/portalPaciente/:dni', mostrarPortalPaciente);
 
 app.get('/formAdmision', (req, res) =>{
     const motivos = [
@@ -71,18 +54,13 @@ app.get('/Emergencia', (req, res) =>{
     res.render('formEmergencia')
 })
 
-app.post('/BuscarPaciente', async (req, res) =>{
-  
-    const dni  = req.body.dni;
+app.post('/buscarPaciente', buscarPacientePOST);
 
-    const paciente = await db.pacientes.findOne({where: { dni }});
+app.post('/crearPaciente', crearPaciente)
 
-    if (paciente) {
-      res.redirect('/portalPaciente/' + dni);
-    } else {
-      res.status(404).send('Paciente no encontrado');
-    }
-  });
+app.get('/pacientes/baja/:dni', darDeBaja);
+
+app.get('/pacientes/alta/:dni', darDeAlta);
 
 app.use((req, res) => {
   res.status(404).render('404');

@@ -28,12 +28,12 @@ html(lang="es")
     
     +navbar
 
-    .container.mt-5
+    div.container.mt-5
       h2.text-center.mb-5 PORTAL DEL PACIENTE
 
-      .row
-        .col-md-4
-          .left-panel
+      div.row
+        div.col-md-4
+          div.left-panel
             h4 Información Del Paciente
             p
               strong ID: 
@@ -48,13 +48,16 @@ html(lang="es")
             hr
 
             .d-grid.gap-2
-              a.btn.btn-outline-primary(href=``) Editar Información
-              a.btn.btn-outline-success(href=``) Asignar Nuevo Turno
-              a.btn.btn-outline-danger(href=``) Dar de Baja
+              a.btn.btn-outline-primary(href=`/FormularioPaciente?dni=${paciente.dni}`) Editar Información
+              a.btn.btn-outline-success(href=`/darBaja`) Asignar Nuevo Turno
+              if paciente.activo
+                a.btn.btn-outline-danger(href=`/pacientes/baja/${paciente.dni}`) Dar de Baja
+              else
+                a.btn.btn-outline-info(href=`/pacientes/alta/${paciente.dni}`) Dar de Alta
               a.btn.btn-outline-warning(href=``) Nueva Admision
 
-        .col-md-8
-          .right-panel
+        div.col-md-8
+          div.right-panel
             h4.mb-3 Turnos del Paciente
             if turnos.length > 0
               table.table.table-hover

@@ -36,45 +36,51 @@ html(lang="en")
         div.card-body
           h4.card-title.mb-4.text-center.text-primary Formulario del Paciente
 
-          form(action='' method='POST' novalidate)
+          if error
+            div.alert.alert-danger.mt-2= error
+
+          form(action='/crearPaciente' method='POST' novalidate)
             div.mb-3
               label.form-label(for='nombre') Nombre
-              input#nombre.form-control(type='text' name='nombre' required placeholder='Ingrese el nombre')
+              input#nombre.form-control(type='text' name='nombre' required placeholder='Ingrese el nombre' value= paciente && paciente.nombre ? paciente.nombre : '')
 
             div.mb-3
               label.form-label(for='apellido') Apellido 
-              input#apellido.form-control(type='text' name='apellido' required placeholder='Ingrese el apellido')
+              input#apellido.form-control(type='text' name='apellido' required placeholder='Ingrese el apellido' value= paciente && paciente.apellido ? paciente.apellido : '')
 
             div.mb-3
               label.form-label(for='dni') DNI
-              input#dni.form-control(type='number' name='dni' required placeholder='Ingrese el DNI')
-            
+              input#dni.form-control(type='number' name='dni' required readonly value= paciente && paciente.dni ? paciente.dni : (dni || ''))
+
             div.mb-3 
-              label.form-label(for='fechaNacimiento') Fecha de Nacimiento
-              input#fechaNacimiento.form-control(type='date' name='fechaNacimiento' required)
+              label.form-label(for='fecha_nacimiento') Fecha de Nacimiento
+              input#fechaNacimiento.form-control(type='date' name='fecha_nacimiento' required value= paciente && paciente.fecha_nacimiento ? paciente.fecha_nacimiento : '')
 
             div.mb-3
               label.form-label(for='sexo') Sexo
               select#sexo.form-select(name='sexo' required)
-                option(value='') Seleccione una opción
-                option(value='M') Masculino
-                option(value='F') Femenino
-                option(value='O') Otro
+                option(value="") Seleccione una opción
+                option(value="M", selected= paciente && paciente.sexo === 'M') Masculino
+                option(value="F", selected= paciente && paciente.sexo === 'F') Femenino
+                option(value="O", selected= paciente && paciente.sexo === 'O') Otro
 
             div.mb-3
               label.form-label(for='telefono') Teléfono
-              input#telefono.form-control(type='tel' name='telefono' required placeholder='Ingrese teléfono')
+              input#telefono.form-control(type='tel' name='telefono' required placeholder='Ingrese teléfono' value= paciente && paciente.telefono ? paciente.telefono : '')
 
             div.mb-3
               label.form-label(for='direccion') Dirección
-              input#direccion.form-control(type='text' name='direccion' required placeholder='Ingrese dirección')
+              input#direccion.form-control(type='text' name='direccion' required placeholder='Ingrese dirección' value= paciente && paciente.direccion ? paciente.direccion : '')
 
             div.mb-3
-              label.form-label(for='mutual') Nombre de la obra social o mutual
-              select#mutual.form-select(name='mutual' required)
+              label.form-label(for='mutual_id') Nombre de la obra social o mutual
+              select#mutual.form-select(name='mutual_id' required)
                 option(value="") Seleccione una opción 
+                each mutual in mutuales 
+                  option(value= mutual.idMutual, selected= paciente && paciente.mutual_id === mutual.idMutual )= mutual.nombre
 
-            button.btn.btn-primary.w-100.mt-3(type='submit') Cargar Paciente
+            button.btn.btn-primary.w-100.mt-3(type='submit') Cargar Datos del Paciente
+
 
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js", integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO", crossorigin="anonymous")
 

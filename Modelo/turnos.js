@@ -58,10 +58,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "paciente_id",
+        name: "fk_especialidades_turnos",
         using: "BTREE",
         fields: [
-          { name: "paciente_id" },
+          { name: "idEspecialidad" },
         ]
       },
       {
@@ -72,10 +72,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "fk_especialidades_turnos",
+        name: "paciente_id",
         using: "BTREE",
         fields: [
-          { name: "idEspecialidad" },
+          { name: "paciente_id" },
         ]
       },
     ]

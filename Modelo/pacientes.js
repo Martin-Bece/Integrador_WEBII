@@ -43,6 +43,11 @@ module.exports = function(sequelize, DataTypes) {
         model: 'mutuales',
         key: 'idMutual'
       }
+    },
+    activo: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 1
     }
   }, {
     sequelize,
