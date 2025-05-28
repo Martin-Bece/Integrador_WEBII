@@ -281,6 +281,20 @@ async function confirmarTurno(req, res) {
   }
 }
 
+async function cancelarTurno(req, res) {
+  try {
+    const turnoId = req.params.id;
+    const dni = req.params.dni;
+
+    await db.turnos.destroy({ where: { idTurno: turnoId } });
+
+    res.redirect(`/portalPaciente/${dni}`);
+  } catch (error) {
+    console.error('Error al cancelar turno:', error);
+    res.status(500).send('Error al cancelar el turno');
+  }
+}
+
 
 module.exports = {
   mostrarPortalPaciente,
@@ -291,6 +305,7 @@ module.exports = {
   darDeBaja,
   renderNuevoTurno,
   EspecialidadTurno,
-  confirmarTurno
+  confirmarTurno,
+  cancelarTurno
 };
 
