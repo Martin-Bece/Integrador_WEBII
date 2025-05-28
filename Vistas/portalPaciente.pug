@@ -49,7 +49,7 @@ html(lang="es")
 
             .d-grid.gap-2
               a.btn.btn-outline-primary(href=`/FormularioPaciente?dni=${paciente.dni}`) Editar Información
-              a.btn.btn-outline-success(href=`/darBaja`) Asignar Nuevo Turno
+              a.btn.btn-outline-success(href=`/NuevoTurno/${paciente.dni}`) Asignar Nuevo Turno
               if paciente.activo
                 a.btn.btn-outline-danger(href=`/pacientes/baja/${paciente.dni}`) Dar de Baja
               else
