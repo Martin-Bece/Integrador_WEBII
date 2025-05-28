@@ -62,6 +62,10 @@ app.get('/pacientes/baja/:dni', darDeBaja);
 
 app.get('/pacientes/alta/:dni', darDeAlta);
 
+app.get('/paginainicial', (req, res) =>{
+  res.render('index')
+})
+
 app.use((req, res) => {
   res.status(404).render('404');
 });

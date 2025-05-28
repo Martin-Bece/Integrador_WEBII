@@ -1,6 +1,7 @@
 
 const db = require('../Modelo');
 const { obtenerMutuales } = require('./mutualesController');
+const { obtenerTurnosPorDNI } = require('./TurnosController');
 
 async function buscarPorDNI(dni) {
     const paciente = await db.pacientes.findOne({ where: { dni } });
@@ -32,9 +33,8 @@ async function mostrarPortalPaciente(req, res) {
     const paciente = await buscarPorDNI(dni);
 
     if (paciente) {
-      const turnos = await db.turnos.findAll({
-        where: { paciente_id: paciente.idPaciente }
-      });
+      const turnos = obtenerTurnosPorDNI(dni);
+      
       return res.render('portalPaciente', { paciente, turnos });
     } else {
       return res.redirect(`/FormularioPaciente?dni=${dni}`);
