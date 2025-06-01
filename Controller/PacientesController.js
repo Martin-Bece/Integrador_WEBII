@@ -4,6 +4,8 @@ const { obtenerEspecialidades, obtenerEspecialidadPorID } = require('./especiali
 const { obtenerMedicosPorEspecialidad, obtenerMedicoPorID } = require('./medicosController');
 const { obtenerMutuales } = require('./mutualesController');
 const { obtenerTurnosPorDNI } = require('./TurnosController');
+const { obtenerMotivos } = require('./motivosController'); 
+const { obtenerOrigenPorNombre } = require('./origenController');
 
 async function buscarPorDNI(dni) {
     const paciente = await db.pacientes.findOne({ where: { dni } });
@@ -295,6 +297,68 @@ async function cancelarTurno(req, res) {
   }
 }
 
+async function admitirTurno(req, res) {
+
+  try {
+    const turnoId = req.params.id;
+    const dni = req.params.dni;
+
+
+  } catch (error) {
+    console.error('Error al admitir turno:', error);
+    res.status(500).send('Error al admitir el turno');
+  }
+}
+
+async function renderFormularioEmergencia(req, res, datosAdicionales = {}) {
+  try {
+    const motivos = await obtenerMotivos();
+    res.render('formEmergencia', {
+      motivos,
+      ...datosAdicionales
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cargar el formulario');
+  }
+}
+
+async function admitirEmergencia(req, res) {
+  
+  const { dni, idMotivo, Nombreorigen} = req.body;
+
+  const dniRegex = /^\d{7,8}$/;
+
+  if (
+    !dni ||
+    !idMotivo ||
+    !origen
+  ) {
+    const motivos = await obtenerMotivos();
+    return renderFormularioEmergencia(req, res, {
+      motivos,
+      error: 'Por favor, complete todos los campos obligatorios.'}
+    )
+  }
+  if (!dniRegex.test(dni)) {
+    const motivos = await obtenerMotivos();
+    return renderFormularioEmergencia(req, res, {
+      error: 'El DNI debe tener 7 u 8 dígitos numéricos.',
+      motivos
+    });
+  }
+
+  const pacienteCargado = await buscarPorDNI(dni);
+
+  if(!pacienteCargado){
+    const paciente = {
+      idPaciente: dni
+    }
+    await db.pacientes.create(paciente);
+  }
+
+  const Origen = obtenerOrigenPorNombre(Nombreorigen);
+}
 
 module.exports = {
   mostrarPortalPaciente,
@@ -306,6 +370,8 @@ module.exports = {
   renderNuevoTurno,
   EspecialidadTurno,
   confirmarTurno,
-  cancelarTurno
+  cancelarTurno,
+  admitirTurno,
+  renderFormularioEmergencia,
+  admitirEmergencia
 };
-

@@ -78,7 +78,7 @@ html(lang="es")
                       td #{turno.idMedico}
                       td #{turno.estado}
                       td
-                        a.btn.btn-sm.btn-success.me-1(href=`/turnos/${turno.id}/admitir`) Admitir 
+                        a.btn.btn-sm.btn-success.me-1(href=`/turnos/${turno.idTurno}/admitir/${paciente.dni}`) Admitir 
                         a.btn.btn-sm.btn-danger(href=`/turnos/${turno.idTurno}/cancelar/${paciente.dni}`) Cancelar
             else
               p.text-muted No hay turnos asignados.

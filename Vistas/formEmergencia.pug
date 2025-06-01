@@ -58,6 +58,8 @@ html(lang="es")
       div.card.p-4.shadow-lg(style="width: 100%; max-width: 400px;")
         div.card-body
           h4.card-title.mb-4.text-center Admisión de Emergencia
+          if error
+            div.alert.alert-danger.mt-2= error
 
           form(action='/emergencia' method='POST' novalidate)
             div.mb-3
@@ -65,15 +67,14 @@ html(lang="es")
               input#dni.form-control(type='number' name='dni' required placeholder='Ingrese el DNI')
 
             div.mb-3
-              label.form-label(for='motivo') Motivo
-              select#motivo.form-select(name='motivo' required)
+              label.form-label(for='idMotivo') Motivo
+              select#motivo.form-select(name='idMotivo' required)
                 option(value='') Seleccione motivo
-                //each motivo in motivos
-                //option(value=motivo.id)= motivo.descripcion
+                each motivo in motivos
+                  option(value=motivo.idMotivo)= motivo.descripcion
 
 
-            //- Origen fijo para emergencia, campo oculto
-            input(type='hidden' name='origen' value='emergencia')
+            input(type='hidden' name='origen' value='Emergencia')
 
             button.btn.btn-danger.w-100.mt-3(type='submit') Registrar Emergencia
 

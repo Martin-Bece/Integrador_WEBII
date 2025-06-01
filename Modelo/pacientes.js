@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     dni: {
       type: DataTypes.BIGINT,
-      allowNull: true,
+      allowNull: false,
       unique: "dni"
     },
     fecha_nacimiento: {

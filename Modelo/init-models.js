@@ -30,6 +30,8 @@ function initModels(sequelize) {
   alas.hasMany(habitaciones, { as: "habitaciones", foreignKey: "ala_id"});
   admisiones.belongsTo(camas, { as: "cama", foreignKey: "cama_id"});
   camas.hasMany(admisiones, { as: "admisiones", foreignKey: "cama_id"});
+  motivos.belongsTo(especialidades, { as: "idEspecialidad_especialidade", foreignKey: "idEspecialidad"});
+  especialidades.hasMany(motivos, { as: "motivos", foreignKey: "idEspecialidad"});
   turnos.belongsTo(especialidades, { as: "idEspecialidad_especialidade", foreignKey: "idEspecialidad"});
   especialidades.hasMany(turnos, { as: "turnos", foreignKey: "idEspecialidad"});
   admisiones.belongsTo(habitaciones, { as: "habitacion", foreignKey: "habitacion_id"});

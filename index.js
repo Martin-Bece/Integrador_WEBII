@@ -3,7 +3,7 @@ const app = express();
 const pug = require('pug');
 const path = require('path');
 const db = require('./Modelo');
-const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno } = require('./Controller/PacientesController');
+const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno, renderFormularioEmergencia, admitirEmergencia } = require('./Controller/PacientesController');
 
 const PORT = 3000;
 
@@ -50,9 +50,9 @@ const origenes = [
     res.render('formAdmision', { motivos, origenes });
 })
 
-app.get('/Emergencia', (req, res) =>{
-    res.render('formEmergencia')
-})
+app.get('/Emergencia', renderFormularioEmergencia)
+
+app.post('/emergencia', admitirEmergencia)
 
 app.post('/buscarPaciente', buscarPacientePOST);
 
@@ -69,6 +69,8 @@ app.post('/Turnos/Nuevo/:dni', EspecialidadTurno);
 app.post('/Turnos/Confirmar', confirmarTurno);
 
 app.get('/turnos/:id/cancelar/:dni', cancelarTurno);
+
+app.get('/turnos/:id/admitir/:dni', cancelarTurno);
 
 app.get('/paginainicial', (req, res) =>{
   res.render('index')
