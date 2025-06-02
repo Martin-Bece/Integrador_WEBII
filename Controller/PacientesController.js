@@ -4,8 +4,10 @@ const { obtenerEspecialidades, obtenerEspecialidadPorID } = require('./especiali
 const { obtenerMedicosPorEspecialidad, obtenerMedicoPorID } = require('./medicosController');
 const { obtenerMutuales } = require('./mutualesController');
 const { obtenerTurnosPorDNI } = require('./TurnosController');
-const { obtenerMotivos } = require('./motivosController'); 
+const { obtenerMotivos, obtenerMotivoPorID } = require('./motivosController'); 
 const { obtenerOrigenPorNombre } = require('./origenController');
+const { obtenerHabsPorUnidad, obtenerHabsPorID } = require('./habitacionesController');
+const { AsignarCama } = require('./camasController');
 
 async function buscarPorDNI(dni) {
     const paciente = await db.pacientes.findOne({ where: { dni } });
@@ -325,19 +327,27 @@ async function renderFormularioEmergencia(req, res, datosAdicionales = {}) {
 
 async function admitirEmergencia(req, res) {
   
-  const { dni, idMotivo, Nombreorigen} = req.body;
+  const { dni, idMotivo, Nombreorigen, sexo } = req.body;
 
   const dniRegex = /^\d{7,8}$/;
 
   if (
     !dni ||
     !idMotivo ||
-    !origen
+    !Nombreorigen ||
+    !sexo
   ) {
     const motivos = await obtenerMotivos();
     return renderFormularioEmergencia(req, res, {
       motivos,
       error: 'Por favor, complete todos los campos obligatorios.'}
+    )
+  }
+  if (!['M', 'F'].includes(sexo)) {
+    const motivos = await obtenerMotivos();
+    return renderFormularioEmergencia(req, res, {
+      motivos,
+      error: 'Sexo Inválido'}
     )
   }
   if (!dniRegex.test(dni)) {
@@ -348,17 +358,69 @@ async function admitirEmergencia(req, res) {
     });
   }
 
-  const pacienteCargado = await buscarPorDNI(dni);
+  let paciente = await buscarPorDNI(dni);
+  if (!paciente) {
+    paciente = await db.pacientes.create({ dni, sexo });
+  } else if (!paciente.sexo) {
+    await paciente.update({ sexo });
+}
 
-  if(!pacienteCargado){
-    const paciente = {
-      idPaciente: dni
+  const admisionActiva = await db.admisiones.findOne({
+    where: {
+      paciente_id: paciente.idPaciente,
+      estado: 'Activa'
     }
-    await db.pacientes.create(paciente);
+  });
+
+  if (admisionActiva) {
+    const motivos = await obtenerMotivos();
+    return renderFormularioEmergencia(req, res, {
+      motivos,
+      error: 'El paciente ya está internado actualmente.'
+    });
   }
 
-  const Origen = obtenerOrigenPorNombre(Nombreorigen);
+  const origen = await obtenerOrigenPorNombre(Nombreorigen);
+
+  const motivo = await obtenerMotivoPorID(idMotivo);
+
+  const habitaciones = await obtenerHabsPorUnidad(motivo.idEspecialidad);
+
+  try {
+    const cama = await AsignarCama(paciente.idPaciente, habitaciones);
+
+    const admision = {
+      paciente_id: paciente.idPaciente,
+      motivo_id: motivo.idMotivo,
+      origen_id: origen.idOrigen,
+      habitacion_id: cama.habitacion_id,
+      cama_id: cama.idCama,
+      estado: 'Activa'
+    }
+
+    await db.admisiones.create(admision);
+
+    const habitacion = await obtenerHabsPorID(cama.habitacion_id)
+
+    return res.render('admisionInfo', {
+      dni: paciente.dni,
+      unidad: habitacion.unidad_id,
+      ala: habitacion.ala_id,
+      habitacion: habitacion.numero, 
+      cama: cama.idCama 
+    });
+
+  } catch (error) {
+      console.error('Error al asignar cama:', error);
+      const motivos = await obtenerMotivos();
+      return renderFormularioEmergencia(req, res, {
+        error: 'No hay camas disponibles para este paciente.',
+        motivos
+      });
+  }
+
 }
+
 
 module.exports = {
   mostrarPortalPaciente,

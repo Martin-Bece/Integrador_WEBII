@@ -1,7 +1,11 @@
 const db = require('../Modelo'); 
 
 async function obtenerMotivos() {
-    return motivos = await db.motivos.findAll()
+    return await db.motivos.findAll()
 }
 
-module.exports = {obtenerMotivos}
+async function obtenerMotivoPorID(idMotivo) {
+    return await db.motivos.findOne({ where: { idMotivo } })
+}
+
+module.exports = {obtenerMotivos, obtenerMotivoPorID}

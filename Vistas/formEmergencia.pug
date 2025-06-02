@@ -65,6 +65,13 @@ html(lang="es")
             div.mb-3
               label.form-label(for='dni') DNI
               input#dni.form-control(type='number' name='dni' required placeholder='Ingrese el DNI')
+            
+            div.mb-3
+              label.form-label(for='sexo') Sexo
+              select#sexo.form-select(name='sexo' required)
+                option(value='') Seleccione sexo
+                option(value='M') Masculino
+                option(value='F') Femenino
 
             div.mb-3
               label.form-label(for='idMotivo') Motivo
@@ -73,8 +80,7 @@ html(lang="es")
                 each motivo in motivos
                   option(value=motivo.idMotivo)= motivo.descripcion
 
-
-            input(type='hidden' name='origen' value='Emergencia')
+            input(type='hidden' name='Nombreorigen' value='Emergencia')
 
             button.btn.btn-danger.w-100.mt-3(type='submit') Registrar Emergencia
 
