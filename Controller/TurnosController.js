@@ -14,8 +14,13 @@ async function obtenerTurnosPorDNI(dni){
     return turnos;
 }
 
+async function obtenerTurnoPorID(idTurno) {
+    return await db.turnos.findByPk(idTurno);
+}
+
 
 
 module.exports = {
-    obtenerTurnosPorDNI
+    obtenerTurnosPorDNI,
+    obtenerTurnoPorID
 }

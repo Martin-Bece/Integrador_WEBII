@@ -54,7 +54,7 @@ async function AsignarCama(pacienteId, habitaciones) {
                 return cama;
             }
 
-            const otroS = camasOcupadas[0].admisiones.paciente.sexo;
+            const otroS = camasOcupadas[0].admisiones[0].paciente.sexo;
             if (otroS === sexo) {
                 await ocuparCama(cama.idCama)
                 return cama;

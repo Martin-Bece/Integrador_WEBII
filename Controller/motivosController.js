@@ -8,4 +8,8 @@ async function obtenerMotivoPorID(idMotivo) {
     return await db.motivos.findOne({ where: { idMotivo } })
 }
 
-module.exports = {obtenerMotivos, obtenerMotivoPorID}
+async function obtenerMotivoPorEspecialidad(idEspecialidad) {
+    return await db.motivos.findAll({ where: { idEspecialidad } })
+}
+
+module.exports = {obtenerMotivos, obtenerMotivoPorID, obtenerMotivoPorEspecialidad}

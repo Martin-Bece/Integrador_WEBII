@@ -1,0 +1,28 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title Nueva Admisión por Derivación
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+
+  body.bg-primary.bg-gradient.d-flex.justify-content-center.align-items-center(style="min-height: 100vh;")
+
+    div.card.shadow-lg.rounded.p-4(style="max-width: 450px; width: 100%;")
+      h2.card-title.text-center.mb-4.text-primary Nueva Admisión
+      if error
+        div.alert.alert-danger.mt-2= error
+      form(action="/admisiones/derivacion" method="POST" novalidate)
+        div.mb-3
+          label.form-label(for="idMotivo") Motivo de Internación
+          select.form-select(name="idMotivo" id="idMotivo" required)
+            option(value="" disabled selected) -- Seleccione un motivo --
+            each motivo in motivos
+              option(value=motivo.idMotivo)= motivo.descripcion
+
+        input(type="hidden" name="Nombreorigen" value="Derivacion")
+        input(type="hidden" name="dni" value=dni)
+
+        button.btn.btn-primary.w-100(type="submit") Guardar Admisión
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")

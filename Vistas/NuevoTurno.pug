@@ -33,11 +33,14 @@ html(lang="es")
         div.card-body
           h4.text-center.text-primary.mb-4 Solicitar Nuevo Turno
 
-          if errores
+          - const erroresValidos = Array.isArray(errores) ? errores.filter(e => e && e.trim()) : []
+
+          if erroresValidos.length
             div.alert.alert-danger
               ul.mb-0
-                each error in errores
+                each error in erroresValidos
                   li= error
+
 
           form(action=`/Turnos/Nuevo/${dni}` method="POST" novalidate)
             div.mb-3

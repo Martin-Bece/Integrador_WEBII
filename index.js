@@ -3,7 +3,9 @@ const app = express();
 const pug = require('pug');
 const path = require('path');
 const db = require('./Modelo');
-const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno, renderFormularioEmergencia, admitirEmergencia } = require('./Controller/PacientesController');
+const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno } = require('./Controller/PacientesController');
+const { mostrarInternaciones } = require('./Controller/InternacionesController');
+const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion } = require('./Controller/admisionesController')
 
 const PORT = 3000;
 
@@ -25,30 +27,9 @@ app.get('/BuscarPaciente', (req, res) =>{
 app.get('/FormularioPaciente', renderFormularioPaciente);
 
 
-app.get('/PacientesInternados', (req, res) =>{
-    res.render('PacientesInternados')
-})
+app.get('/PacientesInternados',mostrarInternaciones);
 
 app.get('/portalPaciente/:dni', mostrarPortalPaciente);
-
-app.get('/formAdmision', (req, res) =>{
-    const motivos = [
-  { id: 1, nombre: 'Observación clínica' },
-  { id: 2, nombre: 'Cirugía programada' },
-  { id: 3, nombre: 'Tratamiento intensivo' },
-  { id: 4, nombre: 'Control postoperatorio' },
-  { id: 5, nombre: 'Descompensación crónica' }
-];
-
-const origenes = [
-  { id: 1, nombre: 'Guardia' },
-  { id: 2, nombre: 'Derivado de consultorio' },
-  { id: 3, nombre: 'Derivado de otro hospital' },
-  { id: 4, nombre: 'Internación domiciliaria' },
-  { id: 5, nombre: 'Sala de espera' }
-];
-    res.render('formAdmision', { motivos, origenes });
-})
 
 app.get('/Emergencia', renderFormularioEmergencia)
 
@@ -70,7 +51,13 @@ app.post('/Turnos/Confirmar', confirmarTurno);
 
 app.get('/turnos/:id/cancelar/:dni', cancelarTurno);
 
-app.get('/turnos/:id/admitir/:dni', cancelarTurno);
+app.get('/turnos/:id/admitir/:dni', renderFormularioAdmision);
+
+app.post('/admisiones/turno', admitirTurno);
+
+app.get('/NuevoAdmitir/:dni', renderFormularioDerivacion);
+
+app.post('/admisiones/derivacion', admitirDerivacion);
 
 app.get('/paginainicial', (req, res) =>{
   res.render('index')
