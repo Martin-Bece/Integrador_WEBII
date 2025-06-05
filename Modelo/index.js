@@ -2,13 +2,13 @@ const Sequelize = require('sequelize');
 const initModels = require('./init-models');
 
 const sequelize = new Sequelize(
-  'bd_his', 
-  'root',   
-  '',       
+  process.env.DB_NAME || 'bd_his',
+  process.env.DB_USER || 'root',
+  process.env.DB_PASSWORD || '',
   {
-    host: 'localhost', 
+    host: process.env.DB_HOST || 'db',
     dialect: 'mysql',
-    logging: false 
+    logging: false
   }
 );
 
