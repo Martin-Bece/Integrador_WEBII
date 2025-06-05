@@ -162,7 +162,7 @@ async function admitirTurno(req, res) {
   });
 
   if (admisionActiva) {
-    const turno = obtenerTurnoPorID(idTurno);
+    const turno = await obtenerTurnoPorID(idTurno);
     const motivos = await obtenerMotivoPorEspecialidad(turno.idEspecialidad);
     return res.render('formAdmisionTurno', {
       motivos,
