@@ -10,7 +10,7 @@ const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision,
 const PORT = 3000;
 
 app.set('view engine', 'pug');
-app.set('views', './vistas');
+app.set('views', './Vistas');
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
