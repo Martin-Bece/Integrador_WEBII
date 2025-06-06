@@ -17,7 +17,7 @@ app.use(express.json());
 
 
 app.get('/', (req, res) =>{
-    res.render('Paginainicio')
+    res.render('PaginaInicio')
 });
 
 app.get('/BuscarPaciente', (req, res) =>{
