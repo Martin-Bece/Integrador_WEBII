@@ -24,7 +24,8 @@ sequelize-auto: Utilidad para generar modelos Sequelize automáticamente a parti
 
 Cómo ejecutar el proyecto
 
-Importante: La aplicación debe ejecutarse usando Docker y Docker Compose. No es posible correrla correctamente con npm run start directamente debido a las dependencias de la base de datos y variables de entorno. Decidí usar docker para poder subir a railway, basandonos en el paso a paso subido a uno de los foros del aula virtual.
+Importante: 
+La aplicación debe ejecutarse usando Docker y Docker Compose. No es posible correrla correctamente con npm run start directamente debido a las dependencias de la base de datos y variables de entorno. Decidí usar docker para poder subir a railway, basandonos en el paso a paso subido a uno de los foros del aula virtual.
 
 Requisitos
 
@@ -49,6 +50,7 @@ PORT=3000
 Levantar los contenedores con Docker Compose:
 
 docker compose up --build
+
 Esto iniciará dos servicios:
 
 app: el servidor Node.js con la aplicación
@@ -67,7 +69,8 @@ Repositorio GitHub: https://github.com/Martin-Bece/Integrador_WEBII.git
 
 Aplicación desplegada: https://integradorwebii-production.up.railway.app/
 
-Requisitos para la entrega y regularización
+Requisitos para la entrega y regularización: 
+
 El sistema cubre el módulo de admisión y recepción de pacientes, funcionando correctamente según los requerimientos. No se implementó autenticación (no requerida), pero la aplicación permite probar el flujo sin necesidad de login. 
 El proyecto está subido a GitHub con un histórico correcto de commits, y el endpoint principal para iniciar pruebas está disponible en la URL desplegada.
 
