@@ -96,7 +96,7 @@ async function admitirEmergencia(req, res) {
 
     const habitacion = await obtenerHabsPorID(cama.habitacion_id)
 
-    return res.render('admisionInfo', {
+    return res.render('AdmisionInfo', {
       dni: paciente.dni,
       unidad: habitacion.unidad_id,
       ala: habitacion.ala_id,
@@ -194,7 +194,7 @@ async function admitirTurno(req, res) {
 
     const habitacion = await obtenerHabsPorID(cama.habitacion_id)
 
-    return res.render('admisionInfo', {
+    return res.render('AdmisionInfo', {
       dni: paciente.dni,
       unidad: habitacion.unidad_id,
       ala: habitacion.ala_id,
@@ -287,7 +287,7 @@ async function admitirDerivacion(req, res) {
 
     const habitacion = await obtenerHabsPorID(cama.habitacion_id)
 
-    return res.render('admisionInfo', {
+    return res.render('AdmisionInfo', {
       dni: paciente.dni,
       unidad: habitacion.unidad_id,
       ala: habitacion.ala_id,
