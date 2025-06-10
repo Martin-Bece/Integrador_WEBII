@@ -69,6 +69,8 @@ Repositorio GitHub: https://github.com/Martin-Bece/Integrador_WEBII.git
 
 Aplicación desplegada: https://integradorwebii-production.up.railway.app/
 
+LINK al video: https://youtu.be/SORKIZ9HB1g
+
 Requisitos para la entrega y regularización: 
 
 El sistema cubre el módulo de admisión y recepción de pacientes, funcionando correctamente según los requerimientos. No se implementó autenticación (no requerida), pero la aplicación permite probar el flujo sin necesidad de login. 
