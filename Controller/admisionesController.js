@@ -192,7 +192,10 @@ async function admitirTurno(req, res) {
 
     await db.admisiones.create(admision);
 
-    const habitacion = await obtenerHabsPorID(cama.habitacion_id)
+    const habitacion = await obtenerHabsPorID(cama.habitacion_id);
+
+    const turno = await obtenerTurnoPorID(idTurno);
+    await turno.update({ estado: 'Atendido' });
 
     return res.render('AdmisionInfo', {
       dni: paciente.dni,
