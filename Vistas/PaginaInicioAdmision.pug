@@ -31,44 +31,32 @@ html(lang="es")
     block content 
 
     div.container.mt-5
-      h2.text-center.mb-4.text-primary Hospital Central Sur - HIS
-      div.row.row-cols-1.row-cols-md-2.row-cols-lg-4.g-4
+      h2.text-center.mb-4.text-dark Hospital Central Sur - Panel Admision y Recepcion
+      div.row.row-cols-1.row-cols-md-3.justify-content-center.g-4
 
         div.col
           div.card.p-3.shadow
-            h5.card-header.bg-primary.text-white Admisión y Recepción
+            h5.card-header.bg-success.text-white Admisión y Recepción
             div.card-body
               h5.card-title Registro
               p.card-text Registro o actualización de datos del paciente.
-              a.btn.btn-outline-primary.mb-2(href="/BuscarPaciente") Buscar Paciente
+              a.btn.btn-outline-success.mb-2(href="/BuscarPaciente") Buscar Paciente
+
+        div.col
+          div.card.p-3.shadow
+            h5.card-header.bg-danger.text-white Emergencia
+            div.card-body
+              h5.card-title Internar un paciente
+              p.card-text Viene con una emergencia.
               a.btn.btn-outline-danger(href="/Emergencia") Emergencia
 
         div.col
           div.card.p-3.shadow
-            h5.card-header.bg-info.text-white Evaluación Médica
+            h5.card-header.bg-primary.text-white Internación
             div.card-body
-              h5.card-title Médicos
-              p.card-text Evolución Médica y turnos.
-              a.btn.btn-info.disabled.mb-2(href="") Nueva Evaluación
-
-        div.col
-          div.card.p-3.shadow
-            h5.card-header.bg-info.text-white Evaluación de Enfermería
-            div.card-body
-              h5.card-title Enfermería
-              p.card-text Registro de signos vitales y controles.
-              a.btn.btn-info.disabled.mb-2(href="") Buscar Historial Médico
-              a.btn.btn-info.disabled.mb-2(href="") Registrar Signos Vitales
-              a.btn.btn-info.disabled(href="") Realizar Plan de Cuidados
-
-        div.col
-          div.card.p-3.shadow
-            h5.card-header.bg-primary.text-white Altas e Internación
-            div.card-body
-              h5.card-title Gestión de Internación
-              p.card-text Asignación de habitación y alta del paciente.
+              h5.card-title Visualización de Internaciones
+              p.card-text Informacion de habitaciones ocupadas.
               a.btn.btn-outline-primary.mb-2(href="/PacientesInternados") Ver Internaciones
-              a.btn.btn-info.disabled(href="") Ver Altas
 
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous")
 

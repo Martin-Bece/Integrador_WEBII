@@ -2,13 +2,16 @@ var DataTypes = require("sequelize").DataTypes;
 var _admisiones = require("./admisiones");
 var _alas = require("./alas");
 var _camas = require("./camas");
+var _enfermero = require("./enfermero");
 var _especialidades = require("./especialidades");
 var _habitaciones = require("./habitaciones");
+var _historial_medico = require("./historial_medico");
 var _medicos = require("./medicos");
 var _motivos = require("./motivos");
 var _mutuales = require("./mutuales");
 var _origenes = require("./origenes");
 var _pacientes = require("./pacientes");
+var _sintomas = require("./sintomas");
 var _turnos = require("./turnos");
 var _unidades = require("./unidades");
 
@@ -16,13 +19,16 @@ function initModels(sequelize) {
   var admisiones = _admisiones(sequelize, DataTypes);
   var alas = _alas(sequelize, DataTypes);
   var camas = _camas(sequelize, DataTypes);
+  var enfermero = _enfermero(sequelize, DataTypes);
   var especialidades = _especialidades(sequelize, DataTypes);
   var habitaciones = _habitaciones(sequelize, DataTypes);
+  var historial_medico = _historial_medico(sequelize, DataTypes);
   var medicos = _medicos(sequelize, DataTypes);
   var motivos = _motivos(sequelize, DataTypes);
   var mutuales = _mutuales(sequelize, DataTypes);
   var origenes = _origenes(sequelize, DataTypes);
   var pacientes = _pacientes(sequelize, DataTypes);
+  var sintomas = _sintomas(sequelize, DataTypes);
   var turnos = _turnos(sequelize, DataTypes);
   var unidades = _unidades(sequelize, DataTypes);
 
@@ -48,6 +54,8 @@ function initModels(sequelize) {
   origenes.hasMany(admisiones, { as: "admisiones", foreignKey: "origen_id"});
   admisiones.belongsTo(pacientes, { as: "paciente", foreignKey: "paciente_id"});
   pacientes.hasMany(admisiones, { as: "admisiones", foreignKey: "paciente_id"});
+  historial_medico.belongsTo(pacientes, { as: "idPaciente_paciente", foreignKey: "idPaciente"});
+  pacientes.hasMany(historial_medico, { as: "historial_medicos", foreignKey: "idPaciente"});
   turnos.belongsTo(pacientes, { as: "paciente", foreignKey: "paciente_id"});
   pacientes.hasMany(turnos, { as: "turnos", foreignKey: "paciente_id"});
   habitaciones.belongsTo(unidades, { as: "unidad", foreignKey: "unidad_id"});
@@ -57,13 +65,16 @@ function initModels(sequelize) {
     admisiones,
     alas,
     camas,
+    enfermero,
     especialidades,
     habitaciones,
+    historial_medico,
     medicos,
     motivos,
     mutuales,
     origenes,
     pacientes,
+    sintomas,
     turnos,
     unidades,
   };

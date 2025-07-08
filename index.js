@@ -16,8 +16,12 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 
-app.get('/', (req, res) =>{
-    res.render('PaginaInicio')
+app.get('/Admision', (req, res) =>{
+    res.render('PaginaInicioAdmision')
+});
+
+app.get('/Enfermeria', (req, res) =>{
+    res.render('PaginaInicioEnfermeria')
 });
 
 app.get('/BuscarPaciente', (req, res) =>{
@@ -59,7 +63,7 @@ app.get('/NuevoAdmitir/:dni', renderFormularioDerivacion);
 
 app.post('/admisiones/derivacion', admitirDerivacion);
 
-app.get('/paginainicial', (req, res) =>{
+app.get('/', (req, res) =>{
   res.render('index')
 })
 
