@@ -15,6 +15,9 @@ app.set('views', './Vistas');
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
+app.get('/', (req, res) =>{
+  res.render('index')
+})
 
 app.get('/Admision', (req, res) =>{
     res.render('PaginaInicioAdmision')
@@ -63,8 +66,24 @@ app.get('/NuevoAdmitir/:dni', renderFormularioDerivacion);
 
 app.post('/admisiones/derivacion', admitirDerivacion);
 
-app.get('/', (req, res) =>{
-  res.render('index')
+app.get('/HistorialDNI', (req, res) =>{
+  res.render('EvaluacionDNI')
+})
+
+app.get('/SignosDNI', (req, res) =>{
+  res.render('SignosDNI')
+})
+
+app.get('/PlanDNI', (req, res) =>{
+  res.render('PlanDNI')
+})
+
+app.get('/forma', (req, res) =>{
+  res.render('FormPlanC')
+})
+
+app.get('/formb', (req, res) =>{
+  res.render('FormInforme')
 })
 
 app.use((req, res) => {

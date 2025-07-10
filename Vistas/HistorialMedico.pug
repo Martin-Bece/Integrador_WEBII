@@ -1,0 +1,67 @@
+doctype html
+include navbarE.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css")
+    title Historial Médico
+    style.
+      body {
+        background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      main.container {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .card {
+        border-radius: 1rem;
+        box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        max-width: 600px;
+        width: 100%;
+      }
+
+  body
+    +navbar
+
+    main.container
+      div.card.p-4.shadow-lg
+        div.card-body
+          h4.card-title.mb-4.text-center.text-primary Historial Médico
+
+          if error
+            div.alert.alert-danger.mt-2= error
+
+          form(action="/enfermeria/guardar-historial" method="POST")
+            input(type="hidden" name="idPaciente" value=idPaciente)
+
+            div.mb-3
+              label.form-label(for="enfermedades_previas") Enfermedades previas
+              textarea.form-control(name="enfermedades_previas" rows="2")
+
+            div.mb-3
+              label.form-label(for="cirugias") Cirugías
+              textarea.form-control(name="cirugias" rows="2")
+
+            div.mb-3
+              label.form-label(for="alergias") Alergias
+              textarea.form-control(name="alergias" rows="2")
+
+            div.mb-3
+              label.form-label(for="medicamentos_actuales") Medicación actual
+              textarea.form-control(name="medicamentos_actuales" rows="2")
+
+            div.mb-3
+              label.form-label(for="antecedentes_familiares") Antecedentes familiares
+              textarea.form-control(name="antecedentes_familiares" rows="2")
+
+            div.mb-3
+              label.form-label(for="contacto_emergencia") Contacto de emergencia
+              input.form-control(type="text" name="contacto_emergencia" required placeholder="Nombre y teléfono")
+
+            button.btn.btn-primary.w-100.mt-3(type="submit") Guardar Historial
