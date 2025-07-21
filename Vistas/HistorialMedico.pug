@@ -42,33 +42,36 @@ html(lang="es")
 
             div.mb-3
               label.form-label(for="enfermedades_previas") Enfermedades previas
-              textarea.form-control(name="enfermedades_previas" rows="2")
+              textarea.form-control(name="enfermedades_previas" rows="2")= historial?.enfermedades_previas || ''
 
             div.mb-3
               label.form-label(for="cirugias") Cirugías
-              textarea.form-control(name="cirugias" rows="2")
+              textarea.form-control(name="cirugias" rows="2")= historial?.cirugias || ''
 
             div.mb-3
               label.form-label(for="alergias") Alergias
-              textarea.form-control(name="alergias" rows="2")
+              textarea.form-control(name="alergias" rows="2")= historial?.alergias || ''
 
             div.mb-3
               label.form-label(for="medicamentos_actuales") Medicación actual
-              textarea.form-control(name="medicamentos_actuales" rows="2")
+              textarea.form-control(name="medicamentos_actuales" rows="2")= historial?.medicamentos_actuales || ''
 
             div.mb-3
               label.form-label(for="antecedentes_familiares") Antecedentes familiares
-              textarea.form-control(name="antecedentes_familiares" rows="2")
+              textarea.form-control(name="antecedentes_familiares" rows="2")= historial?.antecedentes_familiares || ''
 
             div.mb-3
               label.form-label(for="contacto_emergencia") Contacto de emergencia
-              input.form-control(type="text" name="contacto_emergencia" required placeholder="Nombre y teléfono")
+              input.form-control(type="text" name="contacto_emergencia" required placeholder="Nombre y teléfono" value=historial?.contacto_emergencia || '')
 
             div.mb-3
-              label.form-label(for='idSintoma') Sintoma Principal
+              label.form-label(for='idSintoma') Síntoma Principal
               select#mutual.form-select(name='idSintoma' required)
                 option(value="") Seleccione una opción 
-                each sintoma in sintomas 
-                  option(value= sintoma.idSintoma)= sintoma.descripcion
+                each sintoma in sintomas
+                  option(
+                    value=sintoma.idSintoma 
+                    selected=historial?.idSintoma == sintoma.idSintoma
+                  )= sintoma.descripcion
 
             button.btn.btn-primary.w-100.mt-3(type="submit") Guardar Historial

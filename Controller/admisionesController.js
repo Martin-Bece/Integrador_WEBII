@@ -40,7 +40,6 @@ async function FiltrarAdmisionPorDNI(dni) {
   }
 }
 
-
 async function admitirEmergencia(req, res) {
   
   const { dni, idMotivo, Nombreorigen, sexo } = req.body;

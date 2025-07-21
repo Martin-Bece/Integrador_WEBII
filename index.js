@@ -6,7 +6,8 @@ const db = require('./Modelo');
 const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno } = require('./Controller/PacientesController');
 const { mostrarInternaciones } = require('./Controller/InternacionesController');
 const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion } = require('./Controller/admisionesController');
-const { POSTBuscarEvaluacion, renderFormularioEvaluacion, POSTBuscarSignosV, renderFormularioSignosV, POSTBuscarPlanC, renderFormularioPlanC } = require('./Controller/enfermeriaController');
+const { POSTBuscarEvaluacion, POSTBuscarSignosV, renderFormularioSignosV, POSTBuscarPlanC, renderFormularioPlanC } = require('./Controller/enfermeriaController');
+const { renderFormularioEvaluacion } = require('./Controller/historialController');
 
 const PORT = 3000;
 

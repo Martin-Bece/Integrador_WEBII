@@ -1,34 +1,8 @@
-const { render } = require('pug');
 const db = require('../Modelo'); 
-const { obtenerSintomas, buscarSintomaPorMotivo } = require('./sintomasController');
-const { FiltrarAdmisionPorDNI } = require('./admisionesController');
 
 async function buscarPacientePorDNI(dni) {
     const paciente = await db.pacientes.findOne({ where: { dni } });
     return paciente;
-}
-
-async function renderFormularioEvaluacion(req, res, datosAdicionales = {}) {
-  try {
-
-    const dni = req.params.dni || req.query.dni || '';
-
-    const paciente = await buscarPacientePorDNI(dni);
-    const admisiones = await FiltrarAdmisionPorDNI(dni);
-    const admision = admisiones[0];
-    const sintomas = await buscarSintomaPorMotivo(admision.motivo_id);
-
-
-    res.render('HistorialMedico', {
-      dni,
-      paciente,
-      sintomas,
-      ...datosAdicionales
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al cargar el formulario');
-  }
 }
 
 async function POSTBuscarEvaluacion(req, res) {
@@ -153,4 +127,4 @@ async function POSTBuscarPlanC(req, res) {
 }
 
 
-module.exports = {POSTBuscarEvaluacion, renderFormularioEvaluacion, renderFormularioSignosV, POSTBuscarSignosV, POSTBuscarPlanC, renderFormularioPlanC}
+module.exports = {POSTBuscarEvaluacion, renderFormularioSignosV, POSTBuscarSignosV, POSTBuscarPlanC, renderFormularioPlanC}
