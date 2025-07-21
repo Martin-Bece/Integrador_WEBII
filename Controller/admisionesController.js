@@ -19,6 +19,28 @@ async function renderFormularioEmergencia(req, res, datosAdicionales = {}) {
   }
 }
 
+async function FiltrarAdmisionPorDNI(dni) {
+  try {
+    const paciente = await db.pacientes.findOne({ where: { dni } });
+    if (!paciente) {
+      return null; 
+    }
+
+    const admisiones = await db.admisiones.findAll({
+      where: { 
+        paciente_id: paciente.idPaciente,
+        estado: 'Activa'
+      }
+    });
+
+    return admisiones; 
+  } catch (error) {
+    console.error('Error en FiltrarAdmisionPorDNI:', error);
+    throw error;
+  }
+}
+
+
 async function admitirEmergencia(req, res) {
   
   const { dni, idMotivo, Nombreorigen, sexo } = req.body;
@@ -310,4 +332,4 @@ async function admitirDerivacion(req, res) {
 
 }
 
-module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion}
+module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, FiltrarAdmisionPorDNI}

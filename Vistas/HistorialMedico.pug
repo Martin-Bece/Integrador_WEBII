@@ -37,7 +37,7 @@ html(lang="es")
           if error
             div.alert.alert-danger.mt-2= error
 
-          form(action="/enfermeria/guardar-historial" method="POST")
+          form(action="/enfermeria/guardarHistorial" method="POST")
             input(type="hidden" name="idPaciente" value=idPaciente)
 
             div.mb-3
@@ -63,5 +63,12 @@ html(lang="es")
             div.mb-3
               label.form-label(for="contacto_emergencia") Contacto de emergencia
               input.form-control(type="text" name="contacto_emergencia" required placeholder="Nombre y teléfono")
+
+            div.mb-3
+              label.form-label(for='idSintoma') Sintoma Principal
+              select#mutual.form-select(name='idSintoma' required)
+                option(value="") Seleccione una opción 
+                each sintoma in sintomas 
+                  option(value= sintoma.idSintoma)= sintoma.descripcion
 
             button.btn.btn-primary.w-100.mt-3(type="submit") Guardar Historial

@@ -37,7 +37,7 @@ html(lang="es")
           if error
             div.alert.alert-danger.mt-2= error
 
-          form(action="/enfermeria/plan-de-cuidados" method="POST")
+          form(action="/enfermeria/PlanCuidados" method="POST")
             input(type="hidden" name="id_enfermero" value=idEnfermero)
             input(type="hidden" name="id_paciente" value=idPaciente)
 

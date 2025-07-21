@@ -14,6 +14,14 @@ module.exports = function(sequelize, DataTypes) {
     prioridad: {
       type: DataTypes.ENUM('alta','media','baja'),
       allowNull: false
+    },
+    idMotivo: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'motivos',
+        key: 'idMotivo'
+      }
     }
   }, {
     sequelize,
@@ -26,6 +34,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "idSintoma" },
+        ]
+      },
+      {
+        name: "fk_sintomas_motivos",
+        using: "BTREE",
+        fields: [
+          { name: "idMotivo" },
         ]
       },
     ]

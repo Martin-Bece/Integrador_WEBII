@@ -5,7 +5,8 @@ const path = require('path');
 const db = require('./Modelo');
 const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno } = require('./Controller/PacientesController');
 const { mostrarInternaciones } = require('./Controller/InternacionesController');
-const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion } = require('./Controller/admisionesController')
+const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion } = require('./Controller/admisionesController');
+const { POSTBuscarEvaluacion, renderFormularioEvaluacion, POSTBuscarSignosV, renderFormularioSignosV, POSTBuscarPlanC, renderFormularioPlanC } = require('./Controller/enfermeriaController');
 
 const PORT = 3000;
 
@@ -32,7 +33,6 @@ app.get('/BuscarPaciente', (req, res) =>{
 })
 
 app.get('/FormularioPaciente', renderFormularioPaciente);
-
 
 app.get('/PacientesInternados',mostrarInternaciones);
 
@@ -78,13 +78,17 @@ app.get('/PlanDNI', (req, res) =>{
   res.render('PlanDNI')
 })
 
-app.get('/forma', (req, res) =>{
-  res.render('FormPlanC')
-})
+app.post('/Enfermeria/evaluacion', POSTBuscarEvaluacion);
 
-app.get('/formb', (req, res) =>{
-  res.render('FormInforme')
-})
+app.get('/Enfermeria/Historial/:dni', renderFormularioEvaluacion);
+
+app.post('/Enfermeria/signosV', POSTBuscarSignosV);
+
+app.get('/Enfermeria/SignosVitales/:dni', renderFormularioSignosV);
+
+app.post('/Enfermeria/PlanC', POSTBuscarPlanC);
+
+app.get('/Enfermeria/PlanCuidados/:dni', renderFormularioPlanC);
 
 app.use((req, res) => {
   res.status(404).render('404');
