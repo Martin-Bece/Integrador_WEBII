@@ -6,8 +6,9 @@ const db = require('./Modelo');
 const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno } = require('./Controller/PacientesController');
 const { mostrarInternaciones } = require('./Controller/InternacionesController');
 const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion } = require('./Controller/admisionesController');
-const { POSTBuscarEvaluacion, POSTBuscarSignosV, renderFormularioSignosV, POSTBuscarPlanC, renderFormularioPlanC } = require('./Controller/enfermeriaController');
-const { renderFormularioEvaluacion } = require('./Controller/historialController');
+const { POSTBuscarEvaluacion, POSTBuscarSignosV, POSTBuscarEvSignosV, POSTBuscarPlanC, renderFormularioPlanC } = require('./Controller/enfermeriaController');
+const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/historialController');
+const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 
 const PORT = 3000;
 
@@ -75,6 +76,10 @@ app.get('/SignosDNI', (req, res) =>{
   res.render('SignosDNI')
 })
 
+app.get('/EvSignosDNI', (req, res) =>{
+  res.render('EvSignosDNI')
+})
+
 app.get('/PlanDNI', (req, res) =>{
   res.render('PlanDNI')
 })
@@ -85,11 +90,19 @@ app.get('/Enfermeria/Historial/:dni', renderFormularioEvaluacion);
 
 app.post('/Enfermeria/signosV', POSTBuscarSignosV);
 
+app.post('/Enfermeria/EvsignosV', POSTBuscarEvSignosV);
+
 app.get('/Enfermeria/SignosVitales/:dni', renderFormularioSignosV);
+
+app.get('/Enfermeria/EvSignosVitales/:dni', renderTablaEvSignosV);
 
 app.post('/Enfermeria/PlanC', POSTBuscarPlanC);
 
 app.get('/Enfermeria/PlanCuidados/:dni', renderFormularioPlanC);
+
+app.post('/enfermeria/guardarHistorial/:dni', guardarHistorial);
+
+app.post('/enfermeria/evaluacion-fisica/:dni', registrarEvFisica);
 
 app.use((req, res) => {
   res.status(404).render('404');

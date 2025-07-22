@@ -37,8 +37,8 @@ html(lang="es")
           if error
             div.alert.alert-danger.mt-2= error
 
-          form(action="/enfermeria/evaluacion-fisica" method="POST")
-            input(type="hidden" name="id_paciente" value=idPaciente)
+          form(action=`/enfermeria/evaluacion-fisica/${dni}` method="POST")
+            input(type="hidden" name="id_paciente" value=paciente.idPaciente)
 
             div.mb-3
               label.form-label(for="presion_arterial") Presión Arterial

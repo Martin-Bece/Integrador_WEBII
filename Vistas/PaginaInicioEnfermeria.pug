@@ -40,7 +40,7 @@ html(lang="es")
             div.card-body
               h5.card-title Registro y valoración inicial
               p.card-text Completar historial médico y síntomas iniciales.
-              a.btn.btn-outline-warning.mb-2(href="/HistorialDNI") Ingresar Nueva Evaluacion
+              a.btn.btn-outline-warning.mb-2(href="/HistorialDNI") Registrar Evaluacion
 
         div.col
           div.card.p-3.shadow
@@ -48,7 +48,8 @@ html(lang="es")
             div.card-body
               h5.card-title Registro de signos vitales
               p.card-text Controlar presión arterial, frecuencia cardíaca, temperatura, etc.
-              a.btn.btn-outline-danger.mb-2(href="/SignosDNI") Registrar Signos Vitales
+              a.btn.btn-outline-danger.mb-2(href="/SignosDNI") Registrar Signos Vitales.
+              a.btn.btn-outline-danger.mb-2(href="/EvSignosDNI") Ver Evaluaciones Pasadas.
 
         div.col
           div.card.p-3.shadow
@@ -56,6 +57,6 @@ html(lang="es")
             div.card-body
               h5.card-title Plan de cuidados y monitoreo
               p.card-text Seguimiento continuo y ajustes en el plan de enfermería.
-              a.btn.btn-outline-success(href="/PlanDNI") Ver plan de cuidados
+              a.btn.btn-outline-success(href="/PlanDNI") Ver Plan de Cuidados
 
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous")

@@ -32,25 +32,6 @@ async function POSTBuscarEvaluacion(req, res) {
   }
 }
 
-async function renderFormularioSignosV(req, res, datosAdicionales = {}) {
-  try {
-
-    const dni = req.params.dni || req.query.dni || '';
-
-    const paciente = await buscarPacientePorDNI(dni);
-
-
-    res.render('FormSignosV', {
-      dni,
-      paciente,
-      ...datosAdicionales
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al cargar el formulario');
-  }
-}
-
 async function POSTBuscarSignosV(req, res) {
   const dni = req.body.dni;
 
@@ -69,6 +50,33 @@ async function POSTBuscarSignosV(req, res) {
 
     } else {
         return res.render('SignosDNI', {
+            error: 'El paciente no existe o no se encuentra cargado.',
+        });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error interno del servidor');
+  }
+}
+
+async function POSTBuscarEvSignosV(req, res) {
+  const dni = req.body.dni;
+
+  if (dni == '') {
+    return res.render('EvSignosDNI', {
+            error: 'Complete los campos',
+        });
+  }
+
+  try {
+    const paciente = await buscarPacientePorDNI(dni);
+
+    if (paciente) {
+
+        return res.redirect(`/Enfermeria/EvSignosVitales/${paciente.dni}`);
+
+    } else {
+        return res.render('EvSignosDNI', {
             error: 'El paciente no existe o no se encuentra cargado.',
         });
     }
@@ -127,4 +135,4 @@ async function POSTBuscarPlanC(req, res) {
 }
 
 
-module.exports = {POSTBuscarEvaluacion, renderFormularioSignosV, POSTBuscarSignosV, POSTBuscarPlanC, renderFormularioPlanC}
+module.exports = {POSTBuscarEvaluacion, POSTBuscarEvSignosV, POSTBuscarSignosV, POSTBuscarPlanC, renderFormularioPlanC}

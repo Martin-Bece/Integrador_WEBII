@@ -1,5 +1,7 @@
 const db = require('../Modelo');
 const { obtenerSintomas, buscarSintomaPorMotivo } = require('./sintomasController');
+const { buscarPorDNI } = require('./PacientesController');
+
 const { FiltrarAdmisionPorDNI } = require('./admisionesController');
 
 async function buscarHistorialporDNI(dni) {
@@ -24,11 +26,22 @@ async function renderFormularioEvaluacion(req, res, datosAdicionales = {}) {
 
     const dni = req.params.dni || req.query.dni || '';
 
-    const paciente = await buscarPacientePorDNI(dni);
+    const paciente = await buscarPorDNI(dni);
     const admisiones = await FiltrarAdmisionPorDNI(dni);
     const admision = admisiones[0];
     const sintomas = await buscarSintomaPorMotivo(admision.motivo_id);
-    const historial = await buscarHistorialporDNI(dni);
+    const historialAUX = await buscarHistorialporDNI(dni);
+    const historial = historialAUX || {
+      enfermedades_previas: '',
+      cirugias: '',
+      alergias: '',
+      medicamentos_actuales: '',
+      antecedentes_familiares: '',
+      contacto_emergencia: '',
+      idSintoma: '',
+      idPaciente: paciente?.idPaciente || ''
+    };
+
 
 
     res.render('HistorialMedico', {
@@ -44,6 +57,40 @@ async function renderFormularioEvaluacion(req, res, datosAdicionales = {}) {
   }
 }
 
+async function guardarHistorial(req, res) {
+  const historial = req.body;
+  const dni = req.params.dni;
+
+  if (
+    !historial.idPaciente ||
+    !historial.enfermedades_previas ||
+    !historial.cirugias ||
+    !historial.alergias ||
+    !historial.medicamentos_actuales ||
+    !historial.antecedentes_familiares ||
+    !historial.contacto_emergencia
+  ) {
+    return renderFormularioEvaluacion(req, res, {error: "Complete todos los campos por favor.", historial})
+  }
+
+  try {
+    const paciente = await db.pacientes.findOne({ where: { dni } });
+    historial.idPaciente = paciente.idPaciente;
+
+    const historialExistente = await db.historial_medico.findOne({ where: { idPaciente: paciente.idPaciente } });
+    if (historialExistente) {
+      await db.historial_medico.update(historial, { where: { idPaciente: paciente.idPaciente } });
+    } else {
+      await db.historial_medico.create(historial);
+    }
+
+    res.redirect(`/Enfermeria`);
+  } catch (error) {
+    console.error(error);
+    return renderFormularioEvaluacion(req, res, { error: "Error interno al crear el historial", historial });
+  }
+}
 
 
-module.exports = {renderFormularioEvaluacion}
+
+module.exports = {renderFormularioEvaluacion, guardarHistorial}

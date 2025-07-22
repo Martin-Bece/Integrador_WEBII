@@ -302,6 +302,7 @@ async function cancelarTurno(req, res) {
 
 module.exports = {
   mostrarPortalPaciente,
+  buscarPorDNI,
   buscarPacientePOST,
   renderFormularioPaciente,
   crearPaciente,
