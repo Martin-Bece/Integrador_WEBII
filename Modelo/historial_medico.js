@@ -38,6 +38,14 @@ module.exports = function(sequelize, DataTypes) {
     contacto_emergencia: {
       type: DataTypes.STRING(255),
       allowNull: true
+    },
+    idSintoma: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'sintomas',
+        key: 'idSintoma'
+      }
     }
   }, {
     sequelize,
@@ -57,6 +65,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "idPaciente" },
+        ]
+      },
+      {
+        name: "fk_historial_sintomas",
+        using: "BTREE",
+        fields: [
+          { name: "idSintoma" },
         ]
       },
     ]

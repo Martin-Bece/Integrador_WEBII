@@ -68,7 +68,8 @@ async function guardarHistorial(req, res) {
     !historial.alergias ||
     !historial.medicamentos_actuales ||
     !historial.antecedentes_familiares ||
-    !historial.contacto_emergencia
+    !historial.contacto_emergencia ||
+    !historial.idSintoma
   ) {
     return renderFormularioEvaluacion(req, res, {error: "Complete todos los campos por favor.", historial})
   }
