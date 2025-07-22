@@ -86,27 +86,6 @@ async function POSTBuscarEvSignosV(req, res) {
   }
 }
 
-async function renderFormularioPlanC(req, res, datosAdicionales = {}) {
-  try {
-
-    const dni = req.params.dni || req.query.dni || '';
-    const idEnfermero = req.session?.idEnfermero || '';
-
-    const paciente = await buscarPacientePorDNI(dni);
-
-
-    res.render('FormPlanC', {
-      dni,
-      paciente,
-      idEnfermero,
-      ...datosAdicionales
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al cargar el formulario');
-  }
-}
-
 async function POSTBuscarPlanC(req, res) {
   const dni = req.body.dni;
 
@@ -135,4 +114,4 @@ async function POSTBuscarPlanC(req, res) {
 }
 
 
-module.exports = {POSTBuscarEvaluacion, POSTBuscarEvSignosV, POSTBuscarSignosV, POSTBuscarPlanC, renderFormularioPlanC}
+module.exports = {POSTBuscarEvaluacion, POSTBuscarEvSignosV, POSTBuscarSignosV, POSTBuscarPlanC}

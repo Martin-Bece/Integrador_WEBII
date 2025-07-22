@@ -6,9 +6,10 @@ const db = require('./Modelo');
 const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno } = require('./Controller/PacientesController');
 const { mostrarInternaciones } = require('./Controller/InternacionesController');
 const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion } = require('./Controller/admisionesController');
-const { POSTBuscarEvaluacion, POSTBuscarSignosV, POSTBuscarEvSignosV, POSTBuscarPlanC, renderFormularioPlanC } = require('./Controller/enfermeriaController');
+const { POSTBuscarEvaluacion, POSTBuscarSignosV, POSTBuscarEvSignosV, POSTBuscarPlanC } = require('./Controller/enfermeriaController');
 const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/historialController');
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
+const { renderFormularioPlanC, guardarPlan, renderFormularioInforme } = require('./Controller/plancController');
 
 const PORT = 3000;
 
@@ -103,6 +104,10 @@ app.get('/Enfermeria/PlanCuidados/:dni', renderFormularioPlanC);
 app.post('/enfermeria/guardarHistorial/:dni', guardarHistorial);
 
 app.post('/enfermeria/evaluacion-fisica/:dni', registrarEvFisica);
+
+app.post('/enfermeria/guardarPlan', guardarPlan);
+
+app.post('/enfermeria/informar-medico', renderFormularioInforme);
 
 app.use((req, res) => {
   res.status(404).render('404');
