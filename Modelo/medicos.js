@@ -24,6 +24,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(20),
       allowNull: true
     },
+    dni: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      unique: true
+    },
     activo: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
@@ -53,6 +58,14 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "matricula" },
+        ]
+      },
+      {
+        name: "dni",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "dni" },
         ]
       },
     ]

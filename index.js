@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const pug = require('pug');
 const path = require('path');
+const session = require('express-session')
 const db = require('./Modelo');
 const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno } = require('./Controller/PacientesController');
 const { mostrarInternaciones } = require('./Controller/InternacionesController');
@@ -10,14 +11,27 @@ const { POSTBuscarEvaluacion, POSTBuscarSignosV, POSTBuscarEvSignosV, POSTBuscar
 const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/historialController');
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme } = require('./Controller/plancController');
+const { getCurrentUser } = require('./Middleware/auth');
 
 const PORT = 3000;
 
 app.set('view engine', 'pug');
 app.set('views', './Vistas');
 
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'hospital-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, 
+    maxAge: 24 * 60 * 60 * 1000 
+  }
+}));
+
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+
+app.use(getCurrentUser);
 
 app.get('/', (req, res) =>{
   res.render('index')

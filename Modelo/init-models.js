@@ -18,6 +18,7 @@ var _plan_de_cuidados = require("./plan_de_cuidados");
 var _sintomas = require("./sintomas");
 var _turnos = require("./turnos");
 var _unidades = require("./unidades");
+var _usuarios = require("./usuarios");
 
 function initModels(sequelize) {
   var admisiones = _admisiones(sequelize, DataTypes);
@@ -39,6 +40,7 @@ function initModels(sequelize) {
   var sintomas = _sintomas(sequelize, DataTypes);
   var turnos = _turnos(sequelize, DataTypes);
   var unidades = _unidades(sequelize, DataTypes);
+  var usuarios = _usuarios(sequelize, DataTypes);
 
   habitaciones.belongsTo(alas, { as: "ala", foreignKey: "ala_id"});
   alas.hasMany(habitaciones, { as: "habitaciones", foreignKey: "ala_id"});
@@ -103,6 +105,7 @@ function initModels(sequelize) {
     sintomas,
     turnos,
     unidades,
+    usuarios,
   };
 }
 module.exports = initModels;
