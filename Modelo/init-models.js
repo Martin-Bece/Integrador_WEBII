@@ -2,7 +2,6 @@ var DataTypes = require("sequelize").DataTypes;
 var _admisiones = require("./admisiones");
 var _alas = require("./alas");
 var _camas = require("./camas");
-var _enfermero = require("./enfermero");
 var _enfermeros = require("./enfermeros");
 var _especialidades = require("./especialidades");
 var _evaluacion_fisica = require("./evaluacion_fisica");
@@ -24,7 +23,6 @@ function initModels(sequelize) {
   var admisiones = _admisiones(sequelize, DataTypes);
   var alas = _alas(sequelize, DataTypes);
   var camas = _camas(sequelize, DataTypes);
-  var enfermero = _enfermero(sequelize, DataTypes);
   var enfermeros = _enfermeros(sequelize, DataTypes);
   var especialidades = _especialidades(sequelize, DataTypes);
   var evaluacion_fisica = _evaluacion_fisica(sequelize, DataTypes);
@@ -89,7 +87,6 @@ function initModels(sequelize) {
     admisiones,
     alas,
     camas,
-    enfermero,
     enfermeros,
     especialidades,
     evaluacion_fisica,

@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: false
     },
-    contraseña: {
+    contrasea: {
       type: DataTypes.STRING(255),
       allowNull: false
     },
@@ -32,15 +32,15 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     hooks: {
       beforeCreate: async (usuario) => {
-        if (usuario.contraseña) {
+        if (usuario.contrasea) {
           const salt = await bcrypt.genSalt(10);
-          usuario.contraseña = await bcrypt.hash(usuario.contraseña, salt);
+          usuario.contrasea = await bcrypt.hash(usuario.contrasea, salt);
         }
       },
       beforeUpdate: async (usuario) => {
-        if (usuario.changed('contraseña')) {
+        if (usuario.changed('contrasea')) {
           const salt = await bcrypt.genSalt(10);
-          usuario.contraseña = await bcrypt.hash(usuario.contraseña, salt);
+          usuario.contrasea = await bcrypt.hash(usuario.contrasea, salt);
         }
       }
     },
@@ -65,7 +65,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Usuario.prototype.validarContraseña = async function(contraseñaIngresada) {
-    return await bcrypt.compare(contraseñaIngresada, this.contraseña);
+    return await bcrypt.compare(contraseñaIngresada, this.contrasea);
   };
 
   return Usuario;

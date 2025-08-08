@@ -15,11 +15,11 @@ html(lang="es")
 
       form(action="/login" method="POST")
         div.mb-3
-          label.form-label.text-dark(for="usuario") Usuario
-          input#username.form-control(type="text" name="usuario" required placeholder="Ingrese su usuario")
+          label.form-label.text-dark(for="username") Usuario
+          input#username.form-control(type="text" name="username" required placeholder="Ingrese su usuario")
         div.mb-3
-          label.form-label.text-dark(for="contraseña") Contraseña
-          input#password.form-control(type="password" name="contraseña" required placeholder="Ingrese su contraseña")
+          label.form-label.text-dark(for="password") Contraseña
+          input#password.form-control(type="password" name="password" required placeholder="Ingrese su contraseña")
         button.btn.btn-outline-dark.w-100(type="submit") Ingresar
 
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous")
