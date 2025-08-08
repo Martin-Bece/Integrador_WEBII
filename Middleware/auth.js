@@ -1,4 +1,4 @@
-const { usuarios: Usuario } = require('../models'); // Ajustá la ruta según tu proyecto
+const { usuarios: Usuario } = require('../Modelo');
 const bcrypt = require('bcrypt');
 
 function estaAutenticado(req, res, next) {
@@ -8,14 +8,14 @@ function estaAutenticado(req, res, next) {
   res.redirect('/index');
 }
 
-function tieneRol(rol) {
+/* function tieneRol(rol) {
   return function(req, res, next) {
     if (req.session.usuario && req.session.usuario.rol === rol) {
       return next();
     }
     res.status(403).send('No autorizado');
   };
-}
+} */
 
 function esMedico(req, res, next) {
   if (req.session.usuario && req.session.usuario.rol === 'medico') {
@@ -63,7 +63,7 @@ async function autentificarUsuario(req, res) {
 
     req.session.usuario = {
       id: usuario.idUsuario,
-      username: usuario.usuario,
+      usuario: usuario.usuario,
       rol: usuario.rol,
       dni: usuario.dni
     };
@@ -120,7 +120,7 @@ async function getCurrentUser(req, res, next) {
 
 module.exports = {
   estaAutenticado,
-  tieneRol,
+  //tieneRol,
   esMedico,
   esEnfermero,
   esAdmision,

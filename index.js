@@ -11,7 +11,7 @@ const { POSTBuscarEvaluacion, POSTBuscarSignosV, POSTBuscarEvSignosV, POSTBuscar
 const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/historialController');
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme } = require('./Controller/plancController');
-const { getCurrentUser } = require('./Middleware/auth');
+const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario } = require('./Middleware/auth');
 
 const PORT = 3000;
 
@@ -37,91 +37,97 @@ app.get('/', (req, res) =>{
   res.render('index')
 })
 
-app.get('/Admision', (req, res) =>{
+app.post('/login', autentificarUsuario);
+
+app.get('/Admision', esAdmision, (req, res) =>{
     res.render('PaginaInicioAdmision')
 });
 
-app.get('/Enfermeria', (req, res) =>{
+app.get('/Enfermeria', esEnfermero, (req, res) =>{
     res.render('PaginaInicioEnfermeria')
 });
 
-app.get('/BuscarPaciente', (req, res) =>{
+// PARTE DE ADMISION
+
+app.get('/BuscarPaciente', esAdmision, (req, res) =>{
     res.render('BuscarPaciente')
 })
 
-app.get('/FormularioPaciente', renderFormularioPaciente);
+app.get('/FormularioPaciente', esAdmision, renderFormularioPaciente);
 
-app.get('/PacientesInternados',mostrarInternaciones);
+app.get('/PacientesInternados', esAdmision, mostrarInternaciones);
 
-app.get('/portalPaciente/:dni', mostrarPortalPaciente);
+app.get('/portalPaciente/:dni', esAdmision, mostrarPortalPaciente);
 
-app.get('/Emergencia', renderFormularioEmergencia)
+app.get('/Emergencia', esAdmision, renderFormularioEmergencia)
 
-app.post('/emergencia', admitirEmergencia)
+app.post('/emergencia', esAdmision, admitirEmergencia)
 
-app.post('/buscarPaciente', buscarPacientePOST);
+app.post('/buscarPaciente', esAdmision, buscarPacientePOST);
 
-app.post('/crearPaciente', crearPaciente)
+app.post('/crearPaciente', esAdmision, crearPaciente)
 
-app.get('/pacientes/baja/:dni', darDeBaja);
+app.get('/pacientes/baja/:dni', esAdmision, darDeBaja);
 
-app.get('/pacientes/alta/:dni', darDeAlta);
+app.get('/pacientes/alta/:dni', esAdmision, darDeAlta);
 
-app.get('/NuevoTurno/:dni', renderNuevoTurno);
+app.get('/NuevoTurno/:dni', esAdmision, renderNuevoTurno);
 
-app.post('/Turnos/Nuevo/:dni', EspecialidadTurno);
+app.post('/Turnos/Nuevo/:dni', esAdmision, EspecialidadTurno);
 
-app.post('/Turnos/Confirmar', confirmarTurno);
+app.post('/Turnos/Confirmar', esAdmision, confirmarTurno);
 
-app.get('/turnos/:id/cancelar/:dni', cancelarTurno);
+app.get('/turnos/:id/cancelar/:dni', esAdmision, cancelarTurno);
 
-app.get('/turnos/:id/admitir/:dni', renderFormularioAdmision);
+app.get('/turnos/:id/admitir/:dni', esAdmision, renderFormularioAdmision);
 
-app.post('/admisiones/turno', admitirTurno);
+app.post('/admisiones/turno', esAdmision, admitirTurno);
 
-app.get('/NuevoAdmitir/:dni', renderFormularioDerivacion);
+app.get('/NuevoAdmitir/:dni', esAdmision, renderFormularioDerivacion);
 
-app.post('/admisiones/derivacion', admitirDerivacion);
+app.post('/admisiones/derivacion', esAdmision, admitirDerivacion);
 
-app.get('/HistorialDNI', (req, res) =>{
+// PARTE DE ENFERMERO
+
+app.get('/HistorialDNI', esEnfermero, (req, res) =>{
   res.render('EvaluacionDNI')
 })
 
-app.get('/SignosDNI', (req, res) =>{
+app.get('/SignosDNI', esEnfermero, (req, res) =>{
   res.render('SignosDNI')
 })
 
-app.get('/EvSignosDNI', (req, res) =>{
+app.get('/EvSignosDNI', esEnfermero, (req, res) =>{
   res.render('EvSignosDNI')
 })
 
-app.get('/PlanDNI', (req, res) =>{
+app.get('/PlanDNI', esEnfermero, (req, res) =>{
   res.render('PlanDNI')
 })
 
-app.post('/Enfermeria/evaluacion', POSTBuscarEvaluacion);
+app.post('/Enfermeria/evaluacion', esEnfermero, POSTBuscarEvaluacion);
 
-app.get('/Enfermeria/Historial/:dni', renderFormularioEvaluacion);
+app.get('/Enfermeria/Historial/:dni', esEnfermero, renderFormularioEvaluacion);
 
-app.post('/Enfermeria/signosV', POSTBuscarSignosV);
+app.post('/Enfermeria/signosV', esEnfermero, POSTBuscarSignosV);
 
-app.post('/Enfermeria/EvsignosV', POSTBuscarEvSignosV);
+app.post('/Enfermeria/EvsignosV', esEnfermero, POSTBuscarEvSignosV);
 
-app.get('/Enfermeria/SignosVitales/:dni', renderFormularioSignosV);
+app.get('/Enfermeria/SignosVitales/:dni', esEnfermero, renderFormularioSignosV);
 
-app.get('/Enfermeria/EvSignosVitales/:dni', renderTablaEvSignosV);
+app.get('/Enfermeria/EvSignosVitales/:dni', esEnfermero, renderTablaEvSignosV);
 
-app.post('/Enfermeria/PlanC', POSTBuscarPlanC);
+app.post('/Enfermeria/PlanC', esEnfermero, POSTBuscarPlanC);
 
-app.get('/Enfermeria/PlanCuidados/:dni', renderFormularioPlanC);
+app.get('/Enfermeria/PlanCuidados/:dni',esEnfermero, renderFormularioPlanC);
 
-app.post('/enfermeria/guardarHistorial/:dni', guardarHistorial);
+app.post('/enfermeria/guardarHistorial/:dni', esEnfermero, guardarHistorial);
 
-app.post('/enfermeria/evaluacion-fisica/:dni', registrarEvFisica);
+app.post('/enfermeria/evaluacion-fisica/:dni', esEnfermero, registrarEvFisica);
 
-app.post('/enfermeria/guardarPlan', guardarPlan);
+app.post('/enfermeria/guardarPlan', esEnfermero, guardarPlan);
 
-app.post('/enfermeria/informar-medico', renderFormularioInforme);
+app.post('/enfermeria/informar-medico', esEnfermero, renderFormularioInforme);
 
 app.use((req, res) => {
   res.status(404).render('404');
