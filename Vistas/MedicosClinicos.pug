@@ -1,0 +1,43 @@
+//- vista: medicoClinicoInicio.pug
+doctype html
+html(lang="es")
+  head
+    include ../includes/head
+    title Portal Médico Clínico
+  body
+    include ../includes/navbarM
+
+    .container.mt-5
+      h2.text-center Portal Médico Clínico
+      p.text-center.text-muted Seleccione una acción para realizar sobre el paciente.
+
+      .row.mt-4
+        .col-md-4.mb-4
+          a.card.text-decoration-none(href="/medico/diagnostico")
+            .card-body.text-center
+              i.fas.fa-notes-medical.fa-2x.mb-2
+              h5 Diagnóstico Médico
+
+        .col-md-4.mb-4
+          a.card.text-decoration-none(href="/medico/solicitar-estudios")
+            .card-body.text-center
+              i.fas.fa-file-medical.fa-2x.mb-2
+              h5 Solicitar Estudios
+
+        .col-md-4.mb-4
+          a.card.text-decoration-none(href="/medico/historia-clinica")
+            .card-body.text-center
+              i.fas.fa-book-medical.fa-2x.mb-2
+              h5 Historia Clínica
+
+        .col-md-4.mb-4
+          a.card.text-decoration-none(href="/medico/plan-cuidados")
+            .card-body.text-center
+              i.fas.fa-edit.fa-2x.mb-2
+              h5 Editar Plan de Cuidados
+
+        .col-md-4.mb-4
+          a.card.text-decoration-none(href="/medico/alta-paciente")
+            .card-body.text-center
+              i.fas.fa-sign-out-alt.fa-2x.mb-2
+              h5 Dar de Alta al Paciente
