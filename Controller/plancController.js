@@ -1,5 +1,6 @@
 const db = require('../Modelo'); 
 const { FiltrarAdmisionPorDNI } = require('./admisionesController');
+const { buscarEnfermeroPorDNI } = require('./enfermeriaController');
 const { obtenerMedicos, obtenerMedicosPorEspecialidad } = require('./medicosController');
 const { obtenerMotivoPorID } = require('./motivosController');
 const { buscarPorDNI } = require('./PacientesController');
@@ -21,17 +22,22 @@ async function renderFormularioPlanC(req, res, datosAdicionales = {}) {
   try {
 
     const dni = req.params.dni || req.query.dni || '';
-    const idEnfermero = req.session?.idEnfermero || '';
+    const dniEnfermero = req.session.usuario.dni || '';
+    const enfermero = await buscarEnfermeroPorDNI(dniEnfermero);
 
     const paciente = await buscarPorDNI(dni);
+    const idPaciente = paciente.idPaciente
 
-    const planCuidados = buscarPlanPorID(paciente.idPaciente);
+    const planCuidados = await buscarPlanPorID(idPaciente);
+
+    console.log(paciente);
+    console.log(enfermero);
 
 
     res.render('FormPlanC', {
       dni,
       paciente,
-      idEnfermero,
+      enfermero,
       planCuidados,
       ...datosAdicionales
     });
@@ -44,23 +50,24 @@ async function renderFormularioPlanC(req, res, datosAdicionales = {}) {
 async function guardarPlan(req, res) {
     
     const planCuidados = req.body;
+    const dni = req.params.dni || req.query.dni || req.body.dni || '';
 
     if (
         !planCuidados.intervenciones_inmediatas ||
         !planCuidados.medicamentos ||
-        !planCuidados.tratamiento
+        !planCuidados.tratamiento ||
+        !planCuidados.idEnfermero
     ) {
-        return renderFormularioPlanC(req, res, {error: "Complete todos los campos por favor.", planCuidados})
+        return renderFormularioPlanC(req, res, {error: "Complete todos los campos por favor.", planCuidados, dni})
     }
 
     try {
-        planCuidados.idEnfermero = 1;
         await db.plan_de_cuidados.create(planCuidados);
 
         res.redirect(`/Enfermeria`);
     } catch (error) {
         console.error(error);
-        return renderFormularioPlanC(req, res, { error: "Error interno al crear el historial"}, planCuidados);
+        return renderFormularioPlanC(req, res, { error: "Error interno al crear el historial"}, planCuidados, dni);
     }
 }
 
@@ -68,7 +75,8 @@ async function renderFormularioInforme(req, res, datosAdicionales = {}) {
   try {
 
     const dni = req.params.dni || req.query.dni || '';
-    const idEnfermero = req.session?.idEnfermero || '';
+    const dniEnfermero = req.session.usuario.dni || '';
+    const enfermero = await buscarEnfermeroPorDNI(dniEnfermero);
 
     const paciente = await buscarPorDNI(dni);
     const admisiones = await FiltrarAdmisionPorDNI(dni);
@@ -80,7 +88,7 @@ async function renderFormularioInforme(req, res, datosAdicionales = {}) {
     res.render('FormInforme', {
       dni,
       paciente,
-      idEnfermero,
+      enfermero,
       medicos,
       ...datosAdicionales
     });
@@ -90,6 +98,33 @@ async function renderFormularioInforme(req, res, datosAdicionales = {}) {
   }
 }
 
+async function guardarInforme(req, res) {
+    const informeData = req.body;
+    const dni = req.params.dni || req.query.dni || req.body.dni || '';
 
 
-module.exports = {renderFormularioPlanC, guardarPlan, renderFormularioInforme};
+    if (!informeData.id_medico || !informeData.informe) {
+        return renderFormularioInforme(req, res, {
+            error: "Complete todos los campos por favor.",
+            informeData,
+            dni
+        });
+    }
+    try {
+        await db.informe_enfermero.create(informeData);
+
+        res.redirect(`/Enfermeria`);
+    } catch (error) {
+        console.error(error);
+        return renderFormularioInforme(req, res, {
+            error: "Error interno al guardar el informe.",
+            informeData,
+            dni
+        });
+    }
+}
+
+
+
+
+module.exports = {renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme};

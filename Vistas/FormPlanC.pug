@@ -38,7 +38,7 @@ html(lang="es")
             div.alert.alert-danger.mt-2= error
 
           form(action=`/enfermeria/PlanCuidados/${dni}` method="POST" novalidate)
-            input(type="hidden" name="id_enfermero" value=idEnfermero)
+            input(type="hidden" name="id_enfermero" value=enfermero.idEnfermero)
             input(type="hidden" name="id_paciente" value=paciente.idPaciente)
 
             div.mb-3

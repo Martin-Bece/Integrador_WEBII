@@ -1,4 +1,9 @@
+const { where } = require('sequelize');
 const db = require('../Modelo'); 
+
+async function buscarEnfermeroPorDNI(dni) {
+  return await db.enfermeros.findOne({ where: { dni } });
+}
 
 async function buscarPacientePorDNI(dni) {
     const paciente = await db.pacientes.findOne({ where: { dni } });
@@ -114,4 +119,4 @@ async function POSTBuscarPlanC(req, res) {
 }
 
 
-module.exports = {POSTBuscarEvaluacion, POSTBuscarEvSignosV, POSTBuscarSignosV, POSTBuscarPlanC}
+module.exports = {POSTBuscarEvaluacion, POSTBuscarEvSignosV, POSTBuscarSignosV, POSTBuscarPlanC, buscarEnfermeroPorDNI}
