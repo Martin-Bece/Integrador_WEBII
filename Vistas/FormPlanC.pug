@@ -55,4 +55,5 @@ html(lang="es")
 
             div.d-flex.justify-content-between.mt-4
               button.btn.btn-secondary(type="submit" formaction="/enfermeria/guardarPlan") Guardar y Volver a Inicio
-              button.btn.btn-primary(type="submit" formaction="/enfermeria/informar-medico") Guardar e Informar a Médico
+              button.btn.btn-primary(type="submit" formaction=`/enfermeria/guardarPlanConInforme/${paciente.dni}`) Guardar e Informar a Médico
+

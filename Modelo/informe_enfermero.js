@@ -23,6 +23,14 @@ module.exports = function(sequelize, DataTypes) {
         key: 'idMedico'
       }
     },
+    id_paciente: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'pacientes',
+        key: 'idPaciente'
+      }
+    },
     informe: {
       type: DataTypes.TEXT,
       allowNull: false
@@ -46,14 +54,6 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "id_informe",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "id_informe" },
-        ]
-      },
-      {
         name: "id_enfermero",
         using: "BTREE",
         fields: [
@@ -67,6 +67,13 @@ module.exports = function(sequelize, DataTypes) {
           { name: "id_medico" },
         ]
       },
+      {
+        name: "id_paciente",
+        using: "BTREE",
+        fields: [
+          { name: "id_paciente" },
+        ]
+      }
     ]
   });
 };

@@ -40,12 +40,15 @@ html(lang="es")
           form(action="/enfermeria/enviarInforme" method="POST" novalidate)
             input(type="hidden" name="id_enfermero" value=enfermero.idEnfermero)
 
+            input(type="hidden" name="dni" value=paciente.dni)
+
+
             div.mb-3
               label.form-label(for="medico") Médico destinatario
               select.form-select(name="id_medico" id="medico" required)
                 option(value="" disabled selected) -- Seleccione un médico --
                 each medico in medicos
-                  option(value=medico.id)= medico.nombre
+                  option(value=medico.idMedico)= medico.nombre + " " + medico.apellido
 
             div.mb-3
               label.form-label(for="informe") Informe
