@@ -11,7 +11,7 @@ const { POSTBuscarEvaluacion, POSTBuscarSignosV, POSTBuscarEvSignosV, POSTBuscar
 const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/historialController');
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
-const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario } = require('./Middleware/auth');
+const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout } = require('./Middleware/auth');
 
 const PORT = 3000;
 
@@ -35,7 +35,9 @@ app.use(getCurrentUser);
 
 app.get('/', (req, res) =>{
   res.render('index')
-})
+});
+
+app.get('/CerrarSesion', logout);
 
 app.post('/login', autentificarUsuario);
 
@@ -45,6 +47,10 @@ app.get('/Admision', esAdmision, (req, res) =>{
 
 app.get('/Enfermeria', esEnfermero, (req, res) =>{
     res.render('PaginaInicioEnfermeria')
+});
+
+app.get('/Medicos', esMedico, (req, res) => {
+    res.render('PaginaInicioMedicos')
 });
 
 // PARTE DE ADMISION
@@ -131,7 +137,11 @@ app.post('/enfermeria/guardarPlanConInforme/:dni', esEnfermero, guardarPlanConIn
 
 app.get('/enfermeria/informe/:dni', esEnfermero, renderFormularioInforme);
 
-app.post('/enfermeria/enviarInforme', esEnfermero, guardarInforme)
+app.post('/enfermeria/enviarInforme', esEnfermero, guardarInforme);
+
+//PARTE DE MEDICOS
+
+
 
 app.use((req, res) => {
   res.status(404).render('404');

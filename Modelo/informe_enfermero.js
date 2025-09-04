@@ -15,12 +15,12 @@ module.exports = function(sequelize, DataTypes) {
         key: 'idEnfermero'
       }
     },
-    id_medico: {
+    id_especialidad: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'medicos',
-        key: 'idMedico'
+        model: 'especialidades',
+        key: 'idEspecialidad'
       }
     },
     id_paciente: {
@@ -61,10 +61,10 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "id_medico",
+        name: "id_especialidad",
         using: "BTREE",
         fields: [
-          { name: "id_medico" },
+          { name: "id_especialidad" },
         ]
       },
       {

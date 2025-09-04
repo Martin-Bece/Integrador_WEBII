@@ -13,4 +13,8 @@ async function obtenerMedicosPorEspecialidad(idEspecialidad) {
   });
 }
 
+async function renderPaginaInicio(req, res, datosAdicionales = {}) {
+  
+}
+
 module.exports = {obtenerMedicos, obtenerMedicosPorEspecialidad, obtenerMedicoPorID}

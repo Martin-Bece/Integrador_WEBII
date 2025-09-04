@@ -109,35 +109,33 @@ async function renderFormularioInforme(req, res) {
     const dniEnfermero = req.session.usuario.dni || '';
     const enfermero = await buscarEnfermeroPorDNI(dniEnfermero);
 
-    const admisiones = await FiltrarAdmisionPorDNI(dni);
-    if (!admisiones || admisiones.length === 0) {
-      return res.render('FormInforme', { paciente, enfermero, medicos: [], error: "El paciente no tiene admisiones activas." });
-    }
-
-    const admision = admisiones[0].dataValues;
-    const motivo = await obtenerMotivoPorID(admision.motivo_id);
-    const medicos = await obtenerMedicosPorEspecialidad(motivo.idEspecialidad);
-
-    res.render('FormInforme', { paciente, enfermero, medicos });
+    res.render('FormInforme', { paciente, enfermero });
   }
 
 
-async function guardarInforme(req, res) {
-   console.log('REQ.BODY:', req.body); 
-  
+async function guardarInforme(req, res) {  
   const informeData = {
       id_enfermero: parseInt(req.body.id_enfermero),
-      id_medico: parseInt(req.body.id_medico),
       informe: req.body.informe
     };
     const dni = req.body.dni || '';
 
     const paciente = await buscarPorDNI(dni);
-    
+
+    const admisiones = await FiltrarAdmisionPorDNI(dni);
+    const admision = admisiones[0];
+
+    const idMotivo = admision.motivo_id;
+
+    const motivo = await obtenerMotivoPorID(idMotivo);
+
+    const idEspecialidad = motivo.idEspecialidad;
+
+    informeData.id_especialidad = idEspecialidad;    
     informeData.id_paciente = paciente.idPaciente;
 
 
-    if (!informeData.id_medico || !informeData.informe) {
+    if (!informeData.informe) {
         return renderFormularioInforme(req, res, {
             error: "Complete todos los campos por favor.",
             informeData,
