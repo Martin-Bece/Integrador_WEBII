@@ -11,14 +11,14 @@ html(lang="es")
         background-color: #f0f4f8;
       }
       .badge-alta {
-        background-color: #dc3545; // rojo
+        background-color: #dc3545;
       }
       .badge-media {
-        background-color: #ffc107; // amarillo
+        background-color: #ffc107;
         color: black;
       }
       .badge-baja {
-        background-color: #28a745; // verde
+        background-color: #28a745;
       }
 
   body
@@ -38,19 +38,24 @@ html(lang="es")
               th Prioridad
               th Acciones
           tbody
-            each paciente in pacientes
+            each admision in pacientes
+              - var paciente = admision.paciente
+              - var motivo = admision.motivo
+              - var sintomaPrincipal = (motivo && motivo.sintomas && motivo.sintomas[0]) || {}
               tr
                 td= paciente.dni
                 td #{paciente.nombre} #{paciente.apellido}
-                td= paciente.motivo_ingreso
-                td= paciente.sintoma
+                td= motivo ? motivo.descripcion : '-'
+                td= sintomaPrincipal.descripcion || '-'
                 td
-                  if paciente.prioridad === 'alta'
+                  if sintomaPrincipal.prioridad === 'alta'
                     span.badge.badge-alta.text-white Alta
-                  else if paciente.prioridad === 'media'
-                    span.badge.badge-media Media
-                  else
+                  else if sintomaPrincipal.prioridad === 'media'
+                    span.badge.badge-media.text-dark Media
+                  else if sintomaPrincipal.prioridad === 'baja'
                     span.badge.badge-baja.text-white Baja
+                  else
+                    span.text-muted -
                 td
                   a.btn.btn-sm.btn-primary(href=`/medico/evaluar/${paciente.idPaciente}`) Atender
       else

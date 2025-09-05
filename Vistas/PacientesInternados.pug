@@ -65,6 +65,7 @@ html(lang="es")
               td= admision.habitacion.numero
               td
                 a.btn.btn-sm.btn-primary.me-2(href=`/portalPaciente/${admision.paciente.dni}`) Ver / Editar
-                button.btn.btn-sm.btn-danger(disabled) Dar de alta
+                form(action=`/cancelarAdmision/${admision.paciente.dni}` method="POST" style="display:inline")
+                  button.btn.btn-sm.btn-danger(type="submit") Cancelar Admision
 
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous")

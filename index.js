@@ -6,12 +6,13 @@ const session = require('express-session')
 const db = require('./Modelo');
 const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno } = require('./Controller/PacientesController');
 const { mostrarInternaciones } = require('./Controller/InternacionesController');
-const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion } = require('./Controller/admisionesController');
+const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, cancelarAdmision } = require('./Controller/admisionesController');
 const { POSTBuscarEvaluacion, POSTBuscarSignosV, POSTBuscarEvSignosV, POSTBuscarPlanC } = require('./Controller/enfermeriaController');
 const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/historialController');
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout } = require('./Middleware/auth');
+const { renderPaginaInicio } = require('./Controller/medicosController');
 
 const PORT = 3000;
 
@@ -49,9 +50,7 @@ app.get('/Enfermeria', esEnfermero, (req, res) =>{
     res.render('PaginaInicioEnfermeria')
 });
 
-app.get('/Medicos', esMedico, (req, res) => {
-    res.render('PaginaInicioMedicos')
-});
+app.get('/Medicos', esMedico, renderPaginaInicio);
 
 // PARTE DE ADMISION
 
@@ -62,6 +61,8 @@ app.get('/BuscarPaciente', esAdmision, (req, res) =>{
 app.get('/FormularioPaciente', esAdmision, renderFormularioPaciente);
 
 app.get('/PacientesInternados', esAdmision, mostrarInternaciones);
+
+app.post('/cancelarAdmision/:dni', esAdmision, cancelarAdmision);
 
 app.get('/portalPaciente/:dni', esAdmision, mostrarPortalPaciente);
 

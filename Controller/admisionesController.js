@@ -1,6 +1,8 @@
+const { where } = require('sequelize');
 const db = require('../Modelo');
 const { AsignarCama } = require('./camasController');
 const { obtenerHabsPorUnidad, obtenerHabsPorID } = require('./habitacionesController');
+const { mostrarInternaciones } = require('./InternacionesController');
 const { obtenerMotivos, obtenerMotivoPorID, obtenerMotivoPorEspecialidad } = require('./motivosController');
 const { obtenerOrigenPorNombre } = require('./origenController');
 const { buscarPorDNI } = require('./PacientesController');
@@ -331,4 +333,32 @@ async function admitirDerivacion(req, res) {
 
 }
 
-module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, FiltrarAdmisionPorDNI}
+async function cancelarAdmision(req, res) {
+  try {
+    const dni = req.params.dni;
+
+    const admisiones = await FiltrarAdmisionPorDNI(dni);
+
+    if (!admisiones || admisiones.length === 0) {
+      console.log(`No se encontró admisión activa para el DNI ${dni}`);
+      return res.status(404).send("No se encontró una admisión activa");
+    }
+
+    const admision = admisiones[0];
+
+    await db.admisiones.destroy({
+      where: { idAdmision: admision.idAdmision }
+    });
+
+    console.log(`Admisión ${admision.idAdmision} eliminada`);
+
+    return mostrarInternaciones(req, res);
+
+  } catch (error) {
+    console.error("Error al cancelar la admisión:", error);
+    return res.status(500).send("Error al cancelar la admisión");
+  }
+}
+
+
+module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, FiltrarAdmisionPorDNI, cancelarAdmision}
