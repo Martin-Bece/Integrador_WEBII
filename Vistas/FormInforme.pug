@@ -1,5 +1,5 @@
 doctype html
-include navbarE.pug
+include navbar.pug
 html(lang="es")
   head
     meta(charset="UTF-8")
@@ -32,7 +32,7 @@ html(lang="es")
     main.container
       div.card.p-4.shadow-lg
         div.card-body
-          h4.card-title.mb-4.text-center.text-primary Informe del Enfermero
+          h4.card-title.mb-4.text-center.text-primary Informe del Paciente
 
           if error
             div.alert.alert-danger.mt-2= error

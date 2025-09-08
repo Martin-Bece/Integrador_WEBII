@@ -22,6 +22,7 @@ var _sintomas = require("./sintomas");
 var _turnos = require("./turnos");
 var _unidades = require("./unidades");
 var _usuarios = require("./usuarios");
+var _diagnostico = require("./diagnostico");
 
 function initModels(sequelize) {
   var EmpleadosAdmision = _EmpleadosAdmision(sequelize, DataTypes);
@@ -47,7 +48,9 @@ function initModels(sequelize) {
   var turnos = _turnos(sequelize, DataTypes);
   var unidades = _unidades(sequelize, DataTypes);
   var usuarios = _usuarios(sequelize, DataTypes);
+  var diagnostico = _diagnostico(sequelize, DataTypes);
 
+  // Relaciones existentes
   estudios.belongsToMany(pacientes, { as: 'idPaciente_pacientes', through: pacientes_estudios, foreignKey: "idEstudio", otherKey: "idPaciente" });
   pacientes.belongsToMany(estudios, { as: 'idEstudio_estudios', through: pacientes_estudios, foreignKey: "idPaciente", otherKey: "idEstudio" });
   habitaciones.belongsTo(alas, { as: "ala", foreignKey: "ala_id"});
@@ -104,6 +107,8 @@ function initModels(sequelize) {
   sintomas.hasMany(historial_medico, { as: "historial_medicos", foreignKey: "idSintoma"});
   habitaciones.belongsTo(unidades, { as: "unidad", foreignKey: "unidad_id"});
   unidades.hasMany(habitaciones, { as: "habitaciones", foreignKey: "unidad_id"});
+  diagnostico.belongsTo(pacientes, { as: "paciente", foreignKey: "idPaciente" });
+  pacientes.hasMany(diagnostico, { as: "diagnosticos", foreignKey: "idPaciente" });
 
   return {
     EmpleadosAdmision,
@@ -129,6 +134,7 @@ function initModels(sequelize) {
     turnos,
     unidades,
     usuarios,
+    diagnostico
   };
 }
 module.exports = initModels;

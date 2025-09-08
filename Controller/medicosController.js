@@ -1,5 +1,7 @@
 const { where } = require('sequelize');
 const db = require('../Modelo');
+const { obtenerEstudios } = require('./estudiosController');
+const { obtenerDiagnosticoPorID } = require('./diagnosticoController');
 const { Medicos, Admision, Turnos, Pacientes, Motivos, Sintomas } = db;
 
 async function obtenerMedicos() {
@@ -136,4 +138,64 @@ async function renderPlanCMedicos(req, res, datosAdicionales = {}) {
   }
 }
 
-module.exports = { obtenerMedicos, obtenerMedicosPorEspecialidad, obtenerMedicoPorID, renderPaginaInicio, atenderPaciente, renderPlanCMedicos };
+async function renderFormDiagnostico(req, res, datosAdicionales = {}) {
+  
+  const dni = req.params.dni
+
+  const { buscarPorDNI } = require('./PacientesController');
+
+  const paciente = await buscarPorDNI(dni);
+
+  const estudios = await obtenerEstudios();
+
+  const diagnostico = await obtenerDiagnosticoPorID(paciente.idPaciente);
+
+  res.render('formDiagnostico', {paciente, estudios, diagnostico: diagnostico?.diagnostico || '', ...datosAdicionales})
+
+}
+
+async function guardarDiagnostico(req, res) {
+  const diagnosticoC = {
+    idPaciente: req.body.idPaciente,
+    diagnostico: req.body.diagnostico
+  };
+
+  if (!diagnosticoC.idPaciente || !diagnosticoC.diagnostico) {
+    return renderFormDiagnostico(req, res, { errores: ["Debe completar todos los campos"] });
+  }
+
+  try {
+    const diagnosticoExistente = await db.diagnostico.findOne({
+      where: { idPaciente: diagnosticoC.idPaciente }
+    });
+
+    if (diagnosticoExistente) {
+      await diagnosticoExistente.update({ diagnostico: diagnosticoC.diagnostico });
+    } else {
+      await db.diagnostico.create(diagnosticoC);
+    }
+
+    const estudiosSeleccionados = req.body.estudios || [];
+    const fechaHoy = new Date().toISOString().split('T')[0]; 
+
+    for (const idEstudio of estudiosSeleccionados) {
+      await db.pacientes_estudios.create({
+        idPaciente: diagnosticoC.idPaciente,
+        idEstudio: idEstudio,
+        fecha: fechaHoy,
+        descripcion: "Pendiente"
+      });
+    }
+
+    const dni = req.params.dni;
+    res.redirect(`/medicos/atender/${dni}`);
+
+  } catch (error) {
+    console.error(error);
+    return renderFormDiagnostico(req, res, { errores: ["Ocurrió un error al guardar el diagnóstico"] });
+  }
+}
+
+
+
+module.exports = { obtenerMedicos, obtenerMedicosPorEspecialidad, obtenerMedicoPorID, renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico };

@@ -118,6 +118,15 @@ async function getCurrentUser(req, res, next) {
   next();
 }
 
+function esMedicoOEnfermero(req, res, next) {
+  if (req.session.usuario && 
+      (req.session.usuario.rol === 'medico' || req.session.usuario.rol === 'enfermero')) {
+    return next();
+  }
+  res.status(403).send('Acceso solo para médicos o enfermeros');
+}
+
+
 module.exports = {
   estaAutenticado,
   //tieneRol,
@@ -127,5 +136,6 @@ module.exports = {
   esAdmin,
   autentificarUsuario,
   logout,
-  getCurrentUser
+  getCurrentUser,
+  esMedicoOEnfermero
 };

@@ -1,8 +1,18 @@
 mixin navbar()
     nav.navbar.navbar-expand-lg.bg-body-tertiary
-        div.container-fluid
-            a.navbar-brand(href='/Admision') Hospital Central Sur  
-            div.navbar-nav
-                a.nav-link.active(aria-current="page", href='/Admision') Inicio 
-                a.nav-link.active(aria-current="page", href='/CerrarSesion') Cerrar Sesión 
-    br            
+        .container-fluid
+            - var inicioHref = '/';
+            if currentUser
+                if currentUser.rol === 'admision'
+                    - inicioHref = '/Admision';
+                else if currentUser.rol === 'enfermero'
+                    - inicioHref = '/Enfermeria';
+                else if currentUser.rol === 'medico'
+                    - inicioHref = '/Medicos';
+                else if currentUser.rol === 'admin'
+                    - inicioHref = '/Administracion';
+            a.navbar-brand(href=inicioHref) Hospital Central Sur
+            .navbar-nav
+                a.nav-link.active(aria-current="page", href=inicioHref) Inicio
+                a.nav-link.active(aria-current="page", href='/CerrarSesion') Cerrar Sesión
+    br

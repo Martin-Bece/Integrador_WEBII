@@ -11,8 +11,8 @@ const { POSTBuscarEvaluacion, POSTBuscarSignosV, POSTBuscarEvSignosV, POSTBuscar
 const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/historialController');
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
-const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout } = require('./Middleware/auth');
-const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos } = require('./Controller/medicosController');
+const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout, esMedicoOEnfermero } = require('./Middleware/auth');
+const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico } = require('./Controller/medicosController');
 
 const PORT = 3000;
 
@@ -132,7 +132,7 @@ app.post('/enfermeria/guardarHistorial/:dni', esEnfermero, guardarHistorial);
 
 app.post('/enfermeria/evaluacion-fisica/:dni', esEnfermero, registrarEvFisica);
 
-app.post('/enfermeria/guardarPlan', esEnfermero, guardarPlan);
+app.post('/enfermeria/guardarPlan', esMedicoOEnfermero, guardarPlan);
 
 app.post('/enfermeria/guardarPlanConInforme/:dni', esEnfermero, guardarPlanConInforme);
 
@@ -142,9 +142,13 @@ app.post('/enfermeria/enviarInforme', esEnfermero, guardarInforme);
 
 //PARTE DE MEDICOS
 
-app.get('/medicos/atender/:dni', esMedico, atenderPaciente)
+app.get('/medicos/atender/:dni', esMedico, atenderPaciente);
 
-app.get('/medicos/plan-cuidados/:dni', esMedico, renderPlanCMedicos)
+app.get('/medicos/plan-cuidados/:dni', esMedico, renderPlanCMedicos);
+
+app.get('/medicos/diagnostico/:dni', esMedico, renderFormDiagnostico);
+
+app.post('/medicos/guardarDiagnostico/:dni', esMedico, guardarDiagnostico);
 
 //CONF de la app
 
