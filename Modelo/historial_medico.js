@@ -61,17 +61,17 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
-        name: "idPaciente",
-        using: "BTREE",
-        fields: [
-          { name: "idPaciente" },
-        ]
-      },
-      {
         name: "fk_historial_sintomas",
         using: "BTREE",
         fields: [
           { name: "idSintoma" },
+        ]
+      },
+      {
+        name: "idPaciente",
+        using: "BTREE",
+        fields: [
+          { name: "idPaciente" },
         ]
       },
     ]

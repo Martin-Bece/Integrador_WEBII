@@ -15,14 +15,6 @@ module.exports = function(sequelize, DataTypes) {
         key: 'idEnfermero'
       }
     },
-    id_especialidad: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'especialidades',
-        key: 'idEspecialidad'
-      }
-    },
     id_paciente: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -39,6 +31,14 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    id_especialidad: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'especialidades',
+        key: 'idEspecialidad'
+      }
     }
   }, {
     sequelize,
@@ -54,10 +54,25 @@ module.exports = function(sequelize, DataTypes) {
         ]
       },
       {
+        name: "id_informe",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id_informe" },
+        ]
+      },
+      {
         name: "id_enfermero",
         using: "BTREE",
         fields: [
           { name: "id_enfermero" },
+        ]
+      },
+      {
+        name: "id_paciente",
+        using: "BTREE",
+        fields: [
+          { name: "id_paciente" },
         ]
       },
       {
@@ -67,13 +82,6 @@ module.exports = function(sequelize, DataTypes) {
           { name: "id_especialidad" },
         ]
       },
-      {
-        name: "id_paciente",
-        using: "BTREE",
-        fields: [
-          { name: "id_paciente" },
-        ]
-      }
     ]
   });
 };

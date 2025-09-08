@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
-
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
   return sequelize.define('medicos', {
     idMedico: {
       autoIncrement: true,
@@ -25,11 +24,6 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(20),
       allowNull: true
     },
-    dni: {
-      type: DataTypes.STRING(20),
-      allowNull: false,
-      unique: true
-    },
     activo: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
@@ -39,20 +33,15 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 1
+    },
+    dni: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      unique: true
     }
   }, {
     sequelize,
     tableName: 'medicos',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "idMedico" }
-        ]
-      }
-    ]
+    timestamps: false
   });
 };

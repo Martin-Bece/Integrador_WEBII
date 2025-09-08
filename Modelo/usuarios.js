@@ -43,7 +43,25 @@ module.exports = function(sequelize, DataTypes) {
           usuario.contrasea = await bcrypt.hash(usuario.contrasea, salt);
         }
       }
-    }
+    },
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "idUsuario" },
+        ]
+      },
+      {
+        name: "dni_UNIQUE",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "dni" },
+        ]
+      }
+    ]
   });
 
   Usuario.prototype.validarContraseña = async function(contraseñaIngresada) {

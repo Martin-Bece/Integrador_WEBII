@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('EmpleadosAdmision', {
     idEmpleado: {
@@ -36,8 +35,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     estado: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true
+      allowNull: true,
+      defaultValue: 1
     }
   }, {
     sequelize,
