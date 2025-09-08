@@ -21,6 +21,9 @@ html(lang="es")
     +navbar
 
     .container.mt-5
+      a.btn.btn-outline-secondary.mb-3(href=`/medicos/atender/${paciente.dni}`)
+        | ⬅ Volver
+
       h2.text-center.mb-5 Historia Clínica
 
       .row
@@ -42,10 +45,17 @@ html(lang="es")
 
         .col-md-8
           .right-panel
+            // Bloque de errores
+            if errores && errores.length > 0
+              .alert.alert-danger
+                ul.mb-0
+                  each err in errores
+                    li= err
+
             form(action=`/medicos/guardarHistoria/${paciente.dni}` method="POST")
               .mb-3
                 label.form-label(for="observacion") Nueva Observación
-                textarea.form-control(name="observacion" id="observacion" rows="6" placeholder="Registre aquí la evolución, procedimientos o notas sobre el paciente") 
+                textarea.form-control(name="observacion" id="observacion" rows="6" placeholder="Registre aquí la evolución, procedimientos o notas sobre el paciente")= observacion || ''
               button.btn.btn-primary(type="submit") Agregar a Historia Clínica
 
             hr
@@ -55,7 +65,7 @@ html(lang="es")
               ul.list-group
                 each registro in historia
                   li.list-group-item
-                    small.text-muted #{registro.fecha} 
+                    small.text-muted= new Date(registro.fecha).toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' })
                     br
                     | #{registro.observacion}
             else

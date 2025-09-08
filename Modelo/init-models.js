@@ -23,6 +23,8 @@ var _turnos = require("./turnos");
 var _unidades = require("./unidades");
 var _usuarios = require("./usuarios");
 var _diagnostico = require("./diagnostico");
+var _historia_clinica_interna = require("./historia_clinica_interna");
+
 
 function initModels(sequelize) {
   var EmpleadosAdmision = _EmpleadosAdmision(sequelize, DataTypes);
@@ -49,6 +51,8 @@ function initModels(sequelize) {
   var unidades = _unidades(sequelize, DataTypes);
   var usuarios = _usuarios(sequelize, DataTypes);
   var diagnostico = _diagnostico(sequelize, DataTypes);
+  var historia_clinica_interna = _historia_clinica_interna(sequelize, DataTypes);
+
 
   // Relaciones existentes
   estudios.belongsToMany(pacientes, { as: 'idPaciente_pacientes', through: pacientes_estudios, foreignKey: "idEstudio", otherKey: "idPaciente" });
@@ -109,6 +113,9 @@ function initModels(sequelize) {
   unidades.hasMany(habitaciones, { as: "habitaciones", foreignKey: "unidad_id"});
   diagnostico.belongsTo(pacientes, { as: "paciente", foreignKey: "idPaciente" });
   pacientes.hasMany(diagnostico, { as: "diagnosticos", foreignKey: "idPaciente" });
+  historia_clinica_interna.belongsTo(pacientes, { as: "paciente", foreignKey: "idPaciente" });
+  pacientes.hasMany(historia_clinica_interna, { as: "historias_clinicas", foreignKey: "idPaciente" });
+
 
   return {
     EmpleadosAdmision,
@@ -121,6 +128,7 @@ function initModels(sequelize) {
     evaluacion_fisica,
     habitaciones,
     historial_medico,
+    historia_clinica_interna,
     informe_enfermero,
     informes,
     medicos,

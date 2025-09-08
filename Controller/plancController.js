@@ -67,7 +67,11 @@ async function guardarPlan(req, res) {
         } else {
           await db.plan_de_cuidados.create(planCuidados);
         }
-        res.redirect(`/Enfermeria`);
+        if (req.session.usuario.rol == 'enfermero') {
+          res.redirect(`/Enfermeria`);
+        }else {
+          res.redirect(`/medicos/atender/${dni}`);
+        }
     } catch (error) {
         console.error(error);
         return renderFormularioPlanC(req, res, { error: "Error interno al crear el historial"}, planCuidados, dni);

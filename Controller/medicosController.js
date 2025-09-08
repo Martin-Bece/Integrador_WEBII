@@ -2,7 +2,6 @@ const { where } = require('sequelize');
 const db = require('../Modelo');
 const { obtenerEstudios } = require('./estudiosController');
 const { obtenerDiagnosticoPorID } = require('./diagnosticoController');
-const { Medicos, Admision, Turnos, Pacientes, Motivos, Sintomas } = db;
 
 async function obtenerMedicos() {
   return await db.medicos.findAll();
@@ -196,6 +195,47 @@ async function guardarDiagnostico(req, res) {
   }
 }
 
+async function renderHistoria(req, res, datosAdicionales = {}) {
+  const { dni } = req.params;
+  const { buscarPorDNI } = require('./PacientesController');
+
+  const paciente = await buscarPorDNI(dni);
+  if (!paciente) return res.status(404).send('Paciente no encontrado');
+
+  const historia = await db.historia_clinica_interna.findAll({
+    where: { idPaciente: paciente.idPaciente },
+    order: [['fecha', 'DESC']]
+  });
+
+  res.render('formHistoriaC', { paciente, historia, ...datosAdicionales });
+}
+
+async function guardarHistoria(req, res) {
+  const { observacion } = req.body;
+  const { dni } = req.params;
+
+  const { buscarPorDNI } = require('./PacientesController');
+
+  const paciente = await buscarPorDNI(dni);
+  if (!paciente) return res.status(404).send('Paciente no encontrado');
+
+  if (!observacion) {
+    return renderHistoria(req, res, { errores: ['Debe ingresar una observación'] });
+  }
+
+  try {
+    await db.historia_clinica_interna.create({
+      idPaciente: paciente.idPaciente,
+      observacion
+    });
+
+    res.redirect(`/medicos/historia-clinica/${dni}`);
+  } catch (error) {
+    console.error(error);
+    res.render('formHistoriaC', { paciente, historia: [], errores: ['Error al guardar la observación'] });
+  }
+}
 
 
-module.exports = { obtenerMedicos, obtenerMedicosPorEspecialidad, obtenerMedicoPorID, renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico };
+
+module.exports = { obtenerMedicos, obtenerMedicosPorEspecialidad, obtenerMedicoPorID, renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria };

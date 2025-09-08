@@ -1,5 +1,5 @@
 doctype html
-include navbarE.pug
+include navbar.pug
 html(lang="es")
   head
     meta(charset="UTF-8")
@@ -68,7 +68,7 @@ html(lang="es")
               textarea.form-control(name="tratamiento" id="tratamiento" rows="3")= planCuidados ? planCuidados.tratamiento : ''
 
             div.btn-group-custom.mt-4
-              button.btn.btn-secondary.flex-fill(type="submit" formaction="/enfermeria/guardarPlan") Guardar y Volver a Inicio
+              button.btn.btn-secondary.flex-fill(type="submit" formaction=`/enfermeria/guardarPlan/${dni}`) Guardar y Volver a Inicio
               button.btn.btn-primary.flex-fill(type="submit" formaction=`/enfermeria/guardarPlanConInforme/${paciente.dni}`) Guardar e Informar a Médico (Solo enfermeros)
 
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js")
