@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('medicos', {
     idMedico: {
       autoIncrement: true,
@@ -18,7 +19,7 @@ module.exports = function(sequelize, DataTypes) {
     matricula: {
       type: DataTypes.STRING(50),
       allowNull: false,
-      unique: "matricula"
+      unique: true
     },
     telefono: {
       type: DataTypes.STRING(20),
@@ -49,25 +50,9 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idMedico" },
+          { name: "idMedico" }
         ]
-      },
-      {
-        name: "matricula",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "matricula" },
-        ]
-      },
-      {
-        name: "dni",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "dni" },
-        ]
-      },
+      }
     ]
   });
 };

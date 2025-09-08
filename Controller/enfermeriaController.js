@@ -5,6 +5,10 @@ async function buscarEnfermeroPorDNI(dni) {
   return await db.enfermeros.findOne({ where: { dni } });
 }
 
+async function buscarEnfermeroPorID(idEnfermero) {
+  return await db.enfermeros.findOne({ where: { idEnfermero } });
+}
+
 async function buscarPacientePorDNI(dni) {
     const paciente = await db.pacientes.findOne({ where: { dni } });
     return paciente;
@@ -119,4 +123,4 @@ async function POSTBuscarPlanC(req, res) {
 }
 
 
-module.exports = {POSTBuscarEvaluacion, POSTBuscarEvSignosV, POSTBuscarSignosV, POSTBuscarPlanC, buscarEnfermeroPorDNI}
+module.exports = {POSTBuscarEvaluacion, POSTBuscarEvSignosV, POSTBuscarSignosV, POSTBuscarPlanC, buscarEnfermeroPorDNI, buscarEnfermeroPorID}

@@ -12,7 +12,7 @@ const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/h
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout } = require('./Middleware/auth');
-const { renderPaginaInicio } = require('./Controller/medicosController');
+const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos } = require('./Controller/medicosController');
 
 const PORT = 3000;
 
@@ -142,7 +142,11 @@ app.post('/enfermeria/enviarInforme', esEnfermero, guardarInforme);
 
 //PARTE DE MEDICOS
 
+app.get('/medicos/atender/:dni', esMedico, atenderPaciente)
 
+app.get('/medicos/plan-cuidados/:dni', esMedico, renderPlanCMedicos)
+
+//CONF de la app
 
 app.use((req, res) => {
   res.status(404).render('404');

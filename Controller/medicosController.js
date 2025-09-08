@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const db = require('../Modelo');
 const { Medicos, Admision, Turnos, Pacientes, Motivos, Sintomas } = db;
 
@@ -11,6 +12,10 @@ async function obtenerMedicoPorID(idMedico) {
 
 async function obtenerMedicosPorEspecialidad(idEspecialidad) {
   return await db.medicos.findAll({ where: { idEspecialidad } });
+}
+
+async function obtenerMedicoPorDNI(dni) {
+  return await db.medicos.findOne({ where: { dni }});
 }
 
 async function renderPaginaInicio(req, res, datosAdicionales = {}) {
@@ -68,4 +73,67 @@ async function renderPaginaInicio(req, res, datosAdicionales = {}) {
   res.render('PaginaInicioMedicos', { pacientes });
 }
 
-module.exports = { obtenerMedicos, obtenerMedicosPorEspecialidad, obtenerMedicoPorID, renderPaginaInicio };
+async function atenderPaciente(req, res) {
+  try {
+    const dniMedico = req.session?.usuario?.dni;
+    const dniPaciente = req.params.dni;
+
+    if (!dniMedico) {
+      return res.status(400).send("No se encontró el DNI del médico en la sesión");
+    }
+
+    const medico = await obtenerMedicoPorDNI(dniMedico);
+    if (!medico) {
+      return res.status(404).send("Médico no encontrado");
+    }
+
+    const { buscarPorDNI } = require('./PacientesController');
+    const paciente = await buscarPorDNI(dniPaciente);
+
+    if (medico.idEspecialidad == 21 || medico.idEspecialidad == 22) {
+      return res.render("MedicosEspecialistas", { dniPaciente, paciente });
+    } else {
+      return res.render("MedicosClinicos", { dniPaciente, paciente });
+    }
+  } catch (error) {
+    console.error("Error en atenderPaciente:", error);
+    return res.status(500).send("Error interno del servidor");
+  }
+}
+
+async function renderPlanCMedicos(req, res, datosAdicionales = {}) {
+  const { buscarPorDNI } = require('./PacientesController');
+  const { buscarPlanPorID } = require('./plancController');
+  const { buscarEnfermeroPorID } = require('./enfermeriaController');
+
+  const dni = req.params.dni;
+
+  try {
+    const paciente = await buscarPorDNI(dni);
+
+    if (!paciente) {
+      return res.status(404).send("Paciente no encontrado");
+    }
+
+    const plan = await buscarPlanPorID(paciente.idPaciente);
+
+    if (!plan) {
+      return res.status(404).send("El paciente no tiene plan de cuidados. Tiene que ser atendido por un enfermero previamente");
+    }
+
+    const enfermero = await buscarEnfermeroPorID(plan.id_enfermero);
+
+    res.render('FormPlanC', {
+      dni,
+      paciente,
+      enfermero,
+      planCuidados: plan,
+      ...datosAdicionales
+    });
+  } catch (error) {
+    console.error("Error en renderPlanCMedicos:", error);
+    res.status(500).send("Error interno del servidor");
+  }
+}
+
+module.exports = { obtenerMedicos, obtenerMedicosPorEspecialidad, obtenerMedicoPorID, renderPaginaInicio, atenderPaciente, renderPlanCMedicos };

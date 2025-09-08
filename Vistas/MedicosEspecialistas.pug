@@ -4,7 +4,7 @@ html(lang="es")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Informe de Estudio - Médico Especialista
+    title Informe de Estudio
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
     style.
       body {
@@ -22,20 +22,16 @@ html(lang="es")
     +navbar
 
     div.container.mt-5
-      h2.text-center.mb-4.text-primary Informe de Estudio - #{paciente.nombre} #{paciente.apellido}
+      h2.text-center.mb-4.text-primary Realizacion de Estudio - #{paciente.nombre} #{paciente.apellido}
 
       div.card.p-4.shadow-lg
-        form(action=`/medico/especialista/estudio/${estudio.idEstudio}` method='POST')
+        form(action=`/medico/especialista/estudio/${paciente.idPaciente}` method='POST')
           div.mb-3
-            label.form-label(for='informe') Informe Médico
-            textarea#informe.form-control(name='informe' rows='6' required placeholder='Describa los hallazgos del estudio')
+            label.form-label(for='resultado') Informe Médico
+            textarea#informe.form-control(name='resultado' rows='6' required placeholder='Describa los resultados del estudio')
 
-          div.mb-3
-            label.form-label(for='destinatario') Destinatario del Informe
-            select#destinatario.form-select(name='destinatario' required)
-              option(value="") Seleccione un médico
-              each medico in medicos
-                option(value=medico.idMedico)= medico.nombre
+          input(type="hidden" name="id_paciente" value=paciente.idPaciente);
+          input(type="hidden" name="id_estudio" value=estudio.idEstudio);
 
           button.btn.btn-success.w-100.mt-3(type='submit') 📤 Enviar Informe
 

@@ -159,4 +159,4 @@ async function guardarInforme(req, res) {
 
 
 
-module.exports = {renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme};
+module.exports = {renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme, buscarPlanPorID};
