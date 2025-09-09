@@ -1,0 +1,65 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Informe de Alta
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    style.
+      body {
+        background-color: #f0f4f8;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .right-panel {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+      .form-label {
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+      textarea.form-control {
+        font-size: 1rem;
+      }
+      h2, h3 {
+        font-weight: 700;
+      }
+
+  body
+    include navbar.pug
+    +navbar
+
+    .container.mt-5
+      h2.text-center.mb-4.text-primary Informe de Alta - Paciente #{paciente.nombre} #{paciente.apellido}
+      .row.justify-content-center
+        .col-md-8
+          .right-panel
+            if errores && errores.length
+              .alert.alert-danger
+                ul.mb-0
+                  each error in errores
+                    li= error
+
+            form(action=`/medicos/guardarInformeAlta/${paciente.dni}` method="POST")
+              .mb-4
+                label.form-label(for="diagnostico_final") Diagnóstico Final
+                textarea.form-control(name="diagnostico_final" id="diagnostico_final" rows="4" placeholder="Escriba aquí el diagnóstico final del paciente" required)
+
+              .mb-4
+                label.form-label(for="medicacion") Medicación / Tratamiento
+                textarea.form-control(name="medicacion" id="medicacion" rows="3" placeholder="Indique la medicación y tratamiento a seguir" required)
+
+              .mb-4
+                label.form-label(for="recomendaciones") Recomendaciones
+                textarea.form-control(name="recomendaciones" id="recomendaciones" rows="3" placeholder="Recomendaciones para el paciente al alta" required)
+
+              .mb-4
+                label.form-label(for="observaciones") Observaciones adicionales
+                textarea.form-control(name="observaciones" id="observaciones" rows="2" placeholder="Notas adicionales (opcional)")
+
+              button.btn.btn-success.btn-lg.mt-3(type="submit") Dar de Alta
+              .alert.alert-warning.mt-3(role="alert") Una vez presionado el botón, no hay vuelta atrás.
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")

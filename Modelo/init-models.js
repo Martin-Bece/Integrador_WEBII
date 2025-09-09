@@ -24,7 +24,7 @@ var _unidades = require("./unidades");
 var _usuarios = require("./usuarios");
 var _diagnostico = require("./diagnostico");
 var _historia_clinica_interna = require("./historia_clinica_interna");
-
+var _informes_alta = require("./informes_alta"); 
 
 function initModels(sequelize) {
   var EmpleadosAdmision = _EmpleadosAdmision(sequelize, DataTypes);
@@ -52,9 +52,8 @@ function initModels(sequelize) {
   var usuarios = _usuarios(sequelize, DataTypes);
   var diagnostico = _diagnostico(sequelize, DataTypes);
   var historia_clinica_interna = _historia_clinica_interna(sequelize, DataTypes);
+  var informes_alta = _informes_alta(sequelize, DataTypes);
 
-
-  // Relaciones existentes
   estudios.belongsToMany(pacientes, { as: 'idPaciente_pacientes', through: pacientes_estudios, foreignKey: "idEstudio", otherKey: "idPaciente" });
   pacientes.belongsToMany(estudios, { as: 'idEstudio_estudios', through: pacientes_estudios, foreignKey: "idPaciente", otherKey: "idEstudio" });
   habitaciones.belongsTo(alas, { as: "ala", foreignKey: "ala_id"});
@@ -115,7 +114,8 @@ function initModels(sequelize) {
   pacientes.hasMany(diagnostico, { as: "diagnosticos", foreignKey: "idPaciente" });
   historia_clinica_interna.belongsTo(pacientes, { as: "paciente", foreignKey: "idPaciente" });
   pacientes.hasMany(historia_clinica_interna, { as: "historias_clinicas", foreignKey: "idPaciente" });
-
+  informes_alta.belongsTo(admisiones, { as: "admision", foreignKey: "admision_id" });
+  admisiones.hasMany(informes_alta, { as: "informes_alta", foreignKey: "admision_id" });
 
   return {
     EmpleadosAdmision,
@@ -131,6 +131,7 @@ function initModels(sequelize) {
     historia_clinica_interna,
     informe_enfermero,
     informes,
+    informes_alta,
     medicos,
     motivos,
     mutuales,

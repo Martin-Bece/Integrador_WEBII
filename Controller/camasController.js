@@ -64,4 +64,11 @@ async function AsignarCama(pacienteId, habitaciones) {
     return null;
 }
 
-module.exports = { obtenerCamas, obtenerCamasPorHab, AsignarCama}
+async function liberarCama(idCama) {
+  await db.camas.update(
+    { estado: 'libre' },
+    { where: { idCama } }
+  );
+}
+
+module.exports = { obtenerCamas, obtenerCamasPorHab, AsignarCama, liberarCama}

@@ -1,7 +1,6 @@
-
 const db = require('../Modelo');
 const { obtenerEspecialidades, obtenerEspecialidadPorID } = require('./especialidadesController');
-const { obtenerMedicosPorEspecialidad, obtenerMedicoPorID } = require('./medicosController');
+// Se eliminó el require directo a medicosController para romper el ciclo
 const { obtenerMutuales } = require('./mutualesController');
 const { obtenerTurnosPorDNI } = require('./TurnosController');
 const { obtenerMotivos, obtenerMotivoPorID } = require('./motivosController'); 
@@ -20,12 +19,8 @@ async function buscarPacientePOST(req, res) {
   try {
     const paciente = await buscarPorDNI(dni);
 
-    if (paciente) {
-      return res.redirect(`/portalPaciente/${paciente.dni}`);
-
-    } else {
-      return res.redirect(`/FormularioPaciente?dni=${dni}`);
-    }
+    if (paciente) return res.redirect(`/portalPaciente/${paciente.dni}`);
+    else return res.redirect(`/FormularioPaciente?dni=${dni}`);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error interno del servidor');
@@ -40,7 +35,6 @@ async function mostrarPortalPaciente(req, res) {
 
     if (paciente) {
       const turnos = await obtenerTurnosPorDNI(dni);
-
       return res.render('portalPaciente', { paciente, turnos });
     } else {
       return res.redirect(`/FormularioPaciente?dni=${dni}`);
@@ -50,7 +44,6 @@ async function mostrarPortalPaciente(req, res) {
     res.status(500).send('Error interno del servidor');
   }
 }
-
 
 async function renderFormularioPaciente(req, res, datosAdicionales = {}) {
   try {
@@ -109,12 +102,9 @@ async function crearPaciente(req, res) {
   try {
     const pacienteExistente = await buscarPorDNI(paciente.dni);
 
-    if (pacienteExistente) {
-      return await actualizarPaciente(req, res)
-    }
+    if (pacienteExistente) return await actualizarPaciente(req, res);
 
     await db.pacientes.create(paciente);
-
     res.redirect(`/portalPaciente/${paciente.dni}`);
   } catch (error) {
     console.error(error);
@@ -193,9 +183,7 @@ async function EspecialidadTurno(req, res) {
     const { dni } = req.params;
     const errores = [];
 
-    if (!fecha || !hora || !idEspecialidad) {
-      errores.push('Todos los campos son obligatorios.');
-    }
+    if (!fecha || !hora || !idEspecialidad) errores.push('Todos los campos son obligatorios.');
 
     const fechaSeleccionada = new Date(`${fecha}T${hora}`);
     const ahora = new Date();
@@ -203,28 +191,17 @@ async function EspecialidadTurno(req, res) {
       errores.push('La fecha y hora del turno deben ser válidas y futuras.');
     }
 
-    if (!/^\d+$/.test(idEspecialidad)) {
-      errores.push('La especialidad seleccionada no es válida.');
-    }
+    if (!/^\d+$/.test(idEspecialidad)) errores.push('La especialidad seleccionada no es válida.');
+    if (errores.length > 0) return await renderNuevoTurno(req, res, errores, { fecha, hora, idEspecialidad });
 
-    if (errores.length > 0) {
-      return await renderNuevoTurno(req, res, errores, { fecha, hora, idEspecialidad });
-    }
-
+    const { obtenerMedicosPorEspecialidad } = require('./medicosController');
     const medicos = await obtenerMedicosPorEspecialidad(idEspecialidad);
 
     if (!medicos || medicos.length === 0) {
       return await renderNuevoTurno(req, res, ['No hay médicos disponibles para la especialidad seleccionada.'], { fecha, hora, idEspecialidad });
     }
 
-    res.render('NuevoTurnoMedico', {
-      fecha,
-      hora,
-      idEspecialidad,
-      medicos,
-      dni
-    });
-
+    res.render('NuevoTurnoMedico', { fecha, hora, idEspecialidad, medicos, dni });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error al procesar la especialidad');
@@ -234,20 +211,17 @@ async function EspecialidadTurno(req, res) {
 async function confirmarTurno(req, res) {
   try {
     const { fecha, hora, idEspecialidad, idMedico, dni } = req.body;
-
     const errores = [];
 
-    if (!fecha || !hora || !idEspecialidad || !idMedico || !dni) {
-      errores.push('Todos los campos son obligatorios.');
-    }
+    if (!fecha || !hora || !idEspecialidad || !idMedico || !dni) errores.push('Todos los campos son obligatorios.');
 
     const fechaSeleccionada = new Date(`${fecha}T${hora}`);
     const ahora = new Date();
-    if (isNaN(fechaSeleccionada.getTime()) || fechaSeleccionada < ahora) {
-      errores.push('La fecha y hora del turno deben ser válidas y futuras.');
-    }
+    if (isNaN(fechaSeleccionada.getTime()) || fechaSeleccionada < ahora) errores.push('La fecha y hora del turno deben ser válidas y futuras.');
 
     const paciente = await buscarPorDNI(dni);
+
+    const { obtenerMedicoPorID } = require('./medicosController');
     const medico = await obtenerMedicoPorID(idMedico);
     const especialidad = await obtenerEspecialidadPorID(idEspecialidad);
 
@@ -257,28 +231,12 @@ async function confirmarTurno(req, res) {
 
     if (errores.length > 0) {
       const medicos = await obtenerMedicosPorEspecialidad(idEspecialidad);
-      return res.render('NuevoTurnoMedico', {
-        errores,
-        fecha,
-        hora,
-        especialidad: idEspecialidad,
-        medicos,
-        dni
-      });
+      return res.render('NuevoTurnoMedico', { errores, fecha, hora, especialidad: idEspecialidad, medicos, dni });
     }
 
-    const turno = {
-      fecha,
-      hora,
-      paciente_id: paciente.idPaciente,
-      idMedico: medico.idMedico,
-      idEspecialidad: especialidad.idEspecialidad
-    };
-
+    const turno = { fecha, hora, paciente_id: paciente.idPaciente, idMedico: medico.idMedico, idEspecialidad: especialidad.idEspecialidad };
     await db.turnos.create(turno);
-
-    return res.redirect(`/portalPaciente/${req.body.dni}`);
-
+    return res.redirect(`/portalPaciente/${dni}`);
   } catch (error) {
     console.error(error);
     res.status(500).send('Error al confirmar el turno');
@@ -291,14 +249,12 @@ async function cancelarTurno(req, res) {
     const dni = req.params.dni;
 
     await db.turnos.destroy({ where: { idTurno: turnoId } });
-
     res.redirect(`/portalPaciente/${dni}`);
   } catch (error) {
     console.error('Error al cancelar turno:', error);
     res.status(500).send('Error al cancelar el turno');
   }
 }
-
 
 module.exports = {
   mostrarPortalPaciente,
@@ -311,6 +267,5 @@ module.exports = {
   renderNuevoTurno,
   EspecialidadTurno,
   confirmarTurno,
-  cancelarTurno,
-  buscarPorDNI
+  cancelarTurno
 };

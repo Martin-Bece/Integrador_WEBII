@@ -12,7 +12,7 @@ const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/h
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout, esMedicoOEnfermero } = require('./Middleware/auth');
-const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria } = require('./Controller/medicosController');
+const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica } = require('./Controller/medicosController');
 
 const PORT = 3000;
 
@@ -153,6 +153,12 @@ app.post('/medicos/guardarDiagnostico/:dni', esMedico, guardarDiagnostico);
 app.get('/medicos/historia-clinica/:dni', esMedico, renderHistoria);
 
 app.post('/medicos/guardarHistoria/:dni', esMedico, guardarHistoria);
+
+
+
+app.get('/medicos/alta-paciente/:dni', esMedico, renderFormAlta);
+
+app.post('/medicos/guardarInformeAlta/:dni', esMedico, darAltaMedica);
 
 //CONF de la app
 

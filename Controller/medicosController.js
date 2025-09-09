@@ -2,6 +2,7 @@ const { where } = require('sequelize');
 const db = require('../Modelo');
 const { obtenerEstudios } = require('./estudiosController');
 const { obtenerDiagnosticoPorID } = require('./diagnosticoController');
+const { darDeAlta, FiltrarAdmisionPorDNI } = require('./admisionesController');
 
 async function obtenerMedicos() {
   return await db.medicos.findAll();
@@ -64,8 +65,7 @@ async function renderPaginaInicio(req, res, datosAdicionales = {}) {
 
   const pacientesConTurno = turnosConAdmision
     .map(t => t.paciente && t.paciente.admisiones
-      ? t.paciente.admisiones
-          .map(a => ({ ...a, paciente: t.paciente })) 
+      ? t.paciente.admisiones.map(a => ({ ...a, paciente: t.paciente })) 
       : [])
     .flat();
 
@@ -79,15 +79,12 @@ async function atenderPaciente(req, res) {
     const dniMedico = req.session?.usuario?.dni;
     const dniPaciente = req.params.dni;
 
-    if (!dniMedico) {
-      return res.status(400).send("No se encontró el DNI del médico en la sesión");
-    }
+    if (!dniMedico) return res.status(400).send("No se encontró el DNI del médico en la sesión");
 
     const medico = await obtenerMedicoPorDNI(dniMedico);
-    if (!medico) {
-      return res.status(404).send("Médico no encontrado");
-    }
+    if (!medico) return res.status(404).send("Médico no encontrado");
 
+    // Circular dependency resuelta: require dentro de la función
     const { buscarPorDNI } = require('./PacientesController');
     const paciente = await buscarPorDNI(dniPaciente);
 
@@ -103,24 +100,18 @@ async function atenderPaciente(req, res) {
 }
 
 async function renderPlanCMedicos(req, res, datosAdicionales = {}) {
-  const { buscarPorDNI } = require('./PacientesController');
-  const { buscarPlanPorID } = require('./plancController');
-  const { buscarEnfermeroPorID } = require('./enfermeriaController');
-
-  const dni = req.params.dni;
-
   try {
+    const { buscarPorDNI } = require('./PacientesController');
+    const { buscarPlanPorID } = require('./plancController');
+    const { buscarEnfermeroPorID } = require('./enfermeriaController');
+
+    const dni = req.params.dni;
     const paciente = await buscarPorDNI(dni);
 
-    if (!paciente) {
-      return res.status(404).send("Paciente no encontrado");
-    }
+    if (!paciente) return res.status(404).send("Paciente no encontrado");
 
     const plan = await buscarPlanPorID(paciente.idPaciente);
-
-    if (!plan) {
-      return res.status(404).send("El paciente no tiene plan de cuidados. Tiene que ser atendido por un enfermero previamente");
-    }
+    if (!plan) return res.status(404).send("El paciente no tiene plan de cuidados. Tiene que ser atendido por un enfermero previamente");
 
     const enfermero = await buscarEnfermeroPorID(plan.id_enfermero);
 
@@ -138,19 +129,19 @@ async function renderPlanCMedicos(req, res, datosAdicionales = {}) {
 }
 
 async function renderFormDiagnostico(req, res, datosAdicionales = {}) {
-  
-  const dni = req.params.dni
-
+  const dni = req.params.dni;
   const { buscarPorDNI } = require('./PacientesController');
 
   const paciente = await buscarPorDNI(dni);
-
   const estudios = await obtenerEstudios();
-
   const diagnostico = await obtenerDiagnosticoPorID(paciente.idPaciente);
 
-  res.render('formDiagnostico', {paciente, estudios, diagnostico: diagnostico?.diagnostico || '', ...datosAdicionales})
-
+  res.render('formDiagnostico', {
+    paciente,
+    estudios,
+    diagnostico: diagnostico?.diagnostico || '',
+    ...datosAdicionales
+  });
 }
 
 async function guardarDiagnostico(req, res) {
@@ -213,7 +204,6 @@ async function renderHistoria(req, res, datosAdicionales = {}) {
 async function guardarHistoria(req, res) {
   const { observacion } = req.body;
   const { dni } = req.params;
-
   const { buscarPorDNI } = require('./PacientesController');
 
   const paciente = await buscarPorDNI(dni);
@@ -236,6 +226,65 @@ async function guardarHistoria(req, res) {
   }
 }
 
+async function renderFormAlta(req, res, datosAdicionales = {}) {
+  try {
+    const dni = req.params.dni;
+    const { buscarPorDNI } = require('./PacientesController');
 
+    const paciente = await buscarPorDNI(dni);
+    if (!paciente) return res.status(404).send("Paciente no encontrado");
 
-module.exports = { obtenerMedicos, obtenerMedicosPorEspecialidad, obtenerMedicoPorID, renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria };
+    res.render('formAlta', { paciente, ...datosAdicionales });
+  } catch (error) {
+    console.error("Error al cargar el formulario de alta:", error);
+    return res.status(500).send("Error interno al cargar el formulario");
+  }
+}
+
+async function darAltaMedica(req, res) {
+  try {
+    const dni = req.params.dni;
+    const informe = req.body;
+
+    const admisiones = await FiltrarAdmisionPorDNI(dni);
+    if (!admisiones || admisiones.length === 0) {
+      return res.status(404).send("No se encontró una admisión activa para este paciente");
+    }
+
+    const admision = admisiones[0];
+    informe.admision_id = admision.idAdmision;
+
+    await darDeAlta(req, res); 
+
+    await db.informes_alta.create({
+      admision_id: informe.admision_id,
+      diagnostico_final: informe.diagnostico_final,
+      medicacion: informe.medicacion,
+      recomendaciones: informe.recomendaciones,
+      observaciones: informe.observaciones || null,
+      fecha_alta: new Date()
+    });
+
+    res.render('ExitoAlta', { paciente: { dni } });
+
+  } catch (error) {
+    console.error("Error al dar alta médica:", error);
+    res.status(500).send("Ocurrió un error al dar de alta al paciente");
+  }
+}
+
+module.exports = {
+  obtenerMedicos,
+  obtenerMedicosPorEspecialidad,
+  obtenerMedicoPorID,
+  obtenerMedicoPorDNI,
+  renderPaginaInicio,
+  atenderPaciente,
+  renderPlanCMedicos,
+  renderFormDiagnostico,
+  guardarDiagnostico,
+  renderHistoria,
+  guardarHistoria,
+  renderFormAlta,
+  darAltaMedica
+};

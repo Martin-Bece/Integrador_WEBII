@@ -36,8 +36,12 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     },
+    fecha_alta: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
     estado: {
-      type: DataTypes.ENUM('Activa','Alta'),
+      type: DataTypes.ENUM('Activa', 'Alta'),
       allowNull: false,
       defaultValue: "Activa"
     },

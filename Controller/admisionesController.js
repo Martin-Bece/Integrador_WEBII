@@ -1,6 +1,6 @@
 const { where } = require('sequelize');
 const db = require('../Modelo');
-const { AsignarCama } = require('./camasController');
+const { AsignarCama, liberarCama } = require('./camasController');
 const { obtenerHabsPorUnidad, obtenerHabsPorID } = require('./habitacionesController');
 const { mostrarInternaciones } = require('./InternacionesController');
 const { obtenerMotivos, obtenerMotivoPorID, obtenerMotivoPorEspecialidad } = require('./motivosController');
@@ -360,5 +360,39 @@ async function cancelarAdmision(req, res) {
   }
 }
 
+async function darDeAlta(req, res) {
+  try {
+    const dni = req.params.dni;
 
-module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, FiltrarAdmisionPorDNI, cancelarAdmision}
+    const admisiones = await FiltrarAdmisionPorDNI(dni);
+
+    if (!admisiones || admisiones.length === 0) {
+      console.log(`No se encontró admisión activa para el DNI ${dni}`);
+      return res.status(404).send("No se encontró una admisión activa para este paciente");
+    }
+
+    const admision = admisiones[0];
+
+    await admision.update({ 
+      estado: 'Alta',
+      fecha_alta: new Date()
+    });
+
+    if (admision.cama_id) {
+      await liberarCama(admision.cama_id);
+    }
+
+    console.log(`Paciente con DNI ${dni} dado de alta. Admision ${admision.idAdmision} marcada como 'Alta' en fecha ${admision.fecha_alta}.`);
+
+    return;
+
+  } catch (error) {
+    console.error("Error al dar de alta al paciente:", error);
+    return res.status(500).send("Error al dar de alta al paciente");
+  }
+}
+
+
+
+
+module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, FiltrarAdmisionPorDNI, cancelarAdmision, darDeAlta}
