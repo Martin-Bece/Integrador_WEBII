@@ -1,0 +1,30 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Informes de Enfermería
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+  body
+    include navbar.pug
+    +navbar
+
+    .container.mt-5
+      h2.text-center Informes de Enfermería
+      .card.mb-3
+        .card-body
+          p.card-text Paciente: #{paciente.nombre} #{paciente.apellido}
+          p.card-text DNI: #{paciente.dni}
+
+      if informesEnfermeria.length
+        each informe in informesEnfermeria
+          .card.mb-2
+            .card-body
+              p.card-text Fecha: #{new Date(informe.fecha_hora).toLocaleDateString()}
+              p.card-text Enfermero: #{informe.id_enfermero_enfermero.nombre} #{informe.id_enfermero_enfermero.apellido}
+              p.card-text Informe:
+              textarea.form-control(readonly rows="8") #{informe.informe}
+      else
+        p.text-muted.text-center No hay informes de enfermería.
+
+      a.btn.btn-secondary.mt-3(href=`/medicos/informes/${paciente.dni}`) Volver Atrás

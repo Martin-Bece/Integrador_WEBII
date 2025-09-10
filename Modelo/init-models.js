@@ -116,6 +116,8 @@ function initModels(sequelize) {
   pacientes.hasMany(historia_clinica_interna, { as: "historias_clinicas", foreignKey: "idPaciente" });
   informes_alta.belongsTo(admisiones, { as: "admision", foreignKey: "admision_id" });
   admisiones.hasMany(informes_alta, { as: "informes_alta", foreignKey: "admision_id" });
+  informes.belongsTo(especialidades, { as: "idEspecialidad_especialidade", foreignKey: "idEspecialidad"});
+  especialidades.hasMany(informes, { as: "informes", foreignKey: "idEspecialidad"});
 
   return {
     EmpleadosAdmision,

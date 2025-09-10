@@ -12,7 +12,7 @@ const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/h
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout, esMedicoOEnfermero } = require('./Middleware/auth');
-const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica } = require('./Controller/medicosController');
+const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica, renderVerInformes, renderInformeEstudio, renderInformeEnfermeria } = require('./Controller/medicosController');
 
 const PORT = 3000;
 
@@ -154,7 +154,11 @@ app.get('/medicos/historia-clinica/:dni', esMedico, renderHistoria);
 
 app.post('/medicos/guardarHistoria/:dni', esMedico, guardarHistoria);
 
+app.get('/medicos/informes/:dni', esMedico, renderVerInformes);
 
+app.get('/medicos/informes/estudio/:dni', esMedico, renderInformeEstudio);
+
+app.get('/medicos/informes/enfermeria/:dni', esMedico, renderInformeEnfermeria);
 
 app.get('/medicos/alta-paciente/:dni', esMedico, renderFormAlta);
 
@@ -172,7 +176,7 @@ app.use((err,req, res) => {
 });
 
 
-db.sequelize.sync({force:false, alter: true})
+db.sequelize.sync({force:false})
   .then(()=>{
     console.log('Conexion a la BD realizada correctamente.');
     app.listen(PORT,()=>{

@@ -273,6 +273,93 @@ async function darAltaMedica(req, res) {
   }
 }
 
+async function renderVerInformes(req, res) {
+  try {
+    const dni = req.params.dni;
+
+    const medico = await db.medicos.findOne({ where: { dni: req.session.usuario.dni } });
+    if (!medico) return res.redirect('/login');
+
+    const paciente = await db.pacientes.findOne({ where: { dni } });
+    if (!paciente) return res.status(404).send("Paciente no encontrado");
+
+    const idPaciente = paciente.idPaciente;
+    const idEspecialidad = medico.idEspecialidad;
+
+    const informesEstudios = await db.informes.findAll({
+      where: { idPaciente, idEspecialidad },
+      include: [
+        { model: db.estudios, as: "idEstudio_estudio" }
+      ],
+      order: [['fechaInforme', 'DESC']]
+    });
+
+    const informesEnfermeria = await db.informe_enfermero.findAll({
+      where: { id_paciente: idPaciente, id_especialidad: idEspecialidad },
+      include: [
+        { model: db.enfermeros, as: "id_enfermero_enfermero" }
+      ],
+      order: [['fecha_hora', 'DESC']]
+    });
+
+    res.render('verInformes', {
+      paciente,
+      informesEstudios,
+      informesEnfermeria
+    });
+
+  } catch (error) {
+    console.error("Error en renderVerInformes:", error);
+    res.status(500).send("Error al cargar los informes");
+  }
+}
+
+async function renderInformeEstudio(req, res) {
+  try {
+    const { dni } = req.params;
+
+    const paciente = await db.pacientes.findOne({ where: { dni } });
+    if (!paciente) return res.redirect('/medicos');
+
+    const informesEstudios = await db.informes.findAll({
+      where: { idPaciente: paciente.idPaciente },
+      include: [
+        { model: db.estudios, as: 'idEstudio_estudio' },
+      ],
+      order: [['fechaInforme', 'DESC']]
+    });
+
+    res.render('informeEstudio', { paciente, informesEstudios });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/medicos');
+  }
+}
+
+async function renderInformeEnfermeria(req, res) {
+  try {
+    const { dni } = req.params;
+
+    const paciente = await db.pacientes.findOne({ where: { dni } });
+    if (!paciente) return res.redirect('/medicos');
+
+    const informesEnfermeria = await db.informe_enfermero.findAll({
+      where: { id_paciente: paciente.idPaciente },
+      include: [
+        { model: db.enfermeros, as: 'id_enfermero_enfermero' }
+      ],
+      order: [['fecha_hora', 'DESC']]
+    });
+
+    res.render('informeEnfermeria', { paciente, informesEnfermeria });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/medicos');
+  }
+}
+
+
+
 module.exports = {
   obtenerMedicos,
   obtenerMedicosPorEspecialidad,
@@ -286,5 +373,8 @@ module.exports = {
   renderHistoria,
   guardarHistoria,
   renderFormAlta,
-  darAltaMedica
+  darAltaMedica,
+  renderVerInformes,
+  renderInformeEnfermeria,
+  renderInformeEstudio
 };

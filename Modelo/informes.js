@@ -31,6 +31,14 @@ module.exports = function(sequelize, DataTypes) {
         key: 'idMedico'
       }
     },
+    idEspecialidad: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'especialidades',
+        key: 'idEspecialidad'
+      }
+    },
     fechaInforme: {
       type: DataTypes.DATE,
       allowNull: true,
@@ -72,6 +80,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "idMedico" },
+        ]
+      },
+      {
+        name: "idEspecialidad",
+        using: "BTREE",
+        fields: [
+          { name: "idEspecialidad" },
         ]
       },
     ]

@@ -1,0 +1,107 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Informes del Paciente
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css")
+    style.
+      body {
+        background-color: #f0f4f8;
+        padding-bottom: 80px; /* espacio para el botón fijo */
+      }
+      .left-panel, .right-panel {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      }
+      .table thead {
+        background-color: #0d6efd;
+        color: white;
+      }
+      .btn-fixed {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+      }
+
+  body
+    include navbar.pug
+    +navbar
+
+    .container.mt-5
+      h2.text-center Informes del Paciente
+      p.text-center.text-muted Aquí puede consultar los informes de estudios y observaciones de enfermería.
+
+      .row
+        .col-md-4
+          .left-panel
+            h4 Información del Paciente
+            p
+              strong ID: 
+              | #{paciente.idPaciente}
+            p
+              strong Nombre: 
+              | #{paciente.nombre}
+            p
+              strong Apellido: 
+              | #{paciente.apellido}
+            p
+              strong DNI: 
+              | #{paciente.dni}
+
+        .col-md-8
+          .right-panel
+            ul.nav.nav-tabs#informesTabs(role="tablist")
+              li.nav-item
+                a.nav-link.active(href="#estudios" data-bs-toggle="tab") Informes de Estudios
+              li.nav-item
+                a.nav-link(href="#enfermeria" data-bs-toggle="tab") Informes de Enfermería
+
+            .tab-content.mt-3
+              .tab-pane.fade.show.active#estudios
+                if informesEstudios.length
+                  table.table.table-hover
+                    thead
+                      tr
+                        th Fecha
+                        th Tipo de Estudio
+                        th Acción
+                    tbody
+                      each informe in informesEstudios
+                        tr
+                          td= new Date(informe.fechaInforme).toLocaleDateString()
+                          td= informe.idEstudio_estudio.nombre
+                          td
+                            a.btn.btn-sm.btn-primary(href=`/medicos/informes/estudio/${paciente.dni}}`) 
+                              i.fas.fa-eye
+                              |  Ver Informe
+                else
+                  p.text-muted.text-center.mt-3 No hay informes de estudios realizados.
+
+              .tab-pane.fade#enfermeria
+                if informesEnfermeria.length
+                  table.table.table-hover
+                    thead
+                      tr
+                        th Fecha
+                        th Tipo de Informe
+                        th Acción
+                    tbody
+                      each informe in informesEnfermeria
+                        tr
+                          td= new Date(informe.fecha_hora).toLocaleDateString()
+                          td Enfermería
+                          td
+                            a.btn.btn-sm.btn-primary(href=`/medicos/informes/enfermeria/${paciente.dni}`) 
+                              i.fas.fa-eye
+                              |  Ver Informe
+                else
+                  p.text-muted.text-center.mt-3 No hay informes de enfermería realizados.
+
+    a.btn.btn-secondary.btn-fixed(href=`/medicos/atender/${paciente.dni}`) Volver Atrás
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")
