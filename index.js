@@ -187,8 +187,7 @@ app.post('/admin/usuarios/editar/:id', esAdmin, actualizarUsuarioExistente);
 
 app.get('/admin/usuarios/eliminar/:id', esAdmin, renderConfirmarEliminar);
 
-app.post('/admin/usuarios/eliminar-confirmado/:id', esAdmin, eliminarUsuarioLista)
-
+app.post('/admin/usuarios/eliminar-confirmado/:id', esAdmin, eliminarUsuarioLista);
 
 //CONF de la app
 
