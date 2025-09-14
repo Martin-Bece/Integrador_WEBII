@@ -189,7 +189,11 @@ app.get('/admin/usuarios/eliminar/:id', esAdmin, renderConfirmarEliminar);
 
 app.post('/admin/usuarios/eliminar-confirmado/:id', esAdmin, eliminarUsuarioLista);
 
-app.get('/admin/resumen', esAdmin, renderResumen)
+app.get('/admin/resumen', esAdmin, renderResumen);
+
+app.get('/admin/entidades', esAdmin, (req, res) =>{
+  res.render('GestionEntidades');
+})
 
 //CONF de la app
 
