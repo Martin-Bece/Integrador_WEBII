@@ -1,0 +1,61 @@
+doctype html
+include navbar.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= usuario ? 'Editar Usuario' : 'Nuevo Usuario'
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css")
+    style.
+      body {
+        background-color: #f0f4f8;
+      }
+      .form-container {
+        max-width: 600px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      }
+
+  body
+    +navbar
+
+    div.form-container
+      h2.text-center.mb-4= usuario ? 'Editar Usuario' : 'Nuevo Usuario'
+
+      form(method="post" action=usuario ? `/admin/usuarios/editar/${usuario.idUsuario}` : '/admin/usuarios/nuevo')
+        div.mb-3
+          label.form-label(for="usuario") Usuario
+          input.form-control(type="text", name="usuario", id="usuario", required=true, value=usuario ? usuario.usuario : '')
+        
+        div.mb-3
+          label.form-label(for="contrasea") Contraseña
+          input.form-control(
+            type="password",
+            name="contrasea",
+            id="contrasea",
+            placeholder=usuario ? "La contraseña no se puede cambiar aquí" : '',
+            required=!usuario,
+            disabled=usuario ? true : false
+          )
+        
+        div.mb-3
+          label.form-label(for="dni") DNI
+          input.form-control(type="text", name="dni", id="dni", required=true, value=usuario ? usuario.dni : '')
+        
+        div.mb-3
+          label.form-label(for="rol") Rol
+          select.form-select(name="rol", id="rol", required=true)
+            option(value="admision" selected=usuario && usuario.rol==='admision') Admisión
+            option(value="medico" selected=usuario && usuario.rol==='medico') Médico
+            option(value="enfermero" selected=usuario && usuario.rol==='enfermero') Enfermero
+            option(value="admin" selected=usuario && usuario.rol==='admin') Administración
+        
+        div.text-center.mt-4
+          button.btn.btn-primary(type="submit")= usuario ? 'Guardar Cambios' : 'Crear Usuario'
+          a.btn.btn-secondary.ms-2(href="/admin/usuarios") Cancelar
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")

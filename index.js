@@ -13,6 +13,7 @@ const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = req
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout, esMedicoOEnfermero, esAdmin } = require('./Middleware/auth');
 const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica, renderVerInformes, renderInformeEstudio, renderInformeEnfermeria } = require('./Controller/medicosController');
+const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar } = require('./Controller/adminController');
 
 const PORT = 3000;
 
@@ -167,6 +168,27 @@ app.get('/medicos/informes/enfermeria/:dni', esMedico, renderInformeEnfermeria);
 app.get('/medicos/alta-paciente/:dni', esMedico, renderFormAlta);
 
 app.post('/medicos/guardarInformeAlta/:dni', esMedico, darAltaMedica);
+
+//PARTE DE ADMINISTRACION
+
+app.get('/admin/usuarios', esAdmin, renderListaUsuarios);
+
+app.get('/admin/usuarios/nuevo', esAdmin, renderFormUsuario);
+
+app.get('/admin/usuarios/editar/:id', esAdmin, renderFormUsuario);
+
+app.get('/admin/usuarios/cambiar-contrasea/:id', esAdmin, renderFormCambiarContraseña)
+
+app.post('/admin/usuarios/cambiar-contrasea/:id', esAdmin, postCambiarContraseña)
+
+app.post('/admin/usuarios/nuevo', esAdmin, crearUsuarioNuevo);
+
+app.post('/admin/usuarios/editar/:id', esAdmin, actualizarUsuarioExistente);
+
+app.get('/admin/usuarios/eliminar/:id', esAdmin, renderConfirmarEliminar);
+
+app.post('/admin/usuarios/eliminar-confirmado/:id', esAdmin, eliminarUsuarioLista)
+
 
 //CONF de la app
 

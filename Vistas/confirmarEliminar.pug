@@ -1,0 +1,36 @@
+//- Vistas/ConfirmarEliminarUsuario.pug
+doctype html
+include navbar.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Confirmar Eliminación
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css")
+    style.
+      body {
+        background-color: #f0f4f8;
+      }
+      .confirm-container {
+        max-width: 500px;
+        margin: 100px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        text-align: center;
+      }
+
+  body
+    +navbar
+
+    div.confirm-container
+      h3.mb-4 ¿Está seguro que desea eliminar al usuario con ID #{usuario.idUsuario}?
+      p.mb-4 Usuario: #{usuario.usuario} - DNI: #{usuario.dni} - Rol: #{usuario.rol}
+      
+      form(method="post", action=`/admin/usuarios/eliminar-confirmado/${usuario.idUsuario}`)
+        button.btn.btn-danger.me-2(type="submit") Eliminar
+        a.btn.btn-secondary(href="/admin/usuarios") Cancelar
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")
