@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const db = require('../Modelo');
 const { listarUsuarios, usuariosPorRol, buscarUsuarioPorId, crearUsuario, editarUsuario, eliminarUsuario, obtenerUsuarioPorDNI } = require('./usuariosController');
 
@@ -195,6 +196,37 @@ async function eliminarUsuarioLista(req, res) {
   }
 }
 
+async function renderResumen(req, res) {
+  try {
+    const totalPacientes = await db.pacientes.count();
+    const totalTurnos = await db.turnos.count({ where: { estado: 'Pendiente' } });
+    const totalInformes = await db.informes.count();
+    const camasOcupadas = await db.camas.count({ where: { estado: 'ocupada' } });
+    const totalMedicos = await db.usuarios.count({ where: { rol: 'medico' } });
+    const totalEnfermeros = await db.usuarios.count({ where: { rol: 'enfermero' } });
+    const totalAdmision = await db.usuarios.count({ where: { rol: 'admision' } });
+    const altas = await db.admisiones.count({ where: { estado: 'Alta' } });
+    const activas = await db.admisiones.count({ where: { estado: 'Activa' } });
+
+
+
+    res.render('Resumen', {
+      totalPacientes,
+      totalTurnos,
+      totalInformes,
+      camasOcupadas,
+      totalMedicos,
+      totalEnfermeros,
+      totalAdmision,
+      altas,
+      activas
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al cargar el resumen administrativo');
+  }
+}
+
 module.exports = {
-  renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, renderConfirmarEliminar, eliminarUsuarioLista
+  renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, renderConfirmarEliminar, eliminarUsuarioLista, renderResumen
 };

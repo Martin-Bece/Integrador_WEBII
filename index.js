@@ -13,7 +13,7 @@ const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = req
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout, esMedicoOEnfermero, esAdmin } = require('./Middleware/auth');
 const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica, renderVerInformes, renderInformeEstudio, renderInformeEnfermeria } = require('./Controller/medicosController');
-const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar } = require('./Controller/adminController');
+const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar, renderResumen } = require('./Controller/adminController');
 
 const PORT = 3000;
 
@@ -188,6 +188,8 @@ app.post('/admin/usuarios/editar/:id', esAdmin, actualizarUsuarioExistente);
 app.get('/admin/usuarios/eliminar/:id', esAdmin, renderConfirmarEliminar);
 
 app.post('/admin/usuarios/eliminar-confirmado/:id', esAdmin, eliminarUsuarioLista);
+
+app.get('/admin/resumen', esAdmin, renderResumen)
 
 //CONF de la app
 

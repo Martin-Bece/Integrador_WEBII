@@ -350,6 +350,8 @@ async function cancelarAdmision(req, res) {
       where: { idAdmision: admision.idAdmision }
     });
 
+    liberarCama(admision.cama_id);
+
     console.log(`Admisión ${admision.idAdmision} eliminada`);
 
     return mostrarInternaciones(req, res);
