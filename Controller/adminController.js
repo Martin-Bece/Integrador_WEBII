@@ -256,6 +256,25 @@ async function renderformPaciente(req, res, datosAdicionales = {}) {
   res.render('formAdminPaciente', { paciente, mutuales });
 }
 
+async function AdminAltaoBajaPaciente(req, res) {
+  try {
+    const idPaciente = req.params.id;
+    const paciente = await db.pacientes.findByPk(idPaciente);
+
+    if (!paciente) {
+      return res.status(404).send('Paciente no encontrado');
+    }
+
+    paciente.activo = paciente.activo ? 0 : 1;
+    await paciente.save();
+
+    res.redirect('/admin/pacientes');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cambiar el estado del paciente');
+  }
+}
+
 async function renderAdminMedico(req, res, datosAdicionales = {}) {
   
   const medicos = await obtenerMedicos();
@@ -278,6 +297,25 @@ async function renderformMedico(req, res, datosAdicionales = {}) {
   res.render('formAdminMedico', { medico, especialidades });
 }
 
+async function AdminAltaoBajaMedico(req, res) {
+  try {
+    const idMedico = req.params.id;
+    const medico = await db.medicos.findByPk(idMedico);
+
+    if (!medico) {
+      return res.status(404).send('Medico no encontrado');
+    }
+
+    medico.activo = medico.activo ? 0 : 1;
+    await medico.save();
+
+    res.redirect('/admin/medicos');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cambiar el estado del medico');
+  }
+}
+
 async function renderAdminEmpleadoAdm(req, res, datosAdicionales = {}) {
   
   const empleados = await db.EmpleadosAdmision.findAll();
@@ -294,6 +332,25 @@ async function renderformEmpAdmision(req, res, datosAdicionales = {}) {
   }
 
   res.render('formAdminEmpAdmision', { empleado });
+}
+
+async function AdminAltaoBajaEmpAdmision(req, res) {
+  try {
+    const idEmpleado = req.params.id;
+    const empleado = await db.EmpleadosAdmision.findByPk(idEmpleado);
+
+    if (!empleado) {
+      return res.status(404).send('Empleado de Admision no encontrado');
+    }
+
+    empleado.activo = empleado.activo ? 0 : 1;
+    await empleado.save();
+
+    res.redirect('/admin/empleados-admision');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cambiar el estado del empleado de admision');
+  }
 }
 
 async function renderAdminEspecialidad(req, res, datosAdicionales = {}) {
@@ -314,6 +371,25 @@ async function renderformEspecialidad(req, res, datosAdicionales = {}) {
   res.render('formAdminEspecialidad', { especialidad });
 }
 
+async function AdminAltaoBajaEspecialidad(req, res) {
+  try {
+    const idEspecialidad = req.params.id;
+    const especialidad = await db.especialidades.findByPk(idEspecialidad);
+
+    if (!especialidad) {
+      return res.status(404).send('especialidad no encontrada');
+    }
+
+    especialidad.activo = especialidad.activo ? 0 : 1;
+    await especialidad.save();
+
+    res.redirect('/admin/especialidades');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cambiar el estado de la especialidad');
+  }
+}
+
 async function renderAdminEnfermeros(req, res, datosAdicionales = {}) {
   
   const enfermeros = await obtenerEnfermeros();
@@ -330,6 +406,25 @@ async function renderformEnfermero(req, res, datosAdicionales = {}) {
   }
 
   res.render('formAdminEnfermero', { enfermero });
+}
+
+async function AdminAltaoBajaEnfermero(req, res) {
+  try {
+    const idEnfermero = req.params.id;
+    const enfermero = await db.enfermeros.findByPk(idEnfermero);
+
+    if (!enfermero) {
+      return res.status(404).send('Enfermero no encontrado');
+    }
+
+    enfermero.activo = enfermero.activo ? 0 : 1;
+    await enfermero.save();
+
+    res.redirect('/admin/enfermeros');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cambiar el estado del enfermero');
+  }
 }
 
 async function renderAdminCamas(req, res, datosAdicionales = {}) {
@@ -356,6 +451,25 @@ async function renderformCamas(req, res, datosAdicionales = {}) {
   const habitaciones = await obtenerHabitaciones();
 
   res.render('formAdminCama', { cama, habitaciones });
+}
+
+async function AdminAltaoBajaCama(req, res) {
+  try {
+    const idCama = req.params.id;
+    const cama = await db.camas.findByPk(idCama);
+
+    if (!cama) {
+      return res.status(404).send('cama no encontrada');
+    }
+
+    cama.activo = cama.activo ? 0 : 1;
+    await cama.save();
+
+    res.redirect('/admin/camas');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cambiar el estado de la cama');
+  }
 }
 
 async function renderAdminHabitaciones(req, res, datosAdicionales = {}) {
@@ -392,6 +506,25 @@ async function renderformHabitacion(req, res, datosAdicionales = {}) {
   res.render('formAdminHabitacion', { habitacion, unidades, alas });
 }
 
+async function AdminAltaoBajaHabitacion(req, res) {
+  try {
+    const idHabitacion = req.params.id;
+    const habitacion = await db.habitaciones.findByPk(idHabitacion);
+
+    if (!habitacion) {
+      return res.status(404).send('habitacion no encontrada');
+    }
+
+    habitacion.activo = habitacion.activo ? 0 : 1;
+    await habitacion.save();
+
+    res.redirect('/admin/habitaciones');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cambiar el estado de la habitacion');
+  }
+}
+
 async function renderAdminUnidades(req, res, datosAdicionales = {}) {
   
   const unidades = await db.unidades.findAll();
@@ -408,6 +541,25 @@ async function renderformUnidad(req, res, datosAdicionales = {}) {
   }
 
   res.render('formAdminUnidad', { unidad });
+}
+
+async function AdminAltaoBajaUnidad(req, res) {
+  try {
+    const idUnidad = req.params.id;
+    const unidad = await db.unidades.findByPk(idUnidad);
+
+    if (!unidad) {
+      return res.status(404).send('Unidad no encontrada');
+    }
+
+    unidad.activo = unidad.activo ? 0 : 1;
+    await unidad.save();
+
+    res.redirect('/admin/unidades');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cambiar el estado de la unidad');
+  }
 }
 
 async function renderAdminAdmisiones(req, res, datosAdicionales = {}) {
@@ -456,6 +608,25 @@ async function renderformMutual(req, res, datosAdicionales = {}) {
   res.render('formAdminMutual', { mutual });
 }
 
+async function AdminAltaoBajaMutual(req, res) {
+  try {
+    const idMutual = req.params.id;
+    const mutual = await db.mutuales.findByPk(idMutual);
+
+    if (!mutual) {
+      return res.status(404).send('Mutual no encontrada');
+    }
+
+    mutual.activo = mutual.activo ? 0 : 1;
+    await mutual.save();
+
+    res.redirect('/admin/mutuales');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al cambiar el estado de la mutual');
+  }
+}
+
 module.exports = {
-  renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, renderConfirmarEliminar, eliminarUsuarioLista, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminAdmisiones, renderAdminUnidades, renderAdminHabitaciones, renderAdminMutuales, renderformPaciente, renderformMedico, renderformEmpAdmision, renderformAdmision, renderformUnidad, renderformHabitacion, renderformCamas, renderformEnfermero, renderformEspecialidad, renderformMutual
+  renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, renderConfirmarEliminar, eliminarUsuarioLista, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminAdmisiones, renderAdminUnidades, renderAdminHabitaciones, renderAdminMutuales, renderformPaciente, renderformMedico, renderformEmpAdmision, renderformAdmision, renderformUnidad, renderformHabitacion, renderformCamas, renderformEnfermero, renderformEspecialidad, renderformMutual, AdminAltaoBajaCama, AdminAltaoBajaEmpAdmision, AdminAltaoBajaEnfermero, AdminAltaoBajaEspecialidad, AdminAltaoBajaHabitacion, AdminAltaoBajaMedico, AdminAltaoBajaMutual, AdminAltaoBajaPaciente, AdminAltaoBajaUnidad,
 };

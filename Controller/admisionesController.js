@@ -333,6 +333,32 @@ async function admitirDerivacion(req, res) {
 
 }
 
+async function renderConfirmarCancelarAdmision(req, res) {
+  const dni = req.params.dni;
+  try {
+    const admisiones = await db.admisiones.findAll({
+      where: { estado: 'Activa' },
+      include: [
+        {
+          model: db.pacientes,
+          as: 'paciente',
+          where: { dni }
+        }
+      ]
+    });
+
+    if (!admisiones || admisiones.length === 0) {
+      return res.redirect('/PacientesInternados');
+    }
+
+    const admision = admisiones[0];
+    res.render('ConfirmarCancelarAdmision', { admision });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Ocurrió un error al cargar la página de confirmación');
+  }
+}
+
 async function cancelarAdmision(req, res) {
   try {
     const dni = req.params.dni;
@@ -350,7 +376,7 @@ async function cancelarAdmision(req, res) {
       where: { idAdmision: admision.idAdmision }
     });
 
-    liberarCama(admision.cama_id);
+    await liberarCama(admision.cama_id);
 
     console.log(`Admisión ${admision.idAdmision} eliminada`);
 
@@ -361,6 +387,7 @@ async function cancelarAdmision(req, res) {
     return res.status(500).send("Error al cancelar la admisión");
   }
 }
+
 
 async function darDeAlta(req, res) {
   try {
@@ -401,4 +428,4 @@ async function obtenerAdmisiones() {
 
 
 
-module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, FiltrarAdmisionPorDNI, cancelarAdmision, darDeAlta, obtenerAdmisiones}
+module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, FiltrarAdmisionPorDNI, cancelarAdmision, darDeAlta, obtenerAdmisiones, renderConfirmarCancelarAdmision}

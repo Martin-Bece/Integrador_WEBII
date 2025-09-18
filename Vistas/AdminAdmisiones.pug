@@ -42,14 +42,10 @@ html(lang="es")
                 td= adm.habitacion_id
                 td.text-capitalize= adm.estado
                 td
-                  a.btn.btn-sm.btn-info.me-2(href=`/admin/admisiones/ver/${adm.idAdmision}`)
-                    i.bi.bi-eye-fill
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/admisiones/editar/${adm.idAdmision}`)
                     i.bi.bi-pencil-fill
-                  if adm.estado === 'activa'
+                  if adm.estado === 'Activa'
                     a.btn.btn-sm.btn-success.me-2(href=`/admin/admisiones/alta/${adm.idAdmision}`)
                       i.bi.bi-check-circle-fill
-                  a.btn.btn-sm.btn-danger(href=`/admin/admisiones/eliminar/${adm.idAdmision}`)
-                    i.bi.bi-trash-fill
       else
         p.text-muted.text-center No hay admisiones cargadas.

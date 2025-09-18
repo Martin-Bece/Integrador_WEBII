@@ -6,14 +6,14 @@ const session = require('express-session')
 const db = require('./Modelo');
 const { mostrarPortalPaciente, buscarPacientePOST, renderFormularioPaciente, crearPaciente, darDeAlta, darDeBaja, renderNuevoTurno, EspecialidadTurno, confirmarTurno, cancelarTurno } = require('./Controller/PacientesController');
 const { mostrarInternaciones } = require('./Controller/InternacionesController');
-const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, cancelarAdmision } = require('./Controller/admisionesController');
+const { renderFormularioEmergencia, admitirEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, cancelarAdmision, renderConfirmarCancelarAdmision } = require('./Controller/admisionesController');
 const { POSTBuscarEvaluacion, POSTBuscarSignosV, POSTBuscarEvSignosV, POSTBuscarPlanC } = require('./Controller/enfermeriaController');
 const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/historialController');
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout, esMedicoOEnfermero, esAdmin } = require('./Middleware/auth');
 const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica, renderVerInformes, renderInformeEstudio, renderInformeEnfermeria } = require('./Controller/medicosController');
-const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminUnidades, renderAdminHabitaciones, renderAdminAdmisiones, renderAdminMutuales, renderformMutual, renderformPaciente, renderformMedico, renderformEmpAdmision, renderformEspecialidad, renderformEnfermero, renderformCamas, renderformUnidad, renderformHabitacion, renderformAdmision } = require('./Controller/adminController');
+const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminUnidades, renderAdminHabitaciones, renderAdminAdmisiones, renderAdminMutuales, renderformMutual, renderformPaciente, renderformMedico, renderformEmpAdmision, renderformEspecialidad, renderformEnfermero, renderformCamas, renderformUnidad, renderformHabitacion, renderformAdmision, renderConfirmarEliminarAdmision, eliminarAdmision, AdminAltaoBajaEmpAdmision, AdminAltaoBajaPaciente, AdminAltaoBajaMedico, AdminAltaoBajaEspecialidad, AdminAltaoBajaEnfermero, AdminAltaoBajaCama, AdminAltaoBajaUnidad, AdminAltaoBajaHabitacion, AdminAltaoBajaMutual } = require('./Controller/adminController');
 
 const PORT = 3000;
 
@@ -66,6 +66,8 @@ app.get('/BuscarPaciente', esAdmision, (req, res) =>{
 app.get('/FormularioPaciente', esAdmision, renderFormularioPaciente);
 
 app.get('/PacientesInternados', esAdmision, mostrarInternaciones);
+
+app.get('/internaciones/cancelar/:dni', esAdmision, renderConfirmarCancelarAdmision);
 
 app.post('/cancelarAdmision/:dni', esAdmision, cancelarAdmision);
 
@@ -190,6 +192,8 @@ app.get('/admin/usuarios/eliminar/:id', esAdmin, renderConfirmarEliminar);
 
 app.post('/admin/usuarios/eliminar-confirmado/:id', esAdmin, eliminarUsuarioLista);
 
+//resumen
+
 app.get('/admin/resumen', esAdmin, renderResumen);
 
 //ABMC de entidades
@@ -204,12 +208,22 @@ app.get('/admin/pacientes/editar/:id', esAdmin, renderformPaciente)
 
 app.get('/admin/pacientes/nuevo', esAdmin, renderformPaciente)
 
+app.get('/admin/pacientes/alta/:id', esAdmin, AdminAltaoBajaPaciente);
+
+app.get('/admin/pacientes/baja/:id', esAdmin, AdminAltaoBajaPaciente);
+
+
 //medicos
 app.get('/admin/medicos', esAdmin, renderAdminMedico);
 
 app.get('/admin/medicos/editar/:id', esAdmin, renderformMedico);
 
 app.get('/admin/medicos/nuevo', esAdmin, renderformMedico);
+
+app.get('/admin/medicos/alta/:id', esAdmin, AdminAltaoBajaMedico);
+
+app.get('/admin/medicos/baja/:id', esAdmin, AdminAltaoBajaMedico);
+
 
 //emp admision
 app.get('/admin/empleados-admision', esAdmin, renderAdminEmpleadoAdm);
@@ -218,12 +232,22 @@ app.get('/admin/empleados/editar/:id', esAdmin, renderformEmpAdmision);
 
 app.get('/admin/empleados/nuevo', esAdmin, renderformEmpAdmision);
 
+app.get('/admin/empleados/alta/:id', esAdmin, AdminAltaoBajaEmpAdmision);
+
+app.get('/admin/empleados/baja/:id', esAdmin, AdminAltaoBajaEmpAdmision);
+
+
 //especialidades
 app.get('/admin/especialidades', esAdmin, renderAdminEspecialidad);
 
 app.get('/admin/especialidades/editar/:id', esAdmin, renderformEspecialidad);
 
 app.get('/admin/especialidades/nuevo', esAdmin, renderformEspecialidad);
+
+app.get('/admin/especialidades/alta/:id', esAdmin, AdminAltaoBajaEspecialidad);
+
+app.get('/admin/especialidades/baja/:id', esAdmin, AdminAltaoBajaEspecialidad);
+
 
 //enfermeros
 app.get('/admin/enfermeros', esAdmin, renderAdminEnfermeros);
@@ -232,12 +256,22 @@ app.get('/admin/enfermeros/editar/:id', esAdmin, renderformEnfermero);
 
 app.get('/admin/enfermeros/nuevo', esAdmin, renderformEnfermero);
 
+app.get('/admin/enfermeros/alta/:id', esAdmin, AdminAltaoBajaEnfermero);
+
+app.get('/admin/enfermeros/baja/:id', esAdmin, AdminAltaoBajaEnfermero);
+
+
 //camas
 app.get('/admin/camas', esAdmin, renderAdminCamas);
 
 app.get('/admin/camas/editar/:id', esAdmin, renderformCamas);
 
 app.get('/admin/camas/nuevo', esAdmin, renderformCamas);
+
+app.get('/admin/camas/alta/:id', esAdmin, AdminAltaoBajaCama);
+
+app.get('/admin/camas/baja/:id', esAdmin, AdminAltaoBajaCama);
+
 
 //unidades
 app.get('/admin/unidades', esAdmin, renderAdminUnidades);
@@ -246,12 +280,22 @@ app.get('/admin/unidades/editar/:id', esAdmin, renderformUnidad);
 
 app.get('/admin/unidades/nuevo', esAdmin, renderformUnidad);
 
+app.get('/admin/unidades/alta/:id', esAdmin, AdminAltaoBajaUnidad);
+
+app.get('/admin/unidades/baja/:id', esAdmin, AdminAltaoBajaUnidad);
+
+
 //habitaciones
 app.get('/admin/habitaciones', esAdmin, renderAdminHabitaciones);
 
 app.get('/admin/habitaciones/editar/:id', esAdmin, renderformHabitacion);
 
 app.get('/admin/habitaciones/nuevo', esAdmin, renderformHabitacion);
+
+app.get('/admin/habitaciones/alta/:id', esAdmin, AdminAltaoBajaHabitacion);
+
+app.get('/admin/habitaciones/baja/:id', esAdmin, AdminAltaoBajaHabitacion);
+
 
 //admisiones
 app.get('/admin/admisiones', esAdmin, renderAdminAdmisiones);
@@ -266,6 +310,11 @@ app.get('/admin/mutuales', esAdmin, renderAdminMutuales);
 app.get('/admin/mutuales/editar/:id', esAdmin, renderformMutual);
 
 app.get('/admin/mutuales/nuevo', esAdmin, renderformMutual);
+
+app.get('/admin/mutuales/alta/:id', esAdmin, AdminAltaoBajaMutual);
+
+app.get('/admin/mutuales/baja/:id', esAdmin, AdminAltaoBajaMutual);
+
 
 
 //CONF de la app
