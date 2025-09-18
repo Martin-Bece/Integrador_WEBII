@@ -1,0 +1,63 @@
+doctype html
+include navbar.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= enfermero ? 'Editar Enfermero' : 'Nuevo Enfermero'
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css")
+    style.
+      body {
+        background-color: #f0f4f8;
+      }
+      .form-container {
+        max-width: 650px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      }
+
+  body
+    +navbar
+
+    div.form-container
+      h2.text-center.mb-4= enfermero ? 'Editar Enfermero' : 'Nuevo Enfermero'
+
+      form(method="post" action=enfermero ? `/admin/enfermeros/editar/${enfermero.idEnfermero}` : '/admin/enfermeros/nuevo')
+        
+        div.mb-3
+          label.form-label(for="nombre") Nombre
+          input.form-control(type="text", name="nombre", id="nombre", required=true, value=enfermero ? enfermero.nombre : '')
+
+        div.mb-3
+          label.form-label(for="apellido") Apellido
+          input.form-control(type="text", name="apellido", id="apellido", required=true, value=enfermero ? enfermero.apellido : '')
+
+        div.mb-3
+          label.form-label(for="dni") DNI
+          input.form-control(type="text", name="dni", id="dni", required=true, value=enfermero ? enfermero.dni : '')
+
+        div.mb-3
+          label.form-label(for="matricula") Matrícula
+          input.form-control(type="text", name="matricula", id="matricula", required=true, value=enfermero ? enfermero.matricula : '')
+
+        div.mb-3
+          label.form-label(for="telefono") Teléfono
+          input.form-control(type="text", name="telefono", id="telefono", value=enfermero ? enfermero.telefono : '')
+
+        div.mb-3
+          label.form-label(for="email") Email
+          input.form-control(type="email", name="email", id="email", value=enfermero ? enfermero.email : '')
+
+        div.mb-3
+          label.form-label(for="fecha_nacimiento") Fecha de Nacimiento
+          input.form-control(type="date", name="fecha_nacimiento", id="fecha_nacimiento", value=enfermero ? enfermero.fecha_nacimiento : '')
+
+        div.text-center.mt-4
+          button.btn.btn-primary(type="submit")= enfermero ? 'Guardar Cambios' : 'Crear Enfermero'
+          a.btn.btn-secondary.ms-2(href="/admin/enfermeros") Cancelar
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")

@@ -12,7 +12,7 @@ html(lang="es")
       h2.text-center.mb-4 Admisiones
 
       .d-flex.justify-content-between.align-items-center.mb-3
-        a.btn.btn-primary(href="/admin/admisiones/nueva")
+        a.btn.btn-primary(href="/admin/admisiones/nuevo")
           i.bi.bi-plus-circle-fill.me-1
           | Nueva Admisión
 
@@ -29,7 +29,7 @@ html(lang="es")
             tr
               th ID
               th Paciente
-              th Fecha Ingreso
+              th Fecha y Hora de Ingreso
               th Habitación
               th Estado
               th Acciones
@@ -37,9 +37,9 @@ html(lang="es")
             each adm in admisiones
               tr
                 td= adm.idAdmision
-                td= adm.paciente
-                td= adm.fechaIngreso
-                td= adm.habitacion
+                td= adm.paciente_id
+                td= new Date(adm.fecha_admision).toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' })
+                td= adm.habitacion_id
                 td.text-capitalize= adm.estado
                 td
                   a.btn.btn-sm.btn-info.me-2(href=`/admin/admisiones/ver/${adm.idAdmision}`)

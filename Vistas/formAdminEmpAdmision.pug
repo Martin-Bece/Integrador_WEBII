@@ -1,0 +1,63 @@
+doctype html
+include navbar.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= empleado ? 'Editar Empleado de Admisión' : 'Nuevo Empleado de Admisión'
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css")
+    style.
+      body {
+        background-color: #f0f4f8;
+      }
+      .form-container {
+        max-width: 650px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      }
+
+  body
+    +navbar
+
+    div.form-container
+      h2.text-center.mb-4= empleado ? 'Editar Empleado de Admisión' : 'Nuevo Empleado de Admisión'
+
+      form(method="post" action=empleado ? `/admin/empleados/editar/${empleado.idEmpleado}` : '/admin/empleados/nuevo')
+        
+        div.mb-3
+          label.form-label(for="dni") DNI
+          input.form-control(type="text", name="dni", id="dni", required=true, value=empleado ? empleado.dni : '')
+
+        div.mb-3
+          label.form-label(for="nombre") Nombre
+          input.form-control(type="text", name="nombre", id="nombre", required=true, value=empleado ? empleado.nombre : '')
+
+        div.mb-3
+          label.form-label(for="apellido") Apellido
+          input.form-control(type="text", name="apellido", id="apellido", required=true, value=empleado ? empleado.apellido : '')
+
+        div.mb-3
+          label.form-label(for="correo") Correo
+          input.form-control(type="email", name="correo", id="correo", required=true, value=empleado ? empleado.correo : '')
+
+        div.mb-3
+          label.form-label(for="fecha_nacimiento") Fecha de Nacimiento
+          input.form-control(type="date", name="fecha_nacimiento", id="fecha_nacimiento", required=true, value=empleado ? empleado.fecha_nacimiento : '')
+
+        div.mb-3
+          label.form-label(for="telefono") Teléfono
+          input.form-control(type="text", name="telefono", id="telefono", value=empleado ? empleado.telefono : '')
+
+        div.form-check.mb-3
+          input.form-check-input(type="checkbox", name="estado", id="estado", checked=empleado ? empleado.estado : true)
+          label.form-check-label(for="estado") Activo
+
+        div.text-center.mt-4
+          button.btn.btn-primary(type="submit")= empleado ? 'Guardar Cambios' : 'Crear Empleado'
+          a.btn.btn-secondary.ms-2(href="/admin/empleados") Cancelar
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")

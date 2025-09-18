@@ -28,7 +28,6 @@ html(lang="es")
           thead.table-light
             tr
               th ID
-              th Número
               th Estado
               th Habitación
               th Acciones
@@ -36,9 +35,8 @@ html(lang="es")
             each cama in camas
               tr
                 td= cama.idCama
-                td= cama.numero
                 td.text-capitalize= cama.estado
-                td= cama.habitacion
+                td= cama.habitacion.numero
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/camas/editar/${cama.idCama}`)
                     i.bi.bi-pencil-fill

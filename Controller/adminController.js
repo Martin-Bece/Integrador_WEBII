@@ -2,13 +2,14 @@ const { where } = require('sequelize');
 const db = require('../Modelo');
 const { listarUsuarios, usuariosPorRol, buscarUsuarioPorId, crearUsuario, editarUsuario, eliminarUsuario, obtenerUsuarioPorDNI } = require('./usuariosController');
 const { listarPacientes } = require('./PacientesController');
-const { obtenerMedicos } = require('./medicosController');
+const { obtenerMedicos, obtenerMedicoPorID } = require('./medicosController');
 const { obtenerEspecialidades } = require('./especialidadesController');
 const { obtenerEnfermeros } = require('./enfermeriaController');
 const { obtenerCamas } = require('./camasController');
 const { obtenerHabitaciones } = require('./habitacionesController');
 const { obtenerAdmisiones } = require('./admisionesController');
 const { obtenerMutuales } = require('./mutualesController');
+const { obtenerMotivos } = require('./motivosController');
 
 async function renderListaUsuarios(req, res, datosAdicionales = {}) {
   try {
@@ -243,6 +244,18 @@ async function renderAdminPaciente(req, res, datosAdicionales = {}) {
 
 }
 
+async function renderformPaciente(req, res, datosAdicionales = {}) {
+  let paciente = null;
+
+  if (req.params.id) {
+    paciente = await db.pacientes.findByPk(req.params.id)
+  }
+
+  const mutuales = await obtenerMutuales();
+
+  res.render('formAdminPaciente', { paciente, mutuales });
+}
+
 async function renderAdminMedico(req, res, datosAdicionales = {}) {
   
   const medicos = await obtenerMedicos();
@@ -253,12 +266,34 @@ async function renderAdminMedico(req, res, datosAdicionales = {}) {
 
 }
 
+async function renderformMedico(req, res, datosAdicionales = {}) {
+  let medico = null;
+
+  if (req.params.id) {
+    medico = await obtenerMedicoPorID(req.params.id);
+  }
+
+  const especialidades = await obtenerEspecialidades();
+
+  res.render('formAdminMedico', { medico, especialidades });
+}
+
 async function renderAdminEmpleadoAdm(req, res, datosAdicionales = {}) {
   
   const empleados = await db.EmpleadosAdmision.findAll();
 
   return res.render('AdminAdmision', { empleados })
 
+}
+
+async function renderformEmpAdmision(req, res, datosAdicionales = {}) {
+  let empleado = null;
+
+  if (req.params.id) {
+    empleado = await db.EmpleadosAdmision.findByPk(req.params.id);
+  }
+
+  res.render('formAdminEmpAdmision', { empleado });
 }
 
 async function renderAdminEspecialidad(req, res, datosAdicionales = {}) {
@@ -269,6 +304,16 @@ async function renderAdminEspecialidad(req, res, datosAdicionales = {}) {
 
 }
 
+async function renderformEspecialidad(req, res, datosAdicionales = {}) {
+  let especialidad = null;
+
+  if (req.params.id) {
+    especialidad = await db.especialidades.findByPk(req.params.id);
+  }
+
+  res.render('formAdminEspecialidad', { especialidad });
+}
+
 async function renderAdminEnfermeros(req, res, datosAdicionales = {}) {
   
   const enfermeros = await obtenerEnfermeros();
@@ -277,20 +322,74 @@ async function renderAdminEnfermeros(req, res, datosAdicionales = {}) {
 
 }
 
+async function renderformEnfermero(req, res, datosAdicionales = {}) {
+  let enfermero = null;
+
+  if (req.params.id) {
+    enfermero = await db.enfermeros.findByPk(req.params.id);
+  }
+
+  res.render('formAdminEnfermero', { enfermero });
+}
+
 async function renderAdminCamas(req, res, datosAdicionales = {}) {
   
-  const camas = await obtenerCamas();
-
+  const camas =  await db.camas.findAll({
+    include: [
+      {
+        model: db.habitaciones,
+        as: 'habitacion',
+        attributes: ['numero']
+      }
+    ]
+  });
   return res.render('AdminCamas', { camas })
+}
 
+async function renderformCamas(req, res, datosAdicionales = {}) {
+  let cama = null;
+
+  if (req.params.id) {
+    cama = await db.camas.findByPk(req.params.id)
+  }
+
+  const habitaciones = await obtenerHabitaciones();
+
+  res.render('formAdminCama', { cama, habitaciones });
 }
 
 async function renderAdminHabitaciones(req, res, datosAdicionales = {}) {
   
-  const habitaciones = await obtenerHabitaciones();
+  const habitaciones = await db.habitaciones.findAll({
+      include: [
+        {
+          model: db.unidades,
+          as: 'unidad',
+          attributes: ['nombre']
+        },
+        {
+          model: db.camas,
+          as: 'camas',
+          attributes: ['idCama']
+        }
+      ]
+    });
 
-  return res.render('AdminHabitacion', { habitaciones })
+    return res.render('AdminHabitacion', { habitaciones });
 
+}
+
+async function renderformHabitacion(req, res, datosAdicionales = {}) {
+  let habitacion = null;
+
+  if (req.params.id) {
+    habitacion = await db.habitaciones.findByPk(req.params.id);
+  }
+
+  const unidades = await db.unidades.findAll();
+  const alas = await db.alas.findAll();
+
+  res.render('formAdminHabitacion', { habitacion, unidades, alas });
 }
 
 async function renderAdminUnidades(req, res, datosAdicionales = {}) {
@@ -301,11 +400,42 @@ async function renderAdminUnidades(req, res, datosAdicionales = {}) {
 
 }
 
+async function renderformUnidad(req, res, datosAdicionales = {}) {
+  let unidad = null;
+
+  if (req.params.id) {
+    unidad = await db.unidades.findByPk(req.params.id);
+  }
+
+  res.render('formAdminUnidad', { unidad });
+}
+
 async function renderAdminAdmisiones(req, res, datosAdicionales = {}) {
   
   const admisiones = await obtenerAdmisiones();
 
   return res.render('AdminAdmisiones', { admisiones });
+}
+
+async function renderformAdmision(req, res, datosAdicionales = {}) {
+  let admision = null;
+
+  if (req.params.id) {
+    admision = await db.admisiones.findByPk(req.params.id);
+  }
+
+  const pacientes = await db.pacientes.findAll();
+  const motivos = await obtenerMotivos();
+  const origenes = await db.origenes.findAll();
+  const habitaciones = await obtenerHabitaciones();
+  let camas = [];
+  if (admision) {
+    camas = await db.camas.findAll({
+      where: { habitacion_id: admision.habitacion_id }
+    });
+  }
+
+  res.render('formAdminAdmision', { admision, pacientes, motivos, origenes, habitaciones, camas });
 }
 
 async function renderAdminMutuales(req, res, datosAdicionales = {}) {
@@ -316,6 +446,16 @@ async function renderAdminMutuales(req, res, datosAdicionales = {}) {
 
 }
 
+async function renderformMutual(req, res, datosAdicionales = {}) {
+  let mutual = null;
+
+  if (req.params.id) {
+    mutual = await db.mutuales.findByPk(req.params.id);
+  }
+
+  res.render('formAdminMutual', { mutual });
+}
+
 module.exports = {
-  renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, renderConfirmarEliminar, eliminarUsuarioLista, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminAdmisiones, renderAdminUnidades, renderAdminHabitaciones, renderAdminMutuales
+  renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, renderConfirmarEliminar, eliminarUsuarioLista, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminAdmisiones, renderAdminUnidades, renderAdminHabitaciones, renderAdminMutuales, renderformPaciente, renderformMedico, renderformEmpAdmision, renderformAdmision, renderformUnidad, renderformHabitacion, renderformCamas, renderformEnfermero, renderformEspecialidad, renderformMutual
 };

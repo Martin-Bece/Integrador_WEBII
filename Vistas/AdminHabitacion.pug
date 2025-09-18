@@ -29,8 +29,8 @@ html(lang="es")
               tr
                 td= hab.idHabitacion
                 td= hab.numero
-                td= hab.unidad
-                td= hab.cantidadCamas
+                td= hab.unidad ? hab.unidad.nombre : 'Sin unidad'
+                td= hab.camas.length
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/habitaciones/editar/${hab.idHabitacion}`)
                     i.bi.bi-pencil-fill

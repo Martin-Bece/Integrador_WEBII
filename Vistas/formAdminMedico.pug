@@ -1,0 +1,66 @@
+doctype html
+include navbar.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= medico ? 'Editar Médico' : 'Nuevo Médico'
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css")
+    style.
+      body {
+        background-color: #f0f4f8;
+      }
+      .form-container {
+        max-width: 600px;
+        margin: 50px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      }
+
+  body
+    +navbar
+
+    div.form-container
+      h2.text-center.mb-4= medico ? 'Editar Médico' : 'Nuevo Médico'
+
+      form(method="post" action=medico ? `/admin/medicos/editar/${medico.idMedico}` : '/admin/medicos/nuevo')
+        
+        div.mb-3
+          label.form-label(for="nombre") Nombre
+          input.form-control(type="text", name="nombre", id="nombre", required=true, value=medico ? medico.nombre : '')
+
+        div.mb-3
+          label.form-label(for="apellido") Apellido
+          input.form-control(type="text", name="apellido", id="apellido", required=true, value=medico ? medico.apellido : '')
+
+        div.mb-3
+          label.form-label(for="dni") DNI
+          input.form-control(type="text", name="dni", id="dni", required=true, value=medico ? medico.dni : '')
+
+        div.mb-3
+          label.form-label(for="matricula") Matrícula
+          input.form-control(type="text", name="matricula", id="matricula", required=true, value=medico ? medico.matricula : '')
+
+        div.mb-3
+          label.form-label(for="telefono") Teléfono
+          input.form-control(type="text", name="telefono", id="telefono", value=medico ? medico.telefono : '')
+
+        div.mb-3
+          label.form-label(for="idEspecialidad") Especialidad
+          select.form-select(name="idEspecialidad", id="idEspecialidad", required=true)
+            option(value="") Seleccionar Especialidad
+            each esp in especialidades
+              option(value=esp.idEspecialidad, selected=medico && medico.idEspecialidad===esp.idEspecialidad)= esp.nombre
+
+        div.form-check.mb-3
+          input.form-check-input(type="checkbox", name="activo", id="activo", checked=medico ? medico.activo : true)
+          label.form-check-label(for="activo") Activo
+
+        div.text-center.mt-4
+          button.btn.btn-primary(type="submit")= medico ? 'Guardar Cambios' : 'Crear Médico'
+          a.btn.btn-secondary.ms-2(href="/admin/medicos") Cancelar
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")

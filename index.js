@@ -13,7 +13,7 @@ const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = req
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout, esMedicoOEnfermero, esAdmin } = require('./Middleware/auth');
 const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica, renderVerInformes, renderInformeEstudio, renderInformeEnfermeria } = require('./Controller/medicosController');
-const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminUnidades, renderAdminHabitaciones, renderAdminAdmisiones, renderAdminMutuales } = require('./Controller/adminController');
+const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminUnidades, renderAdminHabitaciones, renderAdminAdmisiones, renderAdminMutuales, renderformMutual, renderformPaciente, renderformMedico, renderformEmpAdmision, renderformEspecialidad, renderformEnfermero, renderformCamas, renderformUnidad, renderformHabitacion, renderformAdmision } = require('./Controller/adminController');
 
 const PORT = 3000;
 
@@ -171,6 +171,7 @@ app.post('/medicos/guardarInformeAlta/:dni', esMedico, darAltaMedica);
 
 //PARTE DE ADMINISTRACION
 
+//usuarios
 app.get('/admin/usuarios', esAdmin, renderListaUsuarios);
 
 app.get('/admin/usuarios/nuevo', esAdmin, renderFormUsuario);
@@ -191,31 +192,80 @@ app.post('/admin/usuarios/eliminar-confirmado/:id', esAdmin, eliminarUsuarioList
 
 app.get('/admin/resumen', esAdmin, renderResumen);
 
+//ABMC de entidades
 app.get('/admin/entidades', esAdmin, (req, res) =>{
   res.render('GestionEntidades');
 })
 
+//pacientes
 app.get('/admin/pacientes', esAdmin, renderAdminPaciente);
 
+app.get('/admin/pacientes/editar/:id', esAdmin, renderformPaciente)
+
+app.get('/admin/pacientes/nuevo', esAdmin, renderformPaciente)
+
+//medicos
 app.get('/admin/medicos', esAdmin, renderAdminMedico);
 
+app.get('/admin/medicos/editar/:id', esAdmin, renderformMedico);
+
+app.get('/admin/medicos/nuevo', esAdmin, renderformMedico);
+
+//emp admision
 app.get('/admin/empleados-admision', esAdmin, renderAdminEmpleadoAdm);
 
+app.get('/admin/empleados/editar/:id', esAdmin, renderformEmpAdmision);
+
+app.get('/admin/empleados/nuevo', esAdmin, renderformEmpAdmision);
+
+//especialidades
 app.get('/admin/especialidades', esAdmin, renderAdminEspecialidad);
 
+app.get('/admin/especialidades/editar/:id', esAdmin, renderformEspecialidad);
+
+app.get('/admin/especialidades/nuevo', esAdmin, renderformEspecialidad);
+
+//enfermeros
 app.get('/admin/enfermeros', esAdmin, renderAdminEnfermeros);
 
+app.get('/admin/enfermeros/editar/:id', esAdmin, renderformEnfermero);
+
+app.get('/admin/enfermeros/nuevo', esAdmin, renderformEnfermero);
+
+//camas
 app.get('/admin/camas', esAdmin, renderAdminCamas);
 
+app.get('/admin/camas/editar/:id', esAdmin, renderformCamas);
+
+app.get('/admin/camas/nuevo', esAdmin, renderformCamas);
+
+//unidades
 app.get('/admin/unidades', esAdmin, renderAdminUnidades);
 
+app.get('/admin/unidades/editar/:id', esAdmin, renderformUnidad);
+
+app.get('/admin/unidades/nuevo', esAdmin, renderformUnidad);
+
+//habitaciones
 app.get('/admin/habitaciones', esAdmin, renderAdminHabitaciones);
 
+app.get('/admin/habitaciones/editar/:id', esAdmin, renderformHabitacion);
+
+app.get('/admin/habitaciones/nuevo', esAdmin, renderformHabitacion);
+
+//admisiones
 app.get('/admin/admisiones', esAdmin, renderAdminAdmisiones);
 
+app.get('/admin/admisiones/editar/:id', esAdmin, renderformAdmision);
+
+app.get('/admin/admisiones/nuevo', esAdmin, renderformAdmision);
+
+//mutuales
 app.get('/admin/mutuales', esAdmin, renderAdminMutuales);
 
+app.get('/admin/mutuales/editar/:id', esAdmin, renderformMutual);
 
+app.get('/admin/mutuales/nuevo', esAdmin, renderformMutual);
 
 
 //CONF de la app
