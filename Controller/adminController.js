@@ -1,6 +1,14 @@
 const { where } = require('sequelize');
 const db = require('../Modelo');
 const { listarUsuarios, usuariosPorRol, buscarUsuarioPorId, crearUsuario, editarUsuario, eliminarUsuario, obtenerUsuarioPorDNI } = require('./usuariosController');
+const { listarPacientes } = require('./PacientesController');
+const { obtenerMedicos } = require('./medicosController');
+const { obtenerEspecialidades } = require('./especialidadesController');
+const { obtenerEnfermeros } = require('./enfermeriaController');
+const { obtenerCamas } = require('./camasController');
+const { obtenerHabitaciones } = require('./habitacionesController');
+const { obtenerAdmisiones } = require('./admisionesController');
+const { obtenerMutuales } = require('./mutualesController');
 
 async function renderListaUsuarios(req, res, datosAdicionales = {}) {
   try {
@@ -227,6 +235,87 @@ async function renderResumen(req, res) {
   }
 }
 
+async function renderAdminPaciente(req, res, datosAdicionales = {}) {
+  
+  const pacientes = await listarPacientes();
+
+  return res.render('AdminPaciente', { pacientes })
+
+}
+
+async function renderAdminMedico(req, res, datosAdicionales = {}) {
+  
+  const medicos = await obtenerMedicos();
+
+  const especialidades = await obtenerEspecialidades();
+
+  return res.render('AdminMedico', { medicos, especialidades })
+
+}
+
+async function renderAdminEmpleadoAdm(req, res, datosAdicionales = {}) {
+  
+  const empleados = await db.EmpleadosAdmision.findAll();
+
+  return res.render('AdminAdmision', { empleados })
+
+}
+
+async function renderAdminEspecialidad(req, res, datosAdicionales = {}) {
+  
+  const especialidades = await obtenerEspecialidades();
+
+  return res.render('AdminEspecialidad', { especialidades })
+
+}
+
+async function renderAdminEnfermeros(req, res, datosAdicionales = {}) {
+  
+  const enfermeros = await obtenerEnfermeros();
+
+  return res.render('AdminEnfermero', { enfermeros });
+
+}
+
+async function renderAdminCamas(req, res, datosAdicionales = {}) {
+  
+  const camas = await obtenerCamas();
+
+  return res.render('AdminCamas', { camas })
+
+}
+
+async function renderAdminHabitaciones(req, res, datosAdicionales = {}) {
+  
+  const habitaciones = await obtenerHabitaciones();
+
+  return res.render('AdminHabitacion', { habitaciones })
+
+}
+
+async function renderAdminUnidades(req, res, datosAdicionales = {}) {
+  
+  const unidades = await db.unidades.findAll();
+
+  return res.render('AdminUnidades', { unidades });
+
+}
+
+async function renderAdminAdmisiones(req, res, datosAdicionales = {}) {
+  
+  const admisiones = await obtenerAdmisiones();
+
+  return res.render('AdminAdmisiones', { admisiones });
+}
+
+async function renderAdminMutuales(req, res, datosAdicionales = {}) {
+  
+  const mutuales = await obtenerMutuales();
+
+  return res.render('AdminMutuales', { mutuales });
+
+}
+
 module.exports = {
-  renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, renderConfirmarEliminar, eliminarUsuarioLista, renderResumen
+  renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, renderConfirmarEliminar, eliminarUsuarioLista, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminAdmisiones, renderAdminUnidades, renderAdminHabitaciones, renderAdminMutuales
 };

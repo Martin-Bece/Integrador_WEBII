@@ -13,7 +13,7 @@ const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = req
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout, esMedicoOEnfermero, esAdmin } = require('./Middleware/auth');
 const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica, renderVerInformes, renderInformeEstudio, renderInformeEnfermeria } = require('./Controller/medicosController');
-const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar, renderResumen } = require('./Controller/adminController');
+const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminUnidades, renderAdminHabitaciones, renderAdminAdmisiones, renderAdminMutuales } = require('./Controller/adminController');
 
 const PORT = 3000;
 
@@ -194,6 +194,29 @@ app.get('/admin/resumen', esAdmin, renderResumen);
 app.get('/admin/entidades', esAdmin, (req, res) =>{
   res.render('GestionEntidades');
 })
+
+app.get('/admin/pacientes', esAdmin, renderAdminPaciente);
+
+app.get('/admin/medicos', esAdmin, renderAdminMedico);
+
+app.get('/admin/empleados-admision', esAdmin, renderAdminEmpleadoAdm);
+
+app.get('/admin/especialidades', esAdmin, renderAdminEspecialidad);
+
+app.get('/admin/enfermeros', esAdmin, renderAdminEnfermeros);
+
+app.get('/admin/camas', esAdmin, renderAdminCamas);
+
+app.get('/admin/unidades', esAdmin, renderAdminUnidades);
+
+app.get('/admin/habitaciones', esAdmin, renderAdminHabitaciones);
+
+app.get('/admin/admisiones', esAdmin, renderAdminAdmisiones);
+
+app.get('/admin/mutuales', esAdmin, renderAdminMutuales);
+
+
+
 
 //CONF de la app
 

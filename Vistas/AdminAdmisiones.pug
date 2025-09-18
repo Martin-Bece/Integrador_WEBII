@@ -1,0 +1,55 @@
+doctype html
+include navbar.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    title Admisiones
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css")
+  body
+    +navbar
+    .container.mt-5
+      h2.text-center.mb-4 Admisiones
+
+      .d-flex.justify-content-between.align-items-center.mb-3
+        a.btn.btn-primary(href="/admin/admisiones/nueva")
+          i.bi.bi-plus-circle-fill.me-1
+          | Nueva Admisión
+
+        form(method="get" action="/admin/admisiones" class="d-flex")
+          label.form-label.me-2(for="estado") Filtrar por estado:
+          select.form-select(name="estado" onchange="this.form.submit()")
+            option(value="todas") Todas
+            option(value="activa") Activas
+            option(value="alta") Con alta
+
+      if admisiones.length > 0
+        table.table.table-hover.shadow-sm
+          thead.table-light
+            tr
+              th ID
+              th Paciente
+              th Fecha Ingreso
+              th Habitación
+              th Estado
+              th Acciones
+          tbody
+            each adm in admisiones
+              tr
+                td= adm.idAdmision
+                td= adm.paciente
+                td= adm.fechaIngreso
+                td= adm.habitacion
+                td.text-capitalize= adm.estado
+                td
+                  a.btn.btn-sm.btn-info.me-2(href=`/admin/admisiones/ver/${adm.idAdmision}`)
+                    i.bi.bi-eye-fill
+                  a.btn.btn-sm.btn-warning.me-2(href=`/admin/admisiones/editar/${adm.idAdmision}`)
+                    i.bi.bi-pencil-fill
+                  if adm.estado === 'activa'
+                    a.btn.btn-sm.btn-success.me-2(href=`/admin/admisiones/alta/${adm.idAdmision}`)
+                      i.bi.bi-check-circle-fill
+                  a.btn.btn-sm.btn-danger(href=`/admin/admisiones/eliminar/${adm.idAdmision}`)
+                    i.bi.bi-trash-fill
+      else
+        p.text-muted.text-center No hay admisiones cargadas.

@@ -1,0 +1,54 @@
+doctype html
+include navbar.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    title Lista de Médicos
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css")
+  body
+    +navbar
+    .container.mt-5
+      h2.text-center.mb-4 Lista de Médicos
+
+      .d-flex.justify-content-between.align-items-center.mb-3
+        a.btn.btn-primary(href="/admin/medicos/nuevo")
+          i.bi.bi-person-plus-fill.me-1
+          | Nuevo Médico
+
+        form(method="get" action="/admin/medicos" class="d-flex")
+          label.form-label.me-2(for="filtroEsp") Filtrar por especialidad:
+          select.form-select(name="especialidad" onchange="this.form.submit()")
+            option(value="todas") Todas
+            each esp in especialidades
+              option(value=esp.idEspecialidad)= esp.nombre
+
+      if medicos.length > 0
+        table.table.table-hover.shadow-sm
+          thead.table-light
+            tr
+              th ID
+              th Nombre
+              th Apellido
+              th Especialidad
+              th Matrícula
+              th Teléfono
+              th Mail
+              th Acciones
+          tbody
+            each medico in medicos
+              tr
+                td= medico.idMedico
+                td= medico.nombre
+                td= medico.apellido
+                td= medico.especialidad
+                td= medico.matricula
+                td= medico.telefono
+                td= medico.mail
+                td
+                  a.btn.btn-sm.btn-warning.me-2(href=`/admin/medicos/editar/${medico.idMedico}`)
+                    i.bi.bi-pencil-fill
+                  a.btn.btn-sm.btn-danger(href=`/admin/medicos/eliminar/${medico.idMedico}`)
+                    i.bi.bi-trash-fill
+      else
+        p.text-muted.text-center No hay médicos cargados.

@@ -1,0 +1,36 @@
+doctype html
+include navbar.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    title Mutuales
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css")
+  body
+    +navbar
+    .container.mt-5
+      h2.text-center.mb-4 Mutuales
+
+      a.btn.btn-primary.mb-3(href="/admin/mutuales/nueva")
+        i.bi.bi-plus-circle-fill.me-1
+        | Nueva Mutual
+
+      if mutuales.length > 0
+        table.table.table-hover.shadow-sm
+          thead.table-light
+            tr
+              th ID
+              th Nombre
+              th Acciones
+          tbody
+            each mut in mutuales
+              tr
+                td= mut.idMutual
+                td= mut.nombre
+                td
+                  a.btn.btn-sm.btn-warning.me-2(href=`/admin/mutuales/editar/${mut.idMutual}`)
+                    i.bi.bi-pencil-fill
+                  a.btn.btn-sm.btn-danger(href=`/admin/mutuales/eliminar/${mut.idMutual}`)
+                    i.bi.bi-trash-fill
+      else
+        p.text-muted.text-center No hay mutuales cargadas.

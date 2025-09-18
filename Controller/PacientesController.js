@@ -256,6 +256,10 @@ async function cancelarTurno(req, res) {
   }
 }
 
+async function listarPacientes() {
+  return await db.pacientes.findAll();
+}
+
 module.exports = {
   mostrarPortalPaciente,
   buscarPorDNI,
@@ -267,5 +271,6 @@ module.exports = {
   renderNuevoTurno,
   EspecialidadTurno,
   confirmarTurno,
-  cancelarTurno
+  cancelarTurno,
+  listarPacientes
 };

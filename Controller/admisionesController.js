@@ -394,7 +394,11 @@ async function darDeAlta(req, res) {
   }
 }
 
+async function obtenerAdmisiones() {
+  return await db.admisiones.findAll();
+}
 
 
 
-module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, FiltrarAdmisionPorDNI, cancelarAdmision, darDeAlta}
+
+module.exports = {admitirEmergencia, renderFormularioEmergencia, renderFormularioAdmision, admitirTurno, renderFormularioDerivacion, admitirDerivacion, FiltrarAdmisionPorDNI, cancelarAdmision, darDeAlta, obtenerAdmisiones}

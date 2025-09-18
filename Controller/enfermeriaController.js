@@ -122,5 +122,9 @@ async function POSTBuscarPlanC(req, res) {
   }
 }
 
+async function obtenerEnfermeros() {
+  return await db.enfermeros.findAll();
+}
 
-module.exports = {POSTBuscarEvaluacion, POSTBuscarEvSignosV, POSTBuscarSignosV, POSTBuscarPlanC, buscarEnfermeroPorDNI, buscarEnfermeroPorID}
+
+module.exports = {POSTBuscarEvaluacion, POSTBuscarEvSignosV, POSTBuscarSignosV, POSTBuscarPlanC, buscarEnfermeroPorDNI, buscarEnfermeroPorID, obtenerEnfermeros}
