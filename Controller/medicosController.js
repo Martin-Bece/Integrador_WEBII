@@ -13,7 +13,7 @@ async function obtenerMedicoPorID(idMedico) {
 }
 
 async function obtenerMedicosPorEspecialidad(idEspecialidad) {
-  return await db.medicos.findAll({ where: { idEspecialidad } });
+  return await db.medicos.findAll({ where: { idEspecialidad, activo: 1 } });
 }
 
 async function obtenerMedicoPorDNI(dni) {

@@ -7,6 +7,7 @@ const { obtenerMotivos, obtenerMotivoPorID } = require('./motivosController');
 const { obtenerOrigenPorNombre } = require('./origenController');
 const { obtenerHabsPorUnidad, obtenerHabsPorID } = require('./habitacionesController');
 const { AsignarCama } = require('./camasController');
+const { where } = require('sequelize');
 
 async function buscarPorDNI(dni) {
     const paciente = await db.pacientes.findOne({ where: { dni } });
@@ -163,7 +164,7 @@ async function darDeAlta(req, res) {
 async function renderNuevoTurno(req, res, errores, datosParciales = {}) {
   try {
     const { dni } = req.params;
-    const especialidades = await obtenerEspecialidades();
+    const especialidades = await db.especialidades.findAll({ where: { activo: 1 } });
 
     res.render('NuevoTurno', {
       errores,

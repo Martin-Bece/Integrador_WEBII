@@ -251,7 +251,7 @@ async function renderformPaciente(req, res, datosAdicionales = {}) {
     paciente = await db.pacientes.findByPk(req.params.id)
   }
 
-  const mutuales = await obtenerMutuales();
+  const mutuales = await db.mutuales.findAll({ where: {activo: 1} });
 
   res.render('formAdminPaciente', { paciente, mutuales });
 }
@@ -292,7 +292,7 @@ async function renderformMedico(req, res, datosAdicionales = {}) {
     medico = await obtenerMedicoPorID(req.params.id);
   }
 
-  const especialidades = await obtenerEspecialidades();
+  const especialidades = await db.especialidades.findAll({ where: { activo: 1 } });
 
   res.render('formAdminMedico', { medico, especialidades });
 }
@@ -448,7 +448,7 @@ async function renderformCamas(req, res, datosAdicionales = {}) {
     cama = await db.camas.findByPk(req.params.id)
   }
 
-  const habitaciones = await obtenerHabitaciones();
+  const habitaciones = await db.habitaciones.findAll({ where: { activo: 1 } });
 
   res.render('formAdminCama', { cama, habitaciones });
 }
@@ -500,7 +500,7 @@ async function renderformHabitacion(req, res, datosAdicionales = {}) {
     habitacion = await db.habitaciones.findByPk(req.params.id);
   }
 
-  const unidades = await db.unidades.findAll();
+  const unidades = await db.unidades.findAll({ where: { activo: 1 } });
   const alas = await db.alas.findAll();
 
   res.render('formAdminHabitacion', { habitacion, unidades, alas });
@@ -576,10 +576,10 @@ async function renderformAdmision(req, res, datosAdicionales = {}) {
     admision = await db.admisiones.findByPk(req.params.id);
   }
 
-  const pacientes = await db.pacientes.findAll();
+  const pacientes = await db.pacientes.findAll({ where: { activo: 1}});
   const motivos = await obtenerMotivos();
   const origenes = await db.origenes.findAll();
-  const habitaciones = await obtenerHabitaciones();
+  const habitaciones = await db.habitaciones.findAll({ where: { activo: 1 } });
   let camas = [];
   if (admision) {
     camas = await db.camas.findAll({
