@@ -33,9 +33,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(20),
       allowNull: true
     },
-    estado: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
+    activo: {
+      type: DataTypes.TINYINT(1),
+      allowNull: false,
       defaultValue: 1
     }
   }, {

@@ -36,6 +36,11 @@ module.exports = function(sequelize, DataTypes) {
     fecha_nacimiento: {
       type: DataTypes.DATEONLY,
       allowNull: true
+    },
+    activo: {
+      type: DataTypes.TINYINT,
+      allowNull: false,
+      defaultValue: 1
     }
   }, {
     sequelize,

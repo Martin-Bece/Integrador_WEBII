@@ -11,6 +11,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false,
       unique: "nombre"
+    },
+    activo: {
+      type: DataTypes.TINYINT(1),
+      allowNull: false,
+      defaultValue: 1
     }
   }, {
     sequelize,

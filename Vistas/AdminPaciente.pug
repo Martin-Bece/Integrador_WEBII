@@ -45,7 +45,11 @@ html(lang="es")
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/pacientes/editar/${paciente.idPaciente}`)
                     i.bi.bi-pencil-fill
-                  a.btn.btn-sm.btn-danger(href=`/admin/pacientes/eliminar/${paciente.idPaciente}`)
-                    i.bi.bi-trash-fill
+                  if paciente.activo
+                    a.btn.btn-sm.btn-danger(href=`/admin/pacientes/baja/${paciente.idPaciente}`)
+                      i.bi.bi-hand-thumbs-down-fill
+                  else
+                    a.btn.btn-sm.btn-success(href=`/admin/pacientes/alta/${paciente.idPaciente}`)
+                      i.bi.bi-hand-thumbs-up-fill
       else
         p.text-muted.text-center No hay pacientes cargados.

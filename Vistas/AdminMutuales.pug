@@ -30,7 +30,11 @@ html(lang="es")
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/mutuales/editar/${mut.idMutual}`)
                     i.bi.bi-pencil-fill
-                  a.btn.btn-sm.btn-danger(href=`/admin/mutuales/eliminar/${mut.idMutual}`)
-                    i.bi.bi-trash-fill
+                  if mut.activo
+                    a.btn.btn-sm.btn-danger(href=`/admin/mutuales/baja/${mut.idMutual}`)
+                      i.bi.bi-hand-thumbs-down-fill
+                  else
+                    a.btn.btn-sm.btn-success(href=`/admin/mutuales/alta/${mut.idMutual}`)
+                      i.bi.bi-hand-thumbs-up-fill
       else
         p.text-muted.text-center No hay mutuales cargadas.

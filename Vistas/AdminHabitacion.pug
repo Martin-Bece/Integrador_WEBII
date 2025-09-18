@@ -34,7 +34,11 @@ html(lang="es")
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/habitaciones/editar/${hab.idHabitacion}`)
                     i.bi.bi-pencil-fill
-                  a.btn.btn-sm.btn-danger(href=`/admin/habitaciones/eliminar/${hab.idHabitacion}`)
-                    i.bi.bi-trash-fill
+                  if hab.activo
+                    a.btn.btn-sm.btn-danger(href=`/admin/habitaciones/baja/${hab.idHabitacion}`)
+                      i.bi.bi-hand-thumbs-down-fill
+                  else
+                    a.btn.btn-sm.btn-success(href=`/admin/habitaciones/alta/${hab.idHabitacion}`)
+                      i.bi.bi-hand-thumbs-up-fill
       else
         p.text-muted.text-center No hay habitaciones cargadas.

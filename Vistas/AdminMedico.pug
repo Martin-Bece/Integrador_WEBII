@@ -48,7 +48,11 @@ html(lang="es")
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/medicos/editar/${medico.idMedico}`)
                     i.bi.bi-pencil-fill
-                  a.btn.btn-sm.btn-danger(href=`/admin/medicos/eliminar/${medico.idMedico}`)
-                    i.bi.bi-trash-fill
+                  if medico.activo
+                    a.btn.btn-sm.btn-danger(href=`/admin/medicos/baja/${medico.idMedico}`)
+                      i.bi.bi-hand-thumbs-down-fill
+                  else
+                    a.btn.btn-sm.btn-success(href=`/admin/medicos/alta/${medico.idMedico}`)
+                      i.bi.bi-hand-thumbs-up-fill
       else
         p.text-muted.text-center No hay médicos cargados.

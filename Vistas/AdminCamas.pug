@@ -40,10 +40,11 @@ html(lang="es")
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/camas/editar/${cama.idCama}`)
                     i.bi.bi-pencil-fill
-                  if cama.estado === 'ocupada'
-                    a.btn.btn-sm.btn-success.me-2(href=`/admin/camas/liberar/${cama.idCama}`)
-                      i.bi.bi-unlock-fill
-                  a.btn.btn-sm.btn-danger(href=`/admin/camas/eliminar/${cama.idCama}`)
-                    i.bi.bi-trash-fill
+                  if cama.activo
+                    a.btn.btn-sm.btn-danger(href=`/admin/camas/baja/${cama.idCama}`)
+                      i.bi.bi-hand-thumbs-down-fill
+                  else
+                    a.btn.btn-sm.btn-success(href=`/admin/camas/alta/${cama.idCama}`)
+                      i.bi.bi-hand-thumbs-up-fill
       else
         p.text-muted.text-center No hay camas cargadas.

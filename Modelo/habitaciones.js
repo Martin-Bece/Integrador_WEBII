@@ -30,6 +30,11 @@ module.exports = function(sequelize, DataTypes) {
     capacidad: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    activo: {
+      type: DataTypes.TINYINT(1),
+      allowNull: false,
+      defaultValue: 1
     }
   }, {
     sequelize,
