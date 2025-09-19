@@ -1,5 +1,4 @@
 doctype html
-include navbar.pug
 html(lang="es")
   head
     meta(charset="UTF-8")
@@ -21,13 +20,15 @@ html(lang="es")
       }
 
   body
-    +navbar
+    include navbar.pug
 
     div.form-container
       h2.text-center.mb-4= medico ? 'Editar Médico' : 'Nuevo Médico'
 
+      if error
+        div.alert.alert-danger.text-center= error
+
       form(method="post" action=medico ? `/admin/medicos/editar/${medico.idMedico}` : '/admin/medicos/nuevo')
-        
         div.mb-3
           label.form-label(for="nombre") Nombre
           input.form-control(type="text", name="nombre", id="nombre", required=true, value=medico ? medico.nombre : '')

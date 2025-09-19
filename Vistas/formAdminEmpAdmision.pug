@@ -26,6 +26,9 @@ html(lang="es")
     div.form-container
       h2.text-center.mb-4= empleado ? 'Editar Empleado de Admisión' : 'Nuevo Empleado de Admisión'
 
+      if error
+        div.alert.alert-danger(role="alert")= error
+
       form(method="post" action=empleado ? `/admin/empleados/editar/${empleado.idEmpleado}` : '/admin/empleados/nuevo')
         
         div.mb-3
@@ -41,8 +44,8 @@ html(lang="es")
           input.form-control(type="text", name="apellido", id="apellido", required=true, value=empleado ? empleado.apellido : '')
 
         div.mb-3
-          label.form-label(for="correo") Correo
-          input.form-control(type="email", name="correo", id="correo", required=true, value=empleado ? empleado.correo : '')
+          label.form-label(for="email") Correo
+          input.form-control(type="email", name="email", id="email", required=true, value=empleado ? empleado.email : '')
 
         div.mb-3
           label.form-label(for="fecha_nacimiento") Fecha de Nacimiento

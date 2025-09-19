@@ -26,6 +26,9 @@ html(lang="es")
     div.form-container
       h2.text-center.mb-4= habitacion ? 'Editar Habitación' : 'Nueva Habitación'
 
+      if error
+        div.alert.alert-danger.text-center= error
+
       form(method="post" action=habitacion ? `/admin/habitaciones/editar/${habitacion.idHabitacion}` : '/admin/habitaciones/nuevo')
         
         div.mb-3

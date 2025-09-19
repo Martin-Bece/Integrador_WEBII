@@ -19,12 +19,19 @@ html(lang="es")
         border-radius: 12px;
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       }
+      .error-message {
+        color: red;
+        margin-bottom: 15px;
+      }
 
   body
     +navbar
 
     div.form-container
       h2.text-center.mb-4= especialidad ? 'Editar Especialidad' : 'Nueva Especialidad'
+
+      if error
+        span.error-message= error
 
       form(method="post" action=especialidad ? `/admin/especialidades/editar/${especialidad.idEspecialidad}` : '/admin/especialidades/nuevo')
         

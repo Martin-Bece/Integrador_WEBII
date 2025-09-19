@@ -26,6 +26,9 @@ html(lang="es")
     div.form-container
       h2.text-center.mb-4= cama ? 'Editar Cama' : 'Nueva Cama'
 
+      if error
+        div.alert.alert-danger.text-center= error
+
       form(method="post" action=cama ? `/admin/camas/editar/${cama.idCama}` : '/admin/camas/nuevo')
         
         div.mb-3
@@ -33,7 +36,7 @@ html(lang="es")
           select.form-select(name="habitacion_id" id="habitacion_id" required=true)
             option(value="" disabled selected=!(cama)) Seleccione una habitación
             each habitacion in habitaciones
-              option(value=habitacion.idHabitacion selected=cama && cama.habitacion_id===habitacion.idHabitacion)= habitacion.numero
+              option(value=habitacion.idHabitacion, selected=cama && cama.habitacion_id===habitacion.idHabitacion)= habitacion.numero
 
         div.mb-3
           label.form-label(for="estado") Estado

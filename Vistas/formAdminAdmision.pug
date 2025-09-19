@@ -1,5 +1,4 @@
 doctype html
-include navbar.pug
 html(lang="es")
   head
     meta(charset="UTF-8")
@@ -21,10 +20,13 @@ html(lang="es")
       }
 
   body
-    +navbar
+    include navbar.pug
 
     div.form-container
       h2.text-center.mb-4= admision ? 'Editar Admisión' : 'Nueva Admisión'
+
+      if error
+        div.alert.alert-danger.text-center= error
 
       form(method="post" action=admision ? `/admin/admisiones/editar/${admision.idAdmision}` : '/admin/admisiones/nuevo')
 

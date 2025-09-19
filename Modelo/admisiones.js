@@ -55,7 +55,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     cama_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'camas',
         key: 'idCama'
