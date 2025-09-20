@@ -21,18 +21,18 @@ html(lang="es")
             tr
               th ID
               th Nombre
-              th Usuario
+              th Apellido
               th DNI
-              th Turno
+              th correo
               th Acciones
           tbody
             each emp in empleados
               tr
                 td= emp.idEmpleado
                 td= emp.nombre
-                td= emp.usuario
+                td= emp.apellido
                 td= emp.dni
-                td= emp.turno
+                td= emp.correo
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/empleados/editar/${emp.idEmpleado}`)
                     i.bi.bi-pencil-fill

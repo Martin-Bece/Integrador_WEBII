@@ -12,7 +12,7 @@ const { renderFormularioEvaluacion, guardarHistorial } = require('./Controller/h
 const { renderFormularioSignosV, renderTablaEvSignosV, registrarEvFisica } = require('./Controller/signosvController');
 const { renderFormularioPlanC, guardarPlan, renderFormularioInforme, guardarInforme, guardarPlanConInforme } = require('./Controller/plancController');
 const { getCurrentUser, esAdmision, esEnfermero, autentificarUsuario, esMedico, logout, esMedicoOEnfermero, esAdmin } = require('./Middleware/auth');
-const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica, renderVerInformes, renderInformeEstudio, renderInformeEnfermeria } = require('./Controller/medicosController');
+const { renderPaginaInicio, atenderPaciente, renderPlanCMedicos, renderFormDiagnostico, guardarDiagnostico, renderHistoria, guardarHistoria, renderFormAlta, darAltaMedica, renderVerInformes, renderInformeEstudio, renderInformeEnfermeria, renderMedicosEspecialistas, renderInformeEspecialista, enviarInformeEspecialista } = require('./Controller/medicosController');
 const { renderListaUsuarios, renderFormUsuario, renderFormCambiarContraseña, postCambiarContraseña, crearUsuarioNuevo, actualizarUsuarioExistente, eliminarUsuarioLista, renderConfirmarEliminar, renderResumen, renderAdminPaciente, renderAdminMedico, renderAdminEmpleadoAdm, renderAdminEspecialidad, renderAdminEnfermeros, renderAdminCamas, renderAdminUnidades, renderAdminHabitaciones, renderAdminAdmisiones, renderAdminMutuales, renderformMutual, renderformPaciente, renderformMedico, renderformEmpAdmision, renderformEspecialidad, renderformEnfermero, renderformCamas, renderformUnidad, renderformHabitacion, renderformAdmision, renderConfirmarEliminarAdmision, eliminarAdmision, AdminAltaoBajaEmpAdmision, AdminAltaoBajaPaciente, AdminAltaoBajaMedico, AdminAltaoBajaEspecialidad, AdminAltaoBajaEnfermero, AdminAltaoBajaCama, AdminAltaoBajaUnidad, AdminAltaoBajaHabitacion, AdminAltaoBajaMutual, AdminactualizarPaciente, AdminactualizarMedico, AdminactualizarEmpAdmision, AdminactualizarEspecialidad, AdminactualizarEnfermero, AdminactualizarCama, AdminactualizarUnidad, AdminactualizarHabitacion, AdminactualizarAdmision, AdminactualizarMutual, AdmincrearMutual, AdmincrearPaciente, AdmincrearMedico, AdmincrearEmpAdmision, AdmincrearEspecialidad, AdmincrearEnfermero, AdmincrearCama, AdmincrearUnidad, AdmincrearHabitacion, AdmincrearAdmision } = require('./Controller/adminController');
 
 const PORT = 3000;
@@ -52,6 +52,9 @@ app.get('/Enfermeria', esEnfermero, (req, res) =>{
 });
 
 app.get('/Medicos', esMedico, renderPaginaInicio);
+
+app.get('/MedicosE', esMedico, renderMedicosEspecialistas);
+
 
 app.get('/Administracion', esAdmin, (req, res) =>{
   res.render('PaginaInicioAdmin');
@@ -163,13 +166,18 @@ app.post('/medicos/guardarHistoria/:dni', esMedico, guardarHistoria);
 
 app.get('/medicos/informes/:dni', esMedico, renderVerInformes);
 
-app.get('/medicos/informes/estudio/:dni', esMedico, renderInformeEstudio);
+app.get('/medicos/informes/estudio/:dni/:id', esMedico, renderInformeEstudio);
 
-app.get('/medicos/informes/enfermeria/:dni', esMedico, renderInformeEnfermeria);
+app.get('/medicos/informes/enfermeria/:dni/:id', esMedico, renderInformeEnfermeria);
 
 app.get('/medicos/alta-paciente/:dni', esMedico, renderFormAlta);
 
 app.post('/medicos/guardarInformeAlta/:dni', esMedico, darAltaMedica);
+
+app.get('/especialistas/informe/:idPaciente/:idEstudio/:fecha', esMedico, renderInformeEspecialista);
+
+app.post('/medico/especialista/estudio/:idPaciente', esMedico, enviarInformeEspecialista);
+
 
 //PARTE DE ADMINISTRACION
 

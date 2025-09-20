@@ -16,5 +16,5 @@ html(lang="es")
           h5.card-title Paciente: #{paciente.nombre} #{paciente.apellido}
           p.card-text DNI: #{paciente.dni}
           p.card-text Contenido del Informe:
-          textarea.form-control(readonly rows="8") #{informe.resultado}
+          textarea.form-control(readonly rows="8") #{informeEstudio.resultado}
           a.btn.btn-secondary.mt-3(href=`/medicos/informes/${paciente.dni}`) Volver Atrás

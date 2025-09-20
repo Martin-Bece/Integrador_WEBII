@@ -11,6 +11,16 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false,
       unique: "nombre"
+    },
+    idEspecialidad: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'especialidades',
+        key: 'idEspecialidad'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL'
     }
   }, {
     sequelize,

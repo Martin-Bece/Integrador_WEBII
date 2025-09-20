@@ -76,7 +76,7 @@ html(lang="es")
                           td= new Date(informe.fechaInforme).toLocaleDateString()
                           td= informe.idEstudio_estudio.nombre
                           td
-                            a.btn.btn-sm.btn-primary(href=`/medicos/informes/estudio/${paciente.dni}}`) 
+                            a.btn.btn-sm.btn-primary(href=`/medicos/informes/estudio/${paciente.dni}/${informe.idInforme}}`) 
                               i.fas.fa-eye
                               |  Ver Informe
                 else
@@ -96,7 +96,7 @@ html(lang="es")
                           td= new Date(informe.fecha_hora).toLocaleDateString()
                           td Enfermería
                           td
-                            a.btn.btn-sm.btn-primary(href=`/medicos/informes/enfermeria/${paciente.dni}`) 
+                            a.btn.btn-sm.btn-primary(href=`/medicos/informes/enfermeria/${paciente.dni}/${informe.id_informe}`) 
                               i.fas.fa-eye
                               |  Ver Informe
                 else

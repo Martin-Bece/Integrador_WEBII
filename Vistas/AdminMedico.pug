@@ -33,7 +33,7 @@ html(lang="es")
               th Especialidad
               th Matrícula
               th Teléfono
-              th Mail
+              th DNI
               th Acciones
           tbody
             each medico in medicos
@@ -41,10 +41,10 @@ html(lang="es")
                 td= medico.idMedico
                 td= medico.nombre
                 td= medico.apellido
-                td= medico.especialidad
+                td= medico.idEspecialidad
                 td= medico.matricula
                 td= medico.telefono
-                td= medico.mail
+                td= medico.dni
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/medicos/editar/${medico.idMedico}`)
                     i.bi.bi-pencil-fill

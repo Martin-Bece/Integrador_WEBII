@@ -1,3 +1,4 @@
+const { obtenerMedicoPorDNI } = require('../Controller/medicosController');
 const { usuarios: Usuario } = require('../Modelo');
 const bcrypt = require('bcrypt');
 
@@ -74,7 +75,12 @@ async function autentificarUsuario(req, res) {
       case 'enfermero':
         return res.redirect('/Enfermeria');
       case 'medico':
-        return res.redirect('/Medicos');
+        const medico = await obtenerMedicoPorDNI(usuario.dni);
+        if (medico.idEspecialidad == 21 || medico.idEspecialidad == 22) {
+          return res.redirect('/MedicosE');
+        } else {
+          return res.redirect('/Medicos');
+        }
       case 'admin':
         return res.redirect('/Administracion');
     }

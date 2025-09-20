@@ -58,6 +58,8 @@ function initModels(sequelize) {
 
   estudios.belongsToMany(pacientes, { as: 'idPaciente_pacientes', through: pacientes_estudios, foreignKey: "idEstudio", otherKey: "idPaciente" });
   pacientes.belongsToMany(estudios, { as: 'idEstudio_estudios', through: pacientes_estudios, foreignKey: "idPaciente", otherKey: "idEstudio" });
+  estudios.belongsTo(especialidades, { as: "idEspecialidad_especialidade", foreignKey: "idEspecialidad" });
+  especialidades.hasMany(estudios, { as: "estudios", foreignKey: "idEspecialidad" });
   habitaciones.belongsTo(alas, { as: "ala", foreignKey: "ala_id"});
   alas.hasMany(habitaciones, { as: "habitaciones", foreignKey: "ala_id"});
   admisiones.belongsTo(camas, { as: "cama", foreignKey: "cama_id"});

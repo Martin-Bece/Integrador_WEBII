@@ -317,19 +317,20 @@ async function renderVerInformes(req, res) {
 async function renderInformeEstudio(req, res) {
   try {
     const { dni } = req.params;
+    const idInforme = req.params.id;
 
     const paciente = await db.pacientes.findOne({ where: { dni } });
     if (!paciente) return res.redirect('/medicos');
 
-    const informesEstudios = await db.informes.findAll({
-      where: { idPaciente: paciente.idPaciente },
+    const informeEstudio = await db.informes.findOne({
+      where: { idPaciente: paciente.idPaciente, idInforme },
       include: [
         { model: db.estudios, as: 'idEstudio_estudio' },
       ],
       order: [['fechaInforme', 'DESC']]
     });
 
-    res.render('informeEstudio', { paciente, informesEstudios });
+    res.render('informeEstudio', { paciente, informeEstudio });
   } catch (error) {
     console.error(error);
     res.redirect('/medicos');
@@ -339,12 +340,13 @@ async function renderInformeEstudio(req, res) {
 async function renderInformeEnfermeria(req, res) {
   try {
     const { dni } = req.params;
+    const idInforme = req.params.id;
 
     const paciente = await db.pacientes.findOne({ where: { dni } });
     if (!paciente) return res.redirect('/medicos');
 
     const informesEnfermeria = await db.informe_enfermero.findAll({
-      where: { id_paciente: paciente.idPaciente },
+      where: { id_paciente: paciente.idPaciente, id_informe: idInforme },
       include: [
         { model: db.enfermeros, as: 'id_enfermero_enfermero' }
       ],
@@ -358,7 +360,91 @@ async function renderInformeEnfermeria(req, res) {
   }
 }
 
+async function renderMedicosEspecialistas(req, res) {
+  try {
+    const medicoDNI = req.session.usuario.dni; 
+    const medico = await obtenerMedicoPorDNI(medicoDNI);
 
+    if (!medico) return res.status(404).send("Médico no encontrado");
+
+    const pacientesEstudios = await db.pacientes_estudios.findAll({
+      where: { descripcion: "Pendiente" },
+      include: [
+        {
+          model: db.pacientes,
+          as: 'idPaciente_paciente',
+          attributes: ['idPaciente', 'dni', 'nombre', 'apellido']
+        },
+        {
+          model: db.estudios,
+          as: 'idEstudio_estudio',
+          attributes: ['idEstudio', 'nombre', 'idEspecialidad'],
+          where: { idEspecialidad: medico.idEspecialidad }
+        }
+      ],
+      order: [['fecha', 'DESC']]
+    });
+
+    res.render('InicioMedicosEspecialistas', { pacientesEstudios });
+  } catch (error) {
+    console.error('Error al obtener estudios asignados:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+}
+
+async function renderInformeEspecialista(req, res) {
+  try {
+    const { idPaciente, idEstudio, fecha } = req.params;
+
+    const paciente = await db.pacientes.findByPk(idPaciente);
+    const estudio = await db.estudios.findByPk(idEstudio);
+
+    if (!paciente || !estudio) {
+      return res.status(404).send("Paciente o estudio no encontrado");
+    }
+
+    await db.pacientes_estudios.update({ descripcion: "Realizado" }, { where: { idPaciente, idEstudio, fecha } });
+
+    return res.render('MedicosEspecialistas', { paciente, estudio });
+  } catch (error) {
+    console.error("Error al actualizar estudio:", error);
+    return res.status(500).send("Error interno del servidor");
+  }
+}
+
+async function enviarInformeEspecialista(req, res) {
+  try {
+    const admisionPaciente = await db.admisiones.findOne({ 
+      where: { paciente_id: req.body.idPaciente, estado: 'Activa' } 
+    });
+
+    if (!admisionPaciente) {
+      return res.status(404).send("No se encontró admisión activa para el paciente");
+    }
+
+    const motivo = await db.motivos.findByPk(admisionPaciente.motivo_id);
+    const medico = await obtenerMedicoPorDNI(req.session.usuario.dni);
+
+    if (!motivo || !medico) {
+      return res.status(404).send("Motivo o médico no encontrado");
+    }
+
+    const informe = {
+      idPaciente: req.body.idPaciente,
+      idEstudio: req.body.idEstudio,
+      resultado: req.body.resultado,
+      idEspecialidad: motivo.idEspecialidad,
+      idMedico: medico.idMedico
+    };
+
+    await db.informes.create(informe);
+
+    res.redirect('/MedicosE');
+  } catch (error) {
+    console.error("Error al enviar el informe del estudio:", error);
+    return res.status(500).send("Error interno del servidor");
+  }
+}
 
 module.exports = {
   obtenerMedicos,
@@ -376,5 +462,8 @@ module.exports = {
   darAltaMedica,
   renderVerInformes,
   renderInformeEnfermeria,
-  renderInformeEstudio
+  renderInformeEstudio,
+  renderMedicosEspecialistas,
+  renderInformeEspecialista, 
+  enviarInformeEspecialista
 };

@@ -1,0 +1,43 @@
+doctype html
+include navbar.pug
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Estudios Asignados
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+    style.
+      body {
+        background-color: #f0f4f8;
+      }
+
+  body
+    +navbar
+
+    .container.mt-5
+      h2.text-center.mb-4 Estudios Asignados - Médico Especialista
+
+      if pacientesEstudios.length > 0
+        table.table.table-hover.shadow-sm
+          thead.table-light
+            tr
+              th DNI
+              th Nombre
+              th Estudio
+              th Fecha Solicitud
+              th Acciones
+          tbody
+            each pe in pacientesEstudios
+              - var paciente = pe.idPaciente_paciente
+              - var estudio = pe.idEstudio_estudio
+              tr
+                td= paciente.dni
+                td #{paciente.nombre} #{paciente.apellido}
+                td= estudio.nombre
+                td= pe.fecha
+                td
+                  a.btn.btn-sm.btn-primary(href=`/especialistas/informe/${paciente.idPaciente}/${estudio.idEstudio}/${pe.fecha}`) Cargar Informe
+      else
+        p.text-muted.text-center No hay estudios asignados en este momento.
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")

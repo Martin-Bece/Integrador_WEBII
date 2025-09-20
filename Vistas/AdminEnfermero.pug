@@ -22,8 +22,8 @@ html(lang="es")
               th ID
               th Nombre
               th Apellido
-              th Legajo
-              th Unidad
+              th DNI
+              th Matricula
               th Acciones
           tbody
             each enf in enfermeros
@@ -31,8 +31,8 @@ html(lang="es")
                 td= enf.idEnfermero
                 td= enf.nombre
                 td= enf.apellido
-                td= enf.legajo
-                td= enf.unidad
+                td= enf.dni
+                td= enf.matricula 
                 td
                   a.btn.btn-sm.btn-warning.me-2(href=`/admin/enfermeros/editar/${enf.idEnfermero}`)
                     i.bi.bi-pencil-fill
