@@ -19,9 +19,9 @@ html(lang="es")
         form(method="get" action="/admin/admisiones" class="d-flex")
           label.form-label.me-2(for="estado") Filtrar por estado:
           select.form-select(name="estado" onchange="this.form.submit()")
-            option(value="todas") Todas
-            option(value="activa") Activas
-            option(value="alta") Con alta
+            option(value="Todas" selected=estadoSeleccionado=='Todas') Todas
+            option(value="Activa" selected=estadoSeleccionado=='Activa') Activas
+            option(value="Alta" selected=estadoSeleccionado=='Alta') Con alta
 
       if admisiones.length > 0
         table.table.table-hover.shadow-sm

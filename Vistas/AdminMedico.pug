@@ -19,9 +19,9 @@ html(lang="es")
         form(method="get" action="/admin/medicos" class="d-flex")
           label.form-label.me-2(for="filtroEsp") Filtrar por especialidad:
           select.form-select(name="especialidad" onchange="this.form.submit()")
-            option(value="todas") Todas
+            option(value="todas" selected=espSeleccionada=='todas') Todas
             each esp in especialidades
-              option(value=esp.idEspecialidad)= esp.nombre
+              option(value=esp.idEspecialidad selected=espSeleccionada==esp.idEspecialidad)= esp.nombre
 
       if medicos.length > 0
         table.table.table-hover.shadow-sm

@@ -17,7 +17,7 @@ html(lang="es")
           | Nuevo Paciente
 
         form(method="get" action="/admin/pacientes" class="d-flex")
-          input.form-control.me-2(type="search", name="dni", placeholder="Buscar por DNI o nombre")
+          input.form-control.me-2(type="search", name="dni", placeholder="Buscar por DNI")
           button.btn.btn-outline-secondary(type="submit") Buscar
 
       if pacientes.length > 0

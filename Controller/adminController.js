@@ -2,7 +2,7 @@ const { where } = require('sequelize');
 const db = require('../Modelo');
 const { listarUsuarios, usuariosPorRol, buscarUsuarioPorId, crearUsuario, editarUsuario, eliminarUsuario, obtenerUsuarioPorDNI } = require('./usuariosController');
 const { listarPacientes } = require('./PacientesController');
-const { obtenerMedicos, obtenerMedicoPorID } = require('./medicosController');
+const { obtenerMedicos, obtenerMedicoPorID, obtenerMedicosPorEspecialidad } = require('./medicosController');
 const { obtenerEspecialidades } = require('./especialidadesController');
 const { obtenerEnfermeros } = require('./enfermeriaController');
 const { obtenerCamas } = require('./camasController');
@@ -10,6 +10,7 @@ const { obtenerHabitaciones } = require('./habitacionesController');
 const { obtenerAdmisiones } = require('./admisionesController');
 const { obtenerMutuales } = require('./mutualesController');
 const { obtenerMotivos } = require('./motivosController');
+const { Op } = require('sequelize');
 
 async function renderListaUsuarios(req, res, datosAdicionales = {}) {
   try {
@@ -237,11 +238,19 @@ async function renderResumen(req, res) {
 }
 
 async function renderAdminPaciente(req, res, datosAdicionales = {}) {
-  
-  const pacientes = await listarPacientes();
+  const dni = req.query.dni || '';
 
-  return res.render('AdminPaciente', { pacientes })
+  let pacientes;
 
+  if (dni) {
+    pacientes = await db.pacientes.findAll({
+      where: { dni: { [Op.like]: `%${dni}%` } }
+    });
+  } else {
+    pacientes = await db.pacientes.findAll();
+  }
+
+  return res.render('AdminPaciente', { pacientes });
 }
 
 async function renderformPaciente(req, res, datosAdicionales = {}) {
@@ -343,11 +352,18 @@ async function AdminactualizarPaciente(req, res) {
 
 async function renderAdminMedico(req, res, datosAdicionales = {}) {
   
-  const medicos = await obtenerMedicos();
+  const especialidad = req.query.especialidad || 'todos';
+    let medicos;
+
+    if (especialidad === 'todos') {
+      medicos = await obtenerMedicos();
+    } else {
+      medicos = await obtenerMedicosPorEspecialidad(especialidad);
+    }
 
   const especialidades = await obtenerEspecialidades();
 
-  return res.render('AdminMedico', { medicos, especialidades })
+  return res.render('AdminMedico', { medicos, especialidades, espSeleccionada:especialidad })
 
 }
 
@@ -648,7 +664,6 @@ async function AdminactualizarEspecialidad(req, res) {
   }
 }
 
-
 async function renderAdminEnfermeros(req, res, datosAdicionales = {}) {
   
   const enfermeros = await obtenerEnfermeros();
@@ -766,17 +781,33 @@ async function AdminactualizarEnfermero(req, res) {
 }
 
 async function renderAdminCamas(req, res, datosAdicionales = {}) {
-  
-  const camas =  await db.camas.findAll({
-    include: [
-      {
-        model: db.habitaciones,
-        as: 'habitacion',
-        attributes: ['numero']
-      }
-    ]
-  });
-  return res.render('AdminCamas', { camas })
+  const estado = req.query.estado || 'Todas';
+  let camas;
+
+  if (estado === 'Todas') {
+    camas = await db.camas.findAll({
+      include: [
+        {
+          model: db.habitaciones,
+          as: 'habitacion',
+          attributes: ['numero']
+        }
+      ]
+    });
+  } else {
+    camas = await db.camas.findAll({
+      where: { estado },
+      include: [
+        {
+          model: db.habitaciones,
+          as: 'habitacion',
+          attributes: ['numero']
+        }
+      ]
+    });
+  }
+
+  return res.render('AdminCamas', { camas, estadoSeleccionado: estado });
 }
 
 async function renderformCamas(req, res, datosAdicionales = {}) {
@@ -1086,9 +1117,16 @@ async function AdminactualizarUnidad(req, res) {
 
 async function renderAdminAdmisiones(req, res, datosAdicionales = {}) {
   
-  const admisiones = await obtenerAdmisiones();
+  const estado = req.query.estado || 'Todas';
+    let admisiones;
 
-  return res.render('AdminAdmisiones', { admisiones });
+    if (estado === 'Todas') {
+      admisiones = await obtenerAdmisiones();
+    } else {
+      admisiones = await db.admisiones.findAll({ where: { estado }});
+    }
+  
+  return res.render('AdminAdmisiones', { admisiones, estadoSeleccionado: estado });
 }
 
 async function renderformAdmision(req, res, datosAdicionales = {}) {

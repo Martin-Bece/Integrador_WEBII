@@ -19,9 +19,9 @@ html(lang="es")
         form(method="get" action="/admin/camas" class="d-flex")
           label.form-label.me-2(for="estado") Filtrar por estado:
           select.form-select(name="estado" onchange="this.form.submit()")
-            option(value="todas") Todas
-            option(value="libre") Libres
-            option(value="ocupada") Ocupadas
+            option(value="Todas" selected=estadoSeleccionado=='Todas') Todas
+            option(value="Libre" selected=estadoSeleccionado=='Libre') Libres
+            option(value="Ocupada" selected=estadoSeleccionado=='Ocupada') Ocupadas
 
       if camas.length > 0
         table.table.table-hover.shadow-sm
