@@ -46,7 +46,7 @@ html(lang="es")
                     li= error
 
             h3.mb-3.text-secondary Información del Diagnóstico
-            form(action=`/medicos/guardarDiagnostico/${paciente.dni}` method="POST")
+            form(action=`/medicos/guardarDiagnostico/${paciente.dni}` method="POST" autocomplete="off")
               input(type="hidden" name="idPaciente" value=paciente.idPaciente)
 
               .mb-4

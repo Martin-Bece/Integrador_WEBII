@@ -39,7 +39,7 @@ html(lang="en")
           if error
             div.alert.alert-danger.mt-2= error
 
-          form(action='/crearPaciente' method='POST' novalidate)
+          form(action='/crearPaciente' method='POST' novalidate autocomplete="off")
             div.mb-3
               label.form-label(for='nombre') Nombre
               input#nombre.form-control(type='text' name='nombre' required placeholder='Ingrese el nombre' value= paciente && paciente.nombre ? paciente.nombre : '')

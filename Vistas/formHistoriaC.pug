@@ -52,7 +52,7 @@ html(lang="es")
                   each err in errores
                     li= err
 
-            form(action=`/medicos/guardarHistoria/${paciente.dni}` method="POST")
+            form(action=`/medicos/guardarHistoria/${paciente.dni}` method="POST" autocomplete="off")
               .mb-3
                 label.form-label(for="observacion") Nueva Observación
                 textarea.form-control(name="observacion" id="observacion" rows="6" placeholder="Registre aquí la evolución, procedimientos o notas sobre el paciente")= observacion || ''

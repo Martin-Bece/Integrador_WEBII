@@ -37,7 +37,7 @@ html(lang="es")
           if error
             div.alert.alert-danger.mt-2= error
 
-          form(action="/enfermeria/enviarInforme" method="POST" novalidate)
+          form(action="/enfermeria/enviarInforme" method="POST" novalidate autocomplete="off")
             input(type="hidden" name="id_enfermero" value=enfermero.idEnfermero)
 
             input(type="hidden" name="dni" value=paciente.dni)

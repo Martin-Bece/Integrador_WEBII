@@ -12,7 +12,7 @@ html(lang="es")
       h2.card-title.text-center.mb-4.text-primary Nueva Admisión
       if error
         div.alert.alert-danger.mt-2= error
-      form(action="/admisiones/turno" method="POST" novalidate)
+      form(action="/admisiones/turno" method="POST" autocomplete="off" novalidate)
         div.mb-3
           label.form-label(for="idMotivo") Motivo de Internación
           select.form-select(name="idMotivo" id="idMotivo" required)

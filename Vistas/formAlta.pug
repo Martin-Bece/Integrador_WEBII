@@ -42,7 +42,7 @@ html(lang="es")
                   each error in errores
                     li= error
 
-            form(action=`/medicos/guardarInformeAlta/${paciente.dni}` method="POST")
+            form(action=`/medicos/guardarInformeAlta/${paciente.dni}` method="POST" autocomplete="off")
               .mb-4
                 label.form-label(for="diagnostico_final") Diagnóstico Final
                 textarea.form-control(name="diagnostico_final" id="diagnostico_final" rows="4" placeholder="Escriba aquí el diagnóstico final del paciente" required)

@@ -33,7 +33,7 @@ html(lang="es")
       if error
         span.error-message= error
 
-      form(method="post" action=mutual ? `/admin/mutuales/editar/${mutual.idMutual}` : '/admin/mutuales/nuevo')
+      form(method="post" autocomplete="off" action=mutual ? `/admin/mutuales/editar/${mutual.idMutual}` : '/admin/mutuales/nuevo')
         .mb-3
           label.form-label(for="nombre") Nombre
           input.form-control(type="text", name="nombre", id="nombre", required=true, value=mutual ? mutual.nombre : '')

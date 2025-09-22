@@ -29,7 +29,7 @@ html(lang="es")
       if error
         div.alert.alert-danger.text-center= error
 
-      form(method="post" action=cama ? `/admin/camas/editar/${cama.idCama}` : '/admin/camas/nuevo')
+      form(method="post" autocomplete="off" action=cama ? `/admin/camas/editar/${cama.idCama}` : '/admin/camas/nuevo')
         
         div.mb-3
           label.form-label(for="habitacion_id") Habitación

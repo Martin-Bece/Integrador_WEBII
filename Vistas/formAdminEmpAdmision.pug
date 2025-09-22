@@ -29,7 +29,7 @@ html(lang="es")
       if error
         div.alert.alert-danger(role="alert")= error
 
-      form(method="post" action=empleado ? `/admin/empleados/editar/${empleado.idEmpleado}` : '/admin/empleados/nuevo')
+      form(method="post" autocomplete="off" action=empleado ? `/admin/empleados/editar/${empleado.idEmpleado}` : '/admin/empleados/nuevo')
         
         div.mb-3
           label.form-label(for="dni") DNI

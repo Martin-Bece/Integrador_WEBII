@@ -352,10 +352,10 @@ async function AdminactualizarPaciente(req, res) {
 
 async function renderAdminMedico(req, res, datosAdicionales = {}) {
   
-  const especialidad = req.query.especialidad || 'todos';
+  const especialidad = req.query.especialidad || 'todas';
     let medicos;
 
-    if (especialidad === 'todos') {
+    if (especialidad === 'todas') {
       medicos = await obtenerMedicos();
     } else {
       medicos = await obtenerMedicosPorEspecialidad(especialidad);

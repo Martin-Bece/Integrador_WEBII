@@ -28,7 +28,7 @@ html(lang="es")
       if error
         div.alert.alert-danger.text-center= error
 
-      form(method="post" action=medico ? `/admin/medicos/editar/${medico.idMedico}` : '/admin/medicos/nuevo')
+      form(method="post" autocomplete="off" action=medico ? `/admin/medicos/editar/${medico.idMedico}` : '/admin/medicos/nuevo')
         div.mb-3
           label.form-label(for="nombre") Nombre
           input.form-control(type="text", name="nombre", id="nombre", required=true, value=medico ? medico.nombre : '')

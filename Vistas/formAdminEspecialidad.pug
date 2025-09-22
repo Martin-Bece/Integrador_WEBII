@@ -33,7 +33,7 @@ html(lang="es")
       if error
         span.error-message= error
 
-      form(method="post" action=especialidad ? `/admin/especialidades/editar/${especialidad.idEspecialidad}` : '/admin/especialidades/nuevo')
+      form(method="post" autocomplete="off" action=especialidad ? `/admin/especialidades/editar/${especialidad.idEspecialidad}` : '/admin/especialidades/nuevo')
         
         div.mb-3
           label.form-label(for="nombre") Nombre

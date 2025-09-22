@@ -33,7 +33,7 @@ html(lang="es")
       if error
         span.error-message= error
 
-      form(method="post" action=unidad ? `/admin/unidades/editar/${unidad.idUnidad}` : '/admin/unidades/nuevo')
+      form(method="post" autocomplete="off" action=unidad ? `/admin/unidades/editar/${unidad.idUnidad}` : '/admin/unidades/nuevo')
         div.mb-3
           label.form-label(for="nombre") Nombre
           input.form-control(type="text", name="nombre", id="nombre", required=true, value=unidad ? unidad.nombre : '')

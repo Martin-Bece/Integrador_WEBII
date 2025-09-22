@@ -26,7 +26,7 @@ html(lang="es")
     div.form-container
       h2.text-center.mb-4= usuario ? 'Editar Usuario' : 'Nuevo Usuario'
 
-      form(method="post" action=usuario ? `/admin/usuarios/editar/${usuario.idUsuario}` : '/admin/usuarios/nuevo')
+      form(method="post" autocomplete="off" action=usuario ? `/admin/usuarios/editar/${usuario.idUsuario}` : '/admin/usuarios/nuevo')
         div.mb-3
           label.form-label(for="usuario") Usuario
           input.form-control(type="text", name="usuario", id="usuario", required=true, value=usuario ? usuario.usuario : '')

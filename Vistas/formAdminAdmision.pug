@@ -28,7 +28,7 @@ html(lang="es")
       if error
         div.alert.alert-danger.text-center= error
 
-      form(method="post" action=admision ? `/admin/admisiones/editar/${admision.idAdmision}` : '/admin/admisiones/nuevo')
+      form(method="post" autocomplete="off" action=admision ? `/admin/admisiones/editar/${admision.idAdmision}` : '/admin/admisiones/nuevo')
 
         div.mb-3
           label.form-label(for="paciente_id") Paciente
