@@ -13,7 +13,7 @@ html(lang="es")
       if error
         div.alert.alert-danger.mt-2= error
 
-      form(action="/login" method="POST")
+      form(action="/login" method="POST" autocomplete = "off")
         div.mb-3
           label.form-label.text-dark(for="username") Usuario
           input#username.form-control(type="text" name="username" required placeholder="Ingrese su usuario")
